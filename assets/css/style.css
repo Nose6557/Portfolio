@@ -14,6 +14,13 @@
   --dark-fg: #F0EEE9;
   --dark-muted: #8A8A85;
 
+  /* Pre-inversion values for the difference-blended header. Chosen so the
+     blend resolves to the palette over the cream page background:
+     #fff → #0F1116 (≈ --ink), rgb(118,119,122) → #7A776F (= --muted).
+     Over the dark sections they land on #EEEEED and a mid grey. */
+  --nav-bright: #fff;
+  --nav-dim: rgb(118,119,122);
+
   --max-width: 1280px;
   --gutter: clamp(24px, 3vw, 48px);
 
@@ -136,11 +143,21 @@ button:focus-visible,
 /* ==========================================================================
    Nav
    ========================================================================== */
+/* The header carries no surface of its own and inverts against whatever
+   scrolls beneath it — dark sections, photos, anything — with no JS and
+   no need to tag sections.
+
+   The blend has to sit on the header itself, not on the items: z-index
+   already makes this a stacking context, so blended children would only
+   see the header's own transparent background instead of the page.
+   Children are painted into the group first, then the whole group is
+   differenced, so per-item colours below still work. */
 .site-nav{
   position: sticky;
   top: 0;
   z-index: 90;
   background: transparent;
+  mix-blend-mode: difference;
 }
 
 .site-nav__row{
@@ -152,24 +169,30 @@ button:focus-visible,
   font: 400 12px/1 var(--font-mono);
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--nav-dim);
 }
-.site-nav__name{ color: var(--ink); }
+.site-nav__name{ color: var(--nav-bright); }
 .site-nav__links{
   display: flex;
   align-items: center;
   gap: 28px;
 }
-.site-nav__links a{ color: var(--muted); }
-.site-nav__links a:hover{ color: var(--ink); }
+.site-nav__links a{ color: var(--nav-dim); }
 /* "page" marks the exact current page; "location" marks the parent
    section (a case page highlights Роботи without claiming to be it). */
 .site-nav__links a[aria-current]{
-  color: var(--ink);
+  color: var(--nav-bright);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 6px;
 }
+.site-nav__links a:hover{ color: var(--nav-bright); }
+
+/* The focus ring is inside the blended group too, so a fixed colour would
+   shift hue with the backdrop. currentColor rides the same inversion as
+   the label, which keeps it contrasty on anything. */
+.site-nav a:focus-visible,
+.site-nav button:focus-visible{ outline-color: currentColor; }
 
 @media (max-width: 700px){
   .site-nav__links{ display: none; }
@@ -193,26 +216,10 @@ button:focus-visible,
 .mobile-menu .lang-switch__part{ color: var(--dark-muted); }
 .mobile-menu .lang-switch__part[data-active="true"]{ color: var(--dark-fg); }
 
-/* Adaptive header colours.
-   The header has no background, so each item flips to the light palette
-   only while a dark section actually sits behind that item — checked per
-   item, not per header, so a half-width dark block never bleaches the
-   name on the light half. main.js adds .is-over-dark; without JS the
-   header stays dark-on-light, which is correct for every light section. */
-.site-nav__name,
-.site-nav__links a,
-.nav-toggle,
-.site-nav .lang-switch__part{ transition: color .2s var(--ease-out); }
-
-.site-nav__name.is-over-dark,
-.nav-toggle.is-over-dark{ color: var(--dark-fg); }
-
-.site-nav__links a.is-over-dark{ color: var(--dark-muted); }
-.site-nav__links a.is-over-dark:hover,
-.site-nav__links a.is-over-dark[aria-current]{ color: var(--dark-fg); }
-
-.site-nav .lang-switch__part.is-over-dark{ color: var(--dark-muted); }
-.site-nav .lang-switch__part.is-over-dark[data-active="true"]{ color: var(--dark-fg); }
+/* Scoped to the header so the footer and mobile-menu switches keep the
+   ordinary palette — only the blended group needs pre-inversion values. */
+.site-nav .lang-switch__part{ color: var(--nav-dim); }
+.site-nav .lang-switch__part[data-active="true"]{ color: var(--nav-bright); }
 
 .nav-toggle{
   display: none;
@@ -222,7 +229,7 @@ button:focus-visible,
   font: 400 12px/1 var(--font-mono);
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--nav-bright);
   cursor: pointer;
 }
 @media (max-width: 700px){

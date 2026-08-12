@@ -21,8 +21,9 @@
   --nav-bright: #fff;
   --nav-dim: rgb(118,119,122);
 
-  --max-width: 1280px;
-  --gutter: clamp(24px, 3vw, 48px);
+  /* Wider ceiling than before: with no max-width holding content in,
+     48px of gutter looked pinched on large monitors. */
+  --gutter: clamp(24px, 3vw, 70px);
 
   --font-display: 'Golos Text', sans-serif;
   --font-body: Manrope, sans-serif;
@@ -45,7 +46,12 @@
    Reset & base
    ========================================================================== */
 *, *::before, *::after{ box-sizing: border-box; }
-html{ -webkit-text-size-adjust: 100%; }
+html{
+  -webkit-text-size-adjust: 100%;
+  /* Reserve the scrollbar track always, so short pages like Контакт sit
+     on the same edges as pages that scroll instead of shifting sideways. */
+  scrollbar-gutter: stable;
+}
 body{
   margin: 0;
   background: var(--bg);
@@ -109,11 +115,12 @@ button:focus-visible,
 /* ==========================================================================
    Layout helpers
    ========================================================================== */
-.wrap{
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
+/* Full-bleed: the gutter is the only horizontal constraint, so every page
+   lines up on the same two edges — including the header, which used to be
+   capped while the case and about pages ran full width beneath it.
+   Reading measure is held by the text blocks themselves (see the various
+   max-width: Nch rules), not by a wrapper. */
+.wrap{ padding-inline: var(--gutter); }
 
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{
@@ -532,6 +539,8 @@ button:focus-visible,
 .work-row__title{
   font: 700 clamp(1.35rem,1.1rem + 1.4vw,2.125rem)/1.05 var(--font-display);
   letter-spacing: -.03em;
+  /* Held in check now that the row spans the whole window. */
+  max-width: 28ch;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;

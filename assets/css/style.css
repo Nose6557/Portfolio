@@ -429,7 +429,17 @@ button:focus-visible,
 
 @media (min-width: 992px){
   .project{ grid-template-columns: repeat(12, 1fr); column-gap: 25px; }
-  .project__details{ grid-column: 1 / 7; padding-right: calc((100% - 125px) / 6); }
+  /* The details ride along inside the tall grid row, then pin below the
+     header while the cover keeps scrolling. The row is as tall as the
+     cover, so there's ~600px of travel before the card leaves. 72px
+     clears the 48px transparent header with a small gap. */
+  .project__details{
+    grid-column: 1 / 7;
+    padding-right: calc((100% - 125px) / 6);
+    position: sticky;
+    top: 72px;
+    align-self: start;
+  }
   .project__cover{ grid-column: 7 / 13; }
   .project__frame{ aspect-ratio: 1 / 1.4; }
   /* Indented so the summary starts under the title's second column

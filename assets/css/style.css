@@ -164,8 +164,15 @@ button:focus-visible,
   gap: 28px;
 }
 .site-nav__links a{ color: var(--muted); }
-.site-nav__links a:hover,
-.site-nav__links a[aria-current="page"]{ color: var(--ink); }
+.site-nav__links a:hover{ color: var(--ink); }
+/* "page" marks the exact current page; "location" marks the parent
+   section (a case page highlights Роботи without claiming to be it). */
+.site-nav__links a[aria-current]{
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
 
 @media (max-width: 700px){
   .site-nav__links{ display: none; }
@@ -241,6 +248,11 @@ button:focus-visible,
   letter-spacing: -.04em;
   text-transform: uppercase;
   color: var(--bg);
+}
+.mobile-menu__links a[aria-current]{
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
 }
 .mobile-menu__bottom{
   display: flex;

@@ -14,10 +14,40 @@
 <body>
 <a class="skip-link" href="#main">Перейти до змісту</a>
 
-<header class="case-header">
-  <a href="index.html">← Олександр Носач</a>
-  <span>про мене</span>
+<header class="site-nav" data-site-nav>
+  <div class="wrap site-nav__row">
+    <a class="site-nav__name" href="index.html">Олександр Носач</a>
+    <nav class="site-nav__links" aria-label="Основна навігація">
+      <a href="index.html">головна</a>
+      <a href="work.html">роботи</a>
+      <a href="about.html" aria-current="page">про</a>
+      <a href="index.html#contact">контакт</a>
+      <div class="lang-switch" data-lang-switch role="group" aria-label="Мова сайту">
+        <button type="button" class="lang-switch__part" data-lang="ua">UA</button> / <button type="button" class="lang-switch__part" data-lang="en">EN</button>
+      </div>
+    </nav>
+    <button type="button" class="nav-toggle" data-menu-open aria-haspopup="true">Меню</button>
+  </div>
 </header>
+
+<div class="mobile-menu" data-mobile-menu data-open="false" role="dialog" aria-modal="true" aria-label="Мобільне меню">
+  <div class="mobile-menu__top">
+    <span>Олександр Носач</span>
+    <button type="button" class="mobile-menu__close" data-menu-close aria-label="Закрити меню">✕</button>
+  </div>
+  <nav class="mobile-menu__links" aria-label="Мобільна навігація">
+    <a href="index.html">головна</a>
+    <a href="work.html">роботи</a>
+    <a href="about.html" aria-current="page">про</a>
+    <a href="index.html#contact">контакт</a>
+  </nav>
+  <div class="mobile-menu__bottom">
+    <span>hello@example.com</span>
+    <div class="lang-switch" data-lang-switch role="group" aria-label="Мова сайту">
+      <button type="button" class="lang-switch__part" data-lang="ua">UA</button> / <button type="button" class="lang-switch__part" data-lang="en">EN</button>
+    </div>
+  </div>
+</div>
 
 <main id="main">
 

@@ -140,11 +140,8 @@ button:focus-visible,
   position: sticky;
   top: 0;
   z-index: 90;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
-  transition: transform .24s var(--ease-out);
+  background: transparent;
 }
-.site-nav[data-hidden="true"]{ transform: translateY(-100%); }
 
 .site-nav__row{
   display: flex;
@@ -195,6 +192,27 @@ button:focus-visible,
 .lang-switch__part[data-active="true"]{ color: var(--ink); }
 .mobile-menu .lang-switch__part{ color: var(--dark-muted); }
 .mobile-menu .lang-switch__part[data-active="true"]{ color: var(--dark-fg); }
+
+/* Adaptive header colours.
+   The header has no background, so each item flips to the light palette
+   only while a dark section actually sits behind that item — checked per
+   item, not per header, so a half-width dark block never bleaches the
+   name on the light half. main.js adds .is-over-dark; without JS the
+   header stays dark-on-light, which is correct for every light section. */
+.site-nav__name,
+.site-nav__links a,
+.nav-toggle,
+.site-nav .lang-switch__part{ transition: color .2s var(--ease-out); }
+
+.site-nav__name.is-over-dark,
+.nav-toggle.is-over-dark{ color: var(--dark-fg); }
+
+.site-nav__links a.is-over-dark{ color: var(--dark-muted); }
+.site-nav__links a.is-over-dark:hover,
+.site-nav__links a.is-over-dark[aria-current]{ color: var(--dark-fg); }
+
+.site-nav .lang-switch__part.is-over-dark{ color: var(--dark-muted); }
+.site-nav .lang-switch__part.is-over-dark[data-active="true"]{ color: var(--dark-fg); }
 
 .nav-toggle{
   display: none;

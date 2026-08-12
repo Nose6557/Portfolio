@@ -4,27 +4,53 @@
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------------------------------------------------------------------
-     Sticky nav: hide on scroll down, show on scroll up
+     Adaptive header colours
+
+     The header is transparent and always visible, so its text has to
+     survive whatever scrolls beneath it. Each item is tested against the
+     sections marked [data-nav-theme="dark"] and flipped to the light
+     palette only while one of them is actually behind that item — the
+     check is per item, so a dark block covering half the width leaves
+     the other half alone.
   --------------------------------------------------------------------- */
   const nav = document.querySelector("[data-site-nav]");
-  if (nav) {
-    let lastY = window.scrollY;
+  const darkZones = document.querySelectorAll('[data-nav-theme="dark"]');
+
+  if (nav && darkZones.length) {
+    const items = nav.querySelectorAll(
+      ".site-nav__name, .site-nav__links a, .nav-toggle, .lang-switch__part"
+    );
     let ticking = false;
 
-    const onScroll = () => {
-      const y = window.scrollY;
-      const goingDown = y > lastY;
-      nav.dataset.hidden = String(goingDown && y > nav.offsetHeight);
-      lastY = y;
+    const syncColours = () => {
       ticking = false;
+      const zones = [];
+      for (const zone of darkZones) {
+        const r = zone.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < window.innerHeight) zones.push(r);
+      }
+      for (const item of items) {
+        let dark = false;
+        if (zones.length) {
+          const r = item.getBoundingClientRect();
+          const x = r.left + r.width / 2;
+          const y = r.top + r.height / 2;
+          dark = zones.some((z) => z.top <= y && z.bottom >= y && z.left <= x && z.right >= x);
+        }
+        item.classList.toggle("is-over-dark", dark);
+      }
     };
 
-    window.addEventListener("scroll", () => {
+    const requestSync = () => {
       if (!ticking) {
-        window.requestAnimationFrame(onScroll);
         ticking = true;
+        window.requestAnimationFrame(syncColours);
       }
-    }, { passive: true });
+    };
+
+    window.addEventListener("scroll", requestSync, { passive: true });
+    window.addEventListener("resize", requestSync);
+    syncColours();
   }
 
   /* ---------------------------------------------------------------------

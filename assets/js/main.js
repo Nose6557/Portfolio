@@ -78,13 +78,21 @@
 
   /* ---------------------------------------------------------------------
      Scroll reveal
+
+     Two flavours share one observer: [data-reveal] fades a block up,
+     [data-mask] wipes a project cover open. Each element is flipped by
+     setting its own attribute, so the CSS for the two stays separate.
   --------------------------------------------------------------------- */
-  const revealEls = document.querySelectorAll("[data-reveal]");
+  const revealEls = document.querySelectorAll("[data-reveal], [data-mask]");
+  const flip = (el) => {
+    el.dataset[el.hasAttribute("data-mask") ? "mask" : "reveal"] = "in";
+  };
+
   if (revealEls.length && !prefersReducedMotion && "IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.dataset.reveal = "in";
+          flip(entry.target);
           io.unobserve(entry.target);
         }
       });
@@ -95,12 +103,54 @@
       // immediately rather than waiting on the observer's first tick.
       const r = el.getBoundingClientRect();
       if (r.top < window.innerHeight && r.bottom > 0) {
-        el.dataset.reveal = "in";
+        flip(el);
         io.unobserve(el);
       }
     });
   } else {
-    revealEls.forEach((el) => { el.dataset.reveal = "in"; });
+    revealEls.forEach(flip);
+  }
+
+  /* ---------------------------------------------------------------------
+     Cover parallax
+
+     Each cover image is taller than the frame clipping it. That surplus
+     is the whole travel budget: the image sits at the top when the card
+     enters the viewport and reaches the bottom as it leaves, so it can
+     never expose an edge.
+  --------------------------------------------------------------------- */
+  const parallaxEls = document.querySelectorAll("[data-parallax]");
+  if (parallaxEls.length && !prefersReducedMotion) {
+    let ticking = false;
+
+    const positionCovers = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      for (const img of parallaxEls) {
+        const frame = img.closest(".project__frame");
+        if (!frame) continue;
+        const rect = frame.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > vh) continue;
+        const travel = img.offsetHeight - frame.offsetHeight;
+        if (travel <= 0) continue;
+        // 0 when the frame's top edge first touches the bottom of the
+        // viewport, 1 once its bottom edge has passed the top.
+        const progress = (vh - rect.top) / (vh + rect.height);
+        const clamped = Math.min(1, Math.max(0, progress));
+        img.style.transform = `translate3d(0, ${-clamped * travel}px, 0)`;
+      }
+    };
+
+    const requestPosition = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(positionCovers);
+      }
+    };
+
+    window.addEventListener("scroll", requestPosition, { passive: true });
+    window.addEventListener("resize", requestPosition);
+    positionCovers();
   }
 
   /* ---------------------------------------------------------------------

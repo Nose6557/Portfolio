@@ -431,11 +431,22 @@ button:focus-visible,
   transition: transform 1.25s var(--curve-ref);
 }
 .project__img{
+  position: relative;
   width: 100%;
   height: 118%;
   background-image: repeating-linear-gradient(135deg,#E2DFD8 0 12px,#EDEBE5 12px 24px);
   display: flex; align-items: flex-end; padding: 20px;
   will-change: transform;
+}
+/* A real cover fills the whole box edge-to-edge, ignoring the label
+   padding via absolute inset — so cards with a photo and cards still on
+   the placeholder gradient share the same markup. */
+.project__img img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .project__img-label{
   font: 400 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;

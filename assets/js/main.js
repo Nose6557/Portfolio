@@ -7,6 +7,29 @@
      mix-blend-mode: difference — see .site-nav in style.css. */
 
   /* ---------------------------------------------------------------------
+     Hide the transparent header on scroll down, show on scroll up
+
+     Without a background the bar lets content bleed through it, so it's
+     hidden while reading downward and brought back the moment you scroll
+     up. Past its own height only, so it never flickers at the very top.
+  --------------------------------------------------------------------- */
+  const nav = document.querySelector("[data-site-nav]");
+  if (nav) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const menuOpen = document.querySelector("[data-mobile-menu]")?.dataset.open === "true";
+      nav.dataset.hidden = String(!menuOpen && y > lastY && y > nav.offsetHeight);
+      lastY = y;
+      ticking = false;
+    };
+    window.addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
+  }
+
+  /* ---------------------------------------------------------------------
      Mobile fullscreen menu
   --------------------------------------------------------------------- */
   const menu = document.querySelector("[data-mobile-menu]");

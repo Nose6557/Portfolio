@@ -175,7 +175,12 @@ button:focus-visible,
   z-index: 90;
   background: transparent;
   mix-blend-mode: difference;
+  transition: transform .24s var(--ease-out);
 }
+/* Transparent + always-mounted means content shows through the bar, so it
+   slides away while you scroll down (reading) and returns on scroll up
+   (reaching for nav). main.js toggles data-hidden. */
+.site-nav[data-hidden="true"]{ transform: translateY(-100%); }
 
 .site-nav__row{
   display: flex;

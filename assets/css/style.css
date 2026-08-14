@@ -1,7 +1,18 @@
 /* ==========================================================================
    Tokens
+   ==========================================================================
+   Two layers, in this order:
+
+   1. Primitives  — raw values (family, weight, size, leading, tracking,
+                    colour). Never used directly by a component.
+   2. Text styles — the composites below the reset. One rule per style,
+                    named to match its Figma counterpart 1:1.
+
+   Components never declare font metrics. They join a text style by being
+   listed in its selector, and only carry layout + colour of their own.
    ========================================================================== */
 :root{
+  /* ---- Surface & line ------------------------------------------------- */
   --ink: #111112;
   --muted: #7A776F;
   --line: #DAD6CE;
@@ -14,6 +25,27 @@
   --dark-fg: #F0EEE9;
   --dark-muted: #8A8A85;
 
+  /* ---- Text colour ----------------------------------------------------
+     Three tiers on each background. In Figma these are colour styles,
+     kept separate from the text styles — a text style never carries a
+     fill, so any style can appear in any tier. */
+  --text-primary: var(--ink);                /* #111112 — headings, body */
+  --text-secondary: #443F38;                 /* supporting copy, ledes   */
+  --text-tertiary: var(--muted);             /* #7A776F — labels, meta   */
+
+  --text-inverse-primary: var(--dark-fg);    /* #F0EEE9 on dark surfaces */
+  --text-inverse-secondary: #B9B8B3;
+  --text-inverse-tertiary: var(--dark-muted);/* #8A8A85 */
+
+  --text-accent: var(--accent);
+
+  /* Print sheet (résumé) runs on plain black-on-white, not the palette. */
+  --print-bg: #fff;
+  --print-ink: #000;
+  --print-secondary: #333;
+  --print-tertiary: #555;
+  --print-line: #ccc;
+
   /* Pre-inversion values for the difference-blended header. Chosen so the
      blend resolves to the palette over the cream page background:
      #fff → #0F1116 (≈ --ink), rgb(118,119,122) → #7A776F (= --muted).
@@ -25,19 +57,79 @@
      48px of gutter looked pinched on large monitors. */
   --gutter: clamp(24px, 3vw, 72px);
 
-  /* One typeface throughout (Inter). The display/body split is kept as
-     two names so the var() references still resolve; the real difference
-     is weight — headings run 700, body copy is capped at Medium (500). */
-  --font-display: Inter, sans-serif;
-  --font-body: Inter, sans-serif;
+  /* ---- Family ---------------------------------------------------------
+     One typeface throughout (Inter). The display/body split is kept as
+     two names so the intent stays readable at the call site; the real
+     difference is weight — display runs 700, body is capped at 500. */
+  --font-sans: Inter, sans-serif;
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
 
-  --step-mono: 11px;
-  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);
-  --step-1: clamp(1.35rem, 1.2rem + 0.7vw, 1.875rem);
-  --step-2: clamp(1.8rem, 1.4rem + 2vw, 2.5rem);
-  --step-3: clamp(2.2rem, 1.5rem + 3.5vw, 4.5rem);
-  --step-4: clamp(2.6rem, 1.2rem + 7vw, 8rem);
-  --step-5: clamp(2.2rem, 0.8rem + 8vw, 8rem);
+  /* ---- Weight ---------------------------------------------------------
+     Only these three are loaded (see the Google Fonts link in each page).
+     Nothing may ask for a weight outside this set. */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* ---- Size -----------------------------------------------------------
+     Fluid steps interpolate linearly between a 375px and a 1440px
+     viewport, so every step has one exact value at each end:
+
+       clamp(<375px value>, <intercept> + <slope>vw, <1440px value>)
+
+     Those two ends are the Mobile and Desktop modes of the size variable
+     in Figma — no clamp() equivalent is needed there, and no step has to
+     be eyeballed.
+
+     Display ladder is geometric at ≈1.33: 128 · 96 · 72 · (56) · 44.
+     Body sizes are fixed: reading text should not track the viewport. */
+
+  /* Display — 700, set in caps or as typed */
+  --fs-display-2xl: clamp(2.75rem,  0.901rem + 7.89vw, 8rem);      /*  44 → 128 */
+  --fs-display-xl:  clamp(2.375rem, 1.099rem + 5.45vw, 6rem);      /*  38 →  96 */
+  --fs-display-l:   clamp(2.125rem, 1.289rem + 3.57vw, 4.5rem);    /*  34 →  72 */
+  --fs-display-ml:  clamp(1.875rem, 1.303rem + 2.44vw, 3.5rem);    /*  30 →  56 — reserved rung, keeps the ladder regular */
+  --fs-display-m:   clamp(1.75rem,  1.398rem + 1.50vw, 2.75rem);   /*  28 →  44 */
+
+  /* Heading — 700, sentence case */
+  --fs-heading-l:   clamp(1.5rem,   1.280rem + 0.94vw, 2.125rem);  /*  24 →  34 */
+  --fs-heading-m:   clamp(1.25rem,  1.118rem + 0.56vw, 1.625rem);  /*  20 →  26 */
+  --fs-heading-s:   clamp(1.125rem, 1.081rem + 0.19vw, 1.25rem);   /*  18 →  20 */
+
+  /* Body — 400/500 */
+  --fs-body-xl:     clamp(1.0625rem, 0.996rem + 0.28vw, 1.25rem);  /*  17 →  20 — ledes only */
+  --fs-body-l:      1.0625rem;                                     /*  17 */
+  --fs-body-m:      0.9375rem;                                     /*  15 */
+  --fs-body-s:      0.8125rem;                                     /*  13 */
+
+  /* Label — 400, caps, tracked out */
+  --fs-label-m:     0.75rem;                                       /*  12 */
+  --fs-label-s:     0.6875rem;                                     /*  11 */
+  --fs-label-xs:    0.625rem;                                      /*  10 */
+
+  /* Print sheet — fixed, sized for A4 rather than for a screen */
+  --fs-print-title: 0.875rem;                                      /*  14 */
+  --fs-print-body:  0.6875rem;                                     /*  11 */
+  --fs-print-label: 0.625rem;                                      /*  10 */
+
+  /* ---- Leading --------------------------------------------------------
+     Six values, unitless. Figma wants percentages, given alongside. */
+  --lh-display: 0.92;  /*  92% — display sizes, always short lines */
+  --lh-flat: 1;        /* 100% — single-line labels, buttons, chips */
+  --lh-tight: 1.05;    /* 105% — Display/M and Heading/L */
+  --lh-snug: 1.2;      /* 120% — small headings */
+  --lh-normal: 1.5;    /* 150% — UI text, definition lists, ledes */
+  --lh-relaxed: 1.6;   /* 160% — running prose and wrapping labels */
+
+  /* ---- Tracking -------------------------------------------------------
+     Optical, tied to size: the larger the type, the tighter it is set.
+     Figma wants percentages — an em here is 100% there. */
+  --ls-display: -0.045em;  /* -4.5% — 56px and up */
+  --ls-heading: -0.03em;   /* -3.0% — 24…44px      */
+  --ls-tight: -0.02em;     /* -2.0% — 14…26px      */
+  --ls-normal: 0;          /*    0% — all body copy */
+  --ls-label: 0.1em;       /* +10%  — caps labels   */
 
   --ease-out: cubic-bezier(.16,1,.3,1);
   /* Long, late-settling curve used by the project covers. */
@@ -57,8 +149,11 @@ html{
 body{
   margin: 0;
   background: var(--bg);
-  color: var(--ink);
+  color: var(--text-primary);
   font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
   -webkit-font-smoothing: antialiased;
 }
 img{ max-width: 100%; display: block; }
@@ -72,7 +167,7 @@ a{ color: inherit; text-decoration: none; }
 button{ font-family: inherit; }
 /* Semantic bold is capped at Medium too, so <strong> in the case and
    resume copy never asks for a weight the font isn't loaded at. */
-strong, b{ font-weight: 500; }
+strong, b{ font-weight: var(--fw-medium); }
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible{
@@ -81,23 +176,345 @@ button:focus-visible,
   border-radius: 1px;
 }
 
+/* ==========================================================================
+   Text styles
+   ==========================================================================
+   Every typographic rule in the site lives in this section — nothing
+   below it sets font-family, font-size, font-weight, line-height or
+   letter-spacing. Each block is one Figma text style; the selectors after
+   the .t-* utility are the components that use it, so the rule doubles as
+   the "where is this style applied" list.
+
+   Colour is deliberately absent: it is a separate token, applied by the
+   component. The one exception is the `caps` pairs, where Case is part of
+   the style because Figma cannot override case without detaching.
+
+   Element selectors here are always wrapped in :where(), so they weigh
+   nothing. A style is chosen by class, never won by nesting depth — which
+   is what used to break the kickers: `.case-section p` and `.about-tools p`
+   both out-specified `.mono-label`, so `01 контекст` and `інструменти`
+   rendered as 17px body copy instead of an 11px label. With :where() the
+   two are level and the later rule wins, so the label blocks below are
+   ordered last on purpose.
+   -------------------------------------------------------------------------- */
+
+/* Display/2XL — 40→128 · 700 · 92% · -4.5% · Upper ------------------------ */
+.t-display-2xl,
+.hero__title{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-display-2xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  text-transform: uppercase;
+}
+
+/* Display/XL — 36→96 · 700 · 92% · -4.5% · Upper -------------------------- */
+.t-display-xl,
+.page-hero__title,
+.case-hero__title{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-display-xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  text-transform: uppercase;
+}
+
+/* Display/L — 32→72 · 700 · 92% · -4.5% ----------------------------------- */
+.t-display-l, .t-display-l--caps,
+.contact-main__email,
+.contact-block__email,
+.stat-card__value,
+.about-hero__title,
+.next-case__title,
+.case-decisions__title,
+.error-page__title,
+.mobile-menu__links :where(a){
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-display-l);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+/* Display/L Caps — same metrics, Case: Upper */
+.t-display-l--caps,
+.about-hero__title,
+.next-case__title,
+.case-decisions__title,
+.error-page__title,
+.mobile-menu__links :where(a){ text-transform: uppercase; }
+
+/* Display/M — 26→44 · 700 · 105% · -3% ------------------------------------ */
+.t-display-m, .t-display-m--caps,
+.project__title,
+.resume__name{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-display-m);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-heading);
+}
+/* Display/M Caps — same metrics, Case: Upper */
+.t-display-m--caps,
+.resume__name{ text-transform: uppercase; }
+
+/* Heading/L — 24→34 · 700 · 105% · -3% ------------------------------------ */
+.t-heading-l,
+.work-row__title,
+.case-section__title{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-heading-l);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-heading);
+}
+
+/* Heading/M — 20→26 · 700 · 120% · -2% ------------------------------------ */
+.t-heading-m,
+.decision__fork,
+.about-contact-card__email{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-heading-m);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+
+/* Heading/S — 18→20 · 700 · 120% · -2% ------------------------------------ */
+.t-heading-s,
+.work-nda__title,
+.case-constraints__item-title{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-heading-s);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+
+/* Body/XL — 17→20 · 400 · 150% · 0 · ledes only --------------------------- */
+.t-body-xl,
+.hero__lede,
+.page-hero__lede{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-xl);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Body/L — 17 · 400 · 160% · 0 · running prose ---------------------------- */
+.t-body-l,
+.about-strip__text,
+.about-hero__text :where(p),
+.case-section :where(p),
+.case-results__summary :where(p),
+.error-page__text{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Body/L Medium — 17 · 500 · 100% · 0 · standalone links ------------------ */
+.t-body-l-medium,
+.projects__more{
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Body/M — 15 · 400 · 160% · 0 · secondary copy --------------------------- */
+.t-body-m,
+.project__summary,
+.work-nda__text,
+.case-constraints__item-body,
+.decision__options,
+.decision__choice,
+.about-tools :where(p),
+.exp-row{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-m);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Body/M Medium — 15 · 500 · 100% · 0 · inline link rows ------------------ */
+.t-body-m-medium,
+.contact-main__links{
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body-m);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Body/S — 13 · 400 · 150% · 0 · dense rows, captions --------------------- */
+.t-body-s,
+.contact-facts__item,
+.case-facts__item,
+.stat-card__label,
+.resume-print-hint{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Label/Button — 13 · 500 · 100% · 0 · Case: as typed --------------------- */
+.t-button,
+.btn,
+.skip-link{
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Label/M — 12 · 400 · 160% · +10% · Upper · wraps ------------------------ */
+.t-label-m,
+.hero__status{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-label-m);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* Label/M Compact — 12 · 400 · 100% · +10% · Upper · single line ---------- */
+.t-label-m-compact,
+.site-nav__row,
+.nav-toggle,
+.mobile-menu__top,
+.site-footer,
+.case-header,
+.work-row__index{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-label-m);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* Label/S — 11 · 400 · 160% · +10% · Upper · wraps ------------------------
+   The workhorse label. `.mono-label` is its named entry point in markup. */
+.t-label-s,
+.mono-label,
+.project__index,
+.project__descriptor,
+.contact-facts__item :where(dt),
+.case-facts__item :where(dt),
+.case-constraints__kicker,
+.decision__label,
+.work-row__descriptor,
+.work-row__meta,
+.next-case__meta,
+.exp-row__years{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-label-s);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* Label/S Compact — 11 · 400 · 100% · +10% · Upper · chips ----------------
+   Same style with flat leading, so a padded chip is exactly as tall as
+   its padding plus the cap height. */
+.t-label-s-compact,
+.mobile-menu__bottom,
+.project__img-label,
+.frame-label,
+.next-case__kicker,
+.about-contact-card__kicker,
+.about-contact-card__links{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-label-s);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* Label/XS — 10 · 400 · 100% · +10% · Upper ------------------------------- */
+.t-label-xs,
+.work-row__thumb{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-label-xs);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Print sheet — a separate, fixed ladder.
+
+   The résumé is an A4 document that happens to be rendered in a browser:
+   its column is 794px wide no matter how large the window is, so the
+   fluid web scale does not apply to it. Kept as its own small family of
+   styles (Figma: Print/*) rather than bent into the web one.
+   -------------------------------------------------------------------------- */
+
+/* Print/Title — 14 · 700 · 120% · -2% ------------------------------------- */
+.t-print-title,
+.resume-entry__title{
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-print-title);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+
+/* Print/Body — 11 · 400 · 160% · 0 ---------------------------------------- */
+.t-print-body,
+.resume__contact,
+.resume__block-body,
+.resume-entry__desc{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-print-body);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-normal);
+}
+
+/* Print/Label — 10 · 400 · 160% · +10% · Upper ---------------------------- */
+.t-print-label,
+.resume__block-label,
+.resume-entry__years,
+.resume-entry__org{
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-print-label);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Text-level components
+   ========================================================================== */
 .text-link{
-  color: var(--ink);
+  color: var(--text-primary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   transition: text-decoration-thickness .15s var(--ease-out);
 }
 .text-link:hover{ text-decoration-thickness: 2px; }
-.text-link--accent{ color: var(--accent); }
+.text-link--accent{ color: var(--text-accent); }
 .text-link--external::after{ content: ' \2197'; }
 
-.mono-label{
-  font: 400 var(--step-mono)/1.6 var(--font-body);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+/* Label/S in the tertiary tier — the combination used for every kicker. */
+.mono-label{ color: var(--text-tertiary); }
 
 .visually-hidden{
   position: absolute;
@@ -114,7 +531,6 @@ button:focus-visible,
   background: var(--ink);
   color: var(--bg);
   padding: 8px 16px;
-  font: 500 13px/1 var(--font-body);
   z-index: 200;
   transition: top .15s var(--ease-out);
 }
@@ -188,9 +604,6 @@ button:focus-visible,
   justify-content: space-between;
   gap: 24px;
   padding-block: 16px;
-  font: 400 12px/1 var(--font-body);
-  letter-spacing: .1em;
-  text-transform: uppercase;
   color: var(--nav-dim);
 }
 .site-nav__name{ color: var(--nav-bright); }
@@ -230,13 +643,20 @@ button:focus-visible,
   border: 0;
   padding: 0;
   margin: 0;
+  /* The switch takes whatever label style its container carries — nav row,
+     mobile menu or footer. `font: inherit` alone is not enough: the UA
+     stylesheet resets letter-spacing and text-transform on form controls,
+     so UA/EN used to sit untracked and lowercase next to nav items that
+     were tracked out to +10% and set in caps. */
   font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--text-tertiary);
 }
-.lang-switch__part[data-active="true"]{ color: var(--ink); }
-.mobile-menu .lang-switch__part{ color: var(--dark-muted); }
-.mobile-menu .lang-switch__part[data-active="true"]{ color: var(--dark-fg); }
+.lang-switch__part[data-active="true"]{ color: var(--text-primary); }
+.mobile-menu .lang-switch__part{ color: var(--text-inverse-tertiary); }
+.mobile-menu .lang-switch__part[data-active="true"]{ color: var(--text-inverse-primary); }
 
 /* Scoped to the header so the footer and mobile-menu switches keep the
    ordinary palette — only the blended group needs pre-inversion values. */
@@ -248,9 +668,6 @@ button:focus-visible,
   background: none;
   border: 0;
   padding: 8px;
-  font: 400 12px/1 var(--font-body);
-  letter-spacing: .1em;
-  text-transform: uppercase;
   color: var(--nav-bright);
   cursor: pointer;
 }
@@ -277,9 +694,6 @@ button:focus-visible,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font: 400 12px/1 var(--font-body);
-  letter-spacing: .1em;
-  text-transform: uppercase;
 }
 .mobile-menu__close{
   background: none; border: 0; color: inherit;
@@ -290,12 +704,7 @@ button:focus-visible,
   flex-direction: column;
   gap: 16px;
 }
-.mobile-menu__links a{
-  font: 700 clamp(2rem, 10vw, 2.6rem)/1 var(--font-display);
-  letter-spacing: -.04em;
-  text-transform: uppercase;
-  color: var(--bg);
-}
+.mobile-menu__links a{ color: var(--bg); }
 .mobile-menu__links a[aria-current]{
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -305,10 +714,7 @@ button:focus-visible,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font: 400 11px/1 var(--font-body);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--dark-muted);
+  color: var(--text-inverse-tertiary);
 }
 
 /* ==========================================================================
@@ -318,10 +724,9 @@ button:focus-visible,
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font: 500 13px/1 var(--font-body);
   padding: 16px 16px;
   border: 1px solid var(--ink);
-  color: var(--ink);
+  color: var(--text-primary);
   background: transparent;
   cursor: pointer;
   transition: background .15s var(--ease-out), color .15s var(--ease-out);
@@ -336,10 +741,7 @@ button:focus-visible,
 .hero{ padding-block: clamp(56px,10vw,88px) clamp(48px,8vw,72px); }
 .hero__kicker{ margin-bottom: clamp(24px,4vw,40px); }
 .hero__title{
-  font: 700 var(--step-5)/.9 var(--font-display);
-  letter-spacing: -.045em;
-  text-transform: uppercase;
-  color: var(--ink);
+  color: var(--text-primary);
   overflow-wrap: anywhere;
 }
 .hero__meta{
@@ -350,8 +752,8 @@ button:focus-visible,
   border-top: 1px solid var(--line);
   padding-top: 24px;
 }
-.hero__lede{ font: 400 clamp(1.1rem,1rem + 1vw,1.35rem)/1.45 var(--font-body); color: #443F38; max-width: 44ch; }
-.hero__status{ font: 400 12px/1.8 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.hero__lede{ color: var(--text-secondary); max-width: 44ch; }
+.hero__status{ color: var(--text-tertiary); }
 .hero__status a {
   color: inherit;
   text-decoration: none;
@@ -360,7 +762,7 @@ button:focus-visible,
 }
 .hero__status a:hover,
 .hero__status a:focus-visible {
-  color: #443F38;
+  color: var(--text-secondary);
 }
 
 @media (min-width: 860px){
@@ -390,7 +792,7 @@ button:focus-visible,
   grid-template-columns: repeat(6, 1fr);
   column-gap: 8px;
   row-gap: 32px;
-  color: var(--ink);
+  color: var(--text-primary);
   align-items: start;
 }
 .project:not(:last-of-type){ margin-bottom: 48px; }
@@ -398,12 +800,10 @@ button:focus-visible,
 .project__details{ grid-column: 1 / 7; }
 .project__index{
   display: block;
-  font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; color: var(--muted);
+  color: var(--text-tertiary);
   margin-bottom: 16px;
 }
 .project__title{
-  font: 700 clamp(1.6rem,1.1rem + 2.2vw,2.75rem)/1.02 var(--font-display);
-  letter-spacing: -.035em;
   max-width: 18ch;
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -412,13 +812,11 @@ button:focus-visible,
   transition: text-decoration-color .25s var(--curve-ref);
 }
 .project__descriptor{
-  font: 400 11px/1.9 var(--font-body); letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted);
+  color: var(--text-tertiary);
   margin-top: 16px;
 }
 .project__summary{
-  font: 400 15px/1.6 var(--font-body);
-  color: #443F38;
+  color: var(--text-secondary);
   max-width: 300px;
   margin: 32px 0 32px;
 }
@@ -454,8 +852,7 @@ button:focus-visible,
   object-fit: cover;
 }
 .project__img-label{
-  font: 400 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted); background: var(--surface); padding: 8px 16px;
+  color: var(--text-tertiary); background: var(--surface); padding: 8px 16px;
 }
 
 .project:hover .project__media{ transform: scale3d(1.05,1.05,1.05); }
@@ -497,7 +894,6 @@ button:focus-visible,
 
 .projects__more{
   margin-top: clamp(32px,4vw,40px);
-  font: 500 clamp(1rem,0.95rem + 0.4vw,1.15rem)/1 var(--font-body);
 }
 
 /* ==========================================================================
@@ -505,15 +901,9 @@ button:focus-visible,
    ========================================================================== */
 .page-hero{ padding-block: clamp(48px,8vw,72px) clamp(32px,5vw,48px); }
 .page-hero__kicker{ margin-bottom: clamp(24px,3vw,32px); }
-.page-hero__title{
-  font: 700 clamp(2.2rem,1.2rem + 6vw,5.5rem)/.92 var(--font-display);
-  letter-spacing: -.045em;
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
-}
+.page-hero__title{ overflow-wrap: anywhere; }
 .page-hero__lede{
-  font: 400 clamp(1rem,0.95rem + 0.5vw,1.25rem)/1.5 var(--font-body);
-  color: #443F38;
+  color: var(--text-secondary);
   max-width: 52ch;
   margin-top: clamp(24px,3vw,32px);
 }
@@ -522,15 +912,10 @@ button:focus-visible,
    Contact page
    ========================================================================== */
 .contact-main{ padding-bottom: clamp(40px,6vw,64px); }
-.contact-main__email{
-  font: 700 clamp(1.6rem,0.9rem + 5vw,4.5rem)/1 var(--font-display);
-  letter-spacing: -.04em;
-  overflow-wrap: anywhere;
-}
+.contact-main__email{ overflow-wrap: anywhere; }
 .contact-main__links{
   display: flex; flex-wrap: wrap; gap: 24px;
   margin-top: clamp(24px,3vw,32px);
-  font: 500 15px/1 var(--font-body);
 }
 
 .contact-facts{ display: grid; gap: 0 48px; padding-bottom: clamp(56px,10vw,88px); }
@@ -538,12 +923,8 @@ button:focus-visible,
   border-top: 1px solid var(--line);
   padding: 16px 0;
   display: flex; justify-content: space-between; gap: 16px;
-  font: 400 13px/1.5 var(--font-body);
 }
-.contact-facts__item dt{
-  font: 400 11px/1.6 var(--font-body); letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted);
-}
+.contact-facts__item dt{ color: var(--text-tertiary); }
 @media (min-width: 780px){
   .contact-facts{ grid-template-columns: 1fr 1fr; }
 }
@@ -563,10 +944,10 @@ button:focus-visible,
   display: grid;
   gap: 24px;
   align-items: center;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 .work-row:last-of-type{ border-bottom: 1px solid var(--line); }
-.work-row__index{ font: 400 12px/1 var(--font-body); letter-spacing: .1em; color: var(--muted); }
+.work-row__index{ color: var(--text-tertiary); }
 .work-row__main{ display: flex; align-items: center; gap: clamp(16px,3vw,32px); }
 /* min-width:0 lets the text column shrink instead of shoving itself
    below the thumbnail at mid widths. */
@@ -576,13 +957,11 @@ button:focus-visible,
   background-image: repeating-linear-gradient(135deg,#E2DFD8 0 10px,#EDEBE5 10px 20px);
   border: 1px solid var(--line);
   display: flex; align-items: center; justify-content: center;
-  font: 400 10px/1 var(--font-body); letter-spacing: .08em; color: var(--muted);
+  color: var(--text-tertiary);
   overflow: hidden;
 }
 .work-row__thumb img{ width: 100%; height: 100%; object-fit: cover; transition: transform .4s var(--ease-out); }
 .work-row__title{
-  font: 700 clamp(1.35rem,1.1rem + 1.4vw,2.125rem)/1.05 var(--font-display);
-  letter-spacing: -.03em;
   /* Held in check now that the row spans the whole window. */
   max-width: 28ch;
   text-decoration: underline;
@@ -592,20 +971,16 @@ button:focus-visible,
   transition: text-decoration-color .2s var(--ease-out);
 }
 .work-row__descriptor{
-  font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted); margin-top: 16px;
+  color: var(--text-tertiary); margin-top: 16px;
 }
-.work-row__meta{
-  font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted);
-}
+.work-row__meta{ color: var(--text-tertiary); }
 
 a.work-row:hover .work-row__title{ text-decoration-color: currentColor; }
 a.work-row:hover .work-row__thumb img{ transform: scale(1.02); }
 a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 
-.work-row--soon{ color: var(--muted); }
-.work-row--soon .work-row__title{ color: var(--muted); text-decoration: none; }
+.work-row--soon{ color: var(--text-tertiary); }
+.work-row--soon .work-row__title{ color: var(--text-tertiary); text-decoration: none; }
 .work-row--soon .work-row__thumb{
   background-image: none;
   border-style: dashed;
@@ -618,8 +993,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   display: grid;
   gap: 16px;
 }
-.work-nda__title{ font: 700 20px/1.2 var(--font-display); letter-spacing: -.02em; }
-.work-nda__text{ font: 400 15px/1.6 var(--font-body); color: #443F38; max-width: 60ch; }
+.work-nda__text{ color: var(--text-secondary); max-width: 60ch; }
 
 @media (min-width: 860px){
   .work-row{ grid-template-columns: 60px 1fr 200px; gap: 32px; }
@@ -640,26 +1014,21 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   background-image: repeating-linear-gradient(135deg,#E2DFD8 0 12px,#EDEBE5 12px 24px);
   border: 1px solid var(--line);
 }
-.about-strip__text{ font: 400 17px/1.55 var(--font-body); max-width: 48ch; }
+.about-strip__text{ max-width: 48ch; }
 @media (min-width: 700px){
   .about-strip__inner{ grid-template-columns: 220px 1fr; }
 }
 
 .contact-block{ padding-block: clamp(56px,10vw,88px) clamp(40px,6vw,56px); border-top: 1px solid var(--line); }
 .contact-block__kicker{ margin-bottom: 24px; }
-.contact-block__email{
-  font: 700 clamp(2rem,1.2rem + 5vw,4rem)/1 var(--font-display);
-  letter-spacing: -.035em;
-  word-break: break-word;
-}
+.contact-block__email{ word-break: break-word; }
 .contact-block__links{ display: flex; gap: 24px; margin-top: 24px; }
 
 .site-footer{
   display: flex; align-items: center; justify-content: space-between;
   border-top: 1px solid var(--line);
   padding-block: 24px;
-  font: 400 12px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text-tertiary);
 }
 
 /* ==========================================================================
@@ -669,16 +1038,13 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   padding: 16px var(--gutter);
   border-bottom: 1px solid var(--line);
   display: flex; align-items: center; justify-content: space-between;
-  font: 400 12px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  color: var(--text-tertiary);
 }
-.case-header a{ color: var(--ink); }
+.case-header a{ color: var(--text-primary); }
 
 .case-hero{ padding: clamp(48px,10vw,80px) var(--gutter) 0; }
 .case-hero__kicker{ margin-bottom: 32px; }
-.case-hero__title{
-  font: 700 clamp(2.2rem,1.4rem + 5vw,6rem)/.95 var(--font-display);
-  letter-spacing: -.045em; text-transform: uppercase; max-width: 20ch;
-}
+.case-hero__title{ max-width: 20ch; }
 
 .case-facts{
   padding: clamp(40px,7vw,56px) var(--gutter) 0;
@@ -688,10 +1054,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   border-top: 1px solid var(--line);
   padding: 16px 0;
   display: flex; justify-content: space-between; gap: 16px;
-  font: 400 13px/1.5 var(--font-body);
 }
 .case-facts__item--strong{ border-top-color: var(--ink); }
-.case-facts__item dt{ font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.case-facts__item dt{ color: var(--text-tertiary); }
 @media (min-width: 780px){
   .case-facts{ grid-template-columns: repeat(3,1fr); }
 }
@@ -699,12 +1064,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-section{ padding: clamp(56px,10vw,88px) var(--gutter) 0; display: flex; justify-content: center; }
 .case-section__inner{ max-width: 68ch; width: 100%; }
 .case-section__kicker{ margin-bottom: 16px; }
-.case-section__title{
-  font: 700 clamp(1.5rem,1.2rem + 1.5vw,2.125rem)/1.1 var(--font-display);
-  letter-spacing: -.03em; margin-bottom: 24px;
-}
-.case-section p{ font: 400 17px/1.55 var(--font-body); margin-bottom: 16px; }
-.case-section p:last-child{ margin-bottom: 0; color: #443F38; }
+.case-section__title{ margin-bottom: 24px; }
+.case-section p{ margin-bottom: 16px; }
+.case-section p:last-child{ margin-bottom: 0; color: var(--text-secondary); }
 
 .case-figure{ padding: clamp(40px,7vw,56px) var(--gutter) 0; }
 .case-figure__frame{
@@ -721,8 +1083,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-figure-grid .case-figure__frame{ padding: 16px; }
 .case-figure-grid .frame-media{ aspect-ratio: 4/3; padding: 16px; }
 .frame-label{
-  font: 400 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted); background: var(--surface); padding: 8px 8px;
+  color: var(--text-tertiary); background: var(--surface); padding: 8px 8px;
 }
 
 .case-constraints{
@@ -731,22 +1092,19 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   padding: clamp(32px,6vw,56px) clamp(24px,5vw,48px);
   display: grid; gap: 32px;
 }
-.case-constraints__kicker{ font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--dark-muted); }
+.case-constraints__kicker{ color: var(--text-inverse-tertiary); }
 .case-constraints__list{ display: flex; flex-direction: column; gap: 24px; max-width: 64ch; }
 .case-constraints__item{ border-bottom: 1px solid #2A2A2E; padding-bottom: 24px; }
 .case-constraints__item:last-child{ border-bottom: 0; padding-bottom: 0; }
-.case-constraints__item-title{ font: 700 20px/1.2 var(--font-display); letter-spacing: -.02em; margin-bottom: 8px; }
-.case-constraints__item-body{ font: 400 15px/1.55 var(--font-body); color: #B9B8B3; }
+.case-constraints__item-title{ margin-bottom: 8px; }
+.case-constraints__item-body{ color: var(--text-inverse-secondary); }
 @media (min-width: 780px){
   .case-constraints{ grid-template-columns: 220px 1fr; }
 }
 
 .case-decisions{ padding: clamp(56px,10vw,88px) var(--gutter) 0; }
 .case-decisions__kicker{ margin-bottom: 24px; }
-.case-decisions__title{
-  font: 700 clamp(1.8rem,1.2rem + 3vw,4rem)/.95 var(--font-display);
-  letter-spacing: -.04em; text-transform: uppercase; max-width: 20ch; margin-bottom: 40px;
-}
+.case-decisions__title{ max-width: 20ch; margin-bottom: 40px; }
 .decision{
   border-top: 1px solid var(--line);
   display: grid; gap: 24px;
@@ -754,11 +1112,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 }
 .decision:first-child{ border-top: 2px solid var(--ink); }
 .decision:last-child{ border-bottom: 2px solid var(--ink); }
-.decision__label{ font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-.decision__fork{ font: 700 clamp(1.15rem,1rem + 1vw,1.5rem)/1.15 var(--font-display); letter-spacing: -.025em; }
-.decision__options{ font: 400 15px/1.7 var(--font-body); color: #443F38; display: flex; flex-direction: column; gap: 8px; }
-.decision__choice{ font: 400 15px/1.65 var(--font-body); }
-.decision__choice strong{ font-weight: 500; }
+.decision__label{ color: var(--text-tertiary); margin-bottom: 16px; }
+.decision__options{ color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; }
 @media (min-width: 860px){
   .decision{ grid-template-columns: repeat(3,1fr); }
 }
@@ -768,10 +1123,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-results__stats{ display: grid; gap: 24px; margin-bottom: 32px; }
 @media (min-width: 700px){ .case-results__stats{ grid-template-columns: repeat(3,1fr); } }
 .stat-card{ background: var(--surface); border: 1px solid var(--line); padding: 32px; }
-.stat-card__value{ font: 700 clamp(2.4rem,1.8rem + 3vw,4.5rem)/1 var(--font-display); letter-spacing: -.05em; }
-.stat-card__label{ font: 400 13px/1.5 var(--font-body); color: var(--muted); margin-top: 8px; }
+.stat-card__label{ color: var(--text-tertiary); margin-top: 8px; }
 .case-results__summary{ display: flex; justify-content: center; }
-.case-results__summary p{ font: 400 17px/1.55 var(--font-body); max-width: 68ch; text-align: left; }
+.case-results__summary p{ max-width: 68ch; text-align: left; }
 
 .next-case{
   display: block;
@@ -779,12 +1133,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   padding: clamp(40px,8vw,72px) var(--gutter);
   background: var(--ink); color: var(--bg);
 }
-.next-case__kicker{ font: 400 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--dark-muted); margin-bottom: 24px; }
-.next-case__title{
-  font: 700 clamp(2.2rem,1.4rem + 5vw,4.5rem)/.92 var(--font-display);
-  letter-spacing: -.045em; text-transform: uppercase; max-width: 18ch; margin-bottom: 24px;
-}
-.next-case__meta{ font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--dark-muted); }
+.next-case__kicker{ color: var(--text-inverse-tertiary); margin-bottom: 24px; }
+.next-case__title{ max-width: 18ch; margin-bottom: 24px; }
+.next-case__meta{ color: var(--text-inverse-tertiary); }
 
 /* ==========================================================================
    About page
@@ -797,14 +1148,12 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   border: 1px solid var(--line);
 }
 .about-hero__title{
-  font: 700 clamp(2.2rem,1.4rem + 5vw,4.5rem)/.92 var(--font-display);
-  letter-spacing: -.045em; text-transform: uppercase; max-width: 16ch;
+  max-width: 16ch;
   margin: clamp(32px,6vw,48px) 0 32px;
 }
 .about-hero__text{ max-width: 68ch; display: flex; flex-direction: column; gap: 16px; }
-.about-hero__text p{ font: 400 17px/1.55 var(--font-body); }
-.about-hero__text p:first-child{ color: var(--ink); }
-.about-hero__text p:not(:first-child){ color: #443F38; }
+.about-hero__text p:first-child{ color: var(--text-primary); }
+.about-hero__text p:not(:first-child){ color: var(--text-secondary); }
 
 .about-experience{ padding: clamp(48px,8vw,72px) var(--gutter) 0; }
 .about-experience__kicker{ margin-bottom: 24px; }
@@ -812,13 +1161,12 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   border-top: 1px solid var(--line);
   display: grid; gap: 8px 24px;
   padding: 16px 0;
-  font: 400 15px/1.5 var(--font-body);
 }
 .exp-row:first-child{ border-top: 2px solid var(--ink); }
 .exp-row:last-child{ border-bottom: 2px solid var(--ink); }
-.exp-row__years{ font: 400 11px/1.6 var(--font-body); letter-spacing: .1em; color: var(--muted); }
-.exp-row__org{ font-weight: 500; }
-.exp-row__role{ color: var(--muted); }
+.exp-row__years{ color: var(--text-tertiary); }
+.exp-row__org{ font-weight: var(--fw-medium); }
+.exp-row__role{ color: var(--text-tertiary); }
 @media (min-width: 700px){
   .exp-row{ grid-template-columns: 110px 1fr 1fr; align-items: baseline; }
 }
@@ -827,12 +1175,10 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 @media (min-width: 700px){ .about-footer{ grid-template-columns: 1fr 1fr; } }
 .about-tools{ background: var(--surface); border: 1px solid var(--line); padding: 24px; }
 .about-tools__kicker{ margin-bottom: 16px; }
-.about-tools p{ font: 400 15px/1.7 var(--font-body); }
 .about-contact-card{ background: var(--ink); color: var(--bg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
-.about-contact-card__kicker{ font: 400 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--dark-muted); margin-bottom: 16px; }
-.about-contact-card__email{ font: 700 26px/1.1 var(--font-display); letter-spacing: -.03em; }
-.about-contact-card__links{ display: flex; gap: 24px; margin-top: 16px; font: 400 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--dark-muted); }
-.about-contact-card__links a:hover{ color: var(--dark-fg); }
+.about-contact-card__kicker{ color: var(--text-inverse-tertiary); margin-bottom: 16px; }
+.about-contact-card__links{ display: flex; gap: 24px; margin-top: 16px; color: var(--text-inverse-tertiary); }
+.about-contact-card__links a:hover{ color: var(--text-inverse-primary); }
 
 /* ==========================================================================
    Resume (screen + print)
@@ -840,36 +1186,33 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .resume-page{ background: #DAD6CE; padding: clamp(24px,5vw,56px) var(--gutter); display: flex; justify-content: center; }
 .resume{
   width: 100%; max-width: 794px;
-  background: #fff; color: #000;
+  background: var(--print-bg); color: var(--print-ink);
   padding: clamp(32px,6vw,56px);
 }
 .resume__head{
   display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;
-  border-bottom: 2px solid #000; padding-bottom: 24px;
+  border-bottom: 2px solid var(--print-ink); padding-bottom: 24px;
 }
-.resume__name{ font: 700 clamp(2rem,1.5rem + 3vw,2.75rem)/.92 var(--font-display); letter-spacing: -.045em; text-transform: uppercase; margin: 0; }
-.resume__contact{ text-align: right; font: 400 11px/1.7 var(--font-body); color: #333; }
-.resume__contact strong{ display: block; color: #000; font-weight: 500; }
+.resume__name{ margin: 0; }
+.resume__contact{ text-align: right; color: var(--print-secondary); }
+.resume__contact strong{ display: block; color: var(--print-ink); font-weight: var(--fw-medium); }
 
 .resume__body{ display: grid; gap: 32px; padding-top: 24px; }
 @media (min-width: 640px){ .resume__body{ grid-template-columns: 170px 1fr; } }
 
 .resume__col-side{ display: flex; flex-direction: column; gap: 24px; }
-.resume__block-label{ font: 400 10px/1.4 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: #555; margin-bottom: 8px; }
-.resume__block-body{ font: 400 11px/1.7 var(--font-body); }
+.resume__block-label{ color: var(--print-tertiary); margin-bottom: 8px; }
 
 .resume__col-main{ display: flex; flex-direction: column; gap: 16px; }
-.resume-entry{ border-top: 1px solid #ccc; padding-top: 16px; }
-.resume-entry:first-child{ border-top: 1px solid #000; }
+.resume-entry{ border-top: 1px solid var(--print-line); padding-top: 16px; }
+.resume-entry:first-child{ border-top: 1px solid var(--print-ink); }
 .resume-entry__row{ display: flex; justify-content: space-between; gap: 16px; }
-.resume-entry__title{ font: 700 14px/1.3 var(--font-display); letter-spacing: -.02em; }
-.resume-entry__years{ font: 400 10px/1.6 var(--font-body); letter-spacing: .1em; color: #555; white-space: nowrap; }
-.resume-entry__org{ font: 400 10px/1.6 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: #555; margin: 8px 0 8px; }
-.resume-entry__desc{ font: 400 11px/1.6 var(--font-body); }
+.resume-entry__years{ color: var(--print-tertiary); white-space: nowrap; }
+.resume-entry__org{ color: var(--print-tertiary); margin: 8px 0 8px; }
 
 .resume-print-hint{
   max-width: 794px; margin: 0 auto clamp(16px,3vw,24px);
-  font: 400 13px/1.5 var(--font-body); color: var(--muted); text-align: center;
+  color: var(--text-tertiary); text-align: center;
 }
 
 @media print{
@@ -885,11 +1228,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
    ========================================================================== */
 .error-page{ padding: clamp(72px,14vw,144px) var(--gutter); }
 .error-page__kicker{ margin-bottom: 24px; }
-.error-page__title{
-  font: 700 clamp(2.4rem,1.6rem + 6vw,4rem)/.9 var(--font-display);
-  letter-spacing: -.045em; text-transform: uppercase; max-width: 12ch; margin-bottom: 24px;
-}
-.error-page__text{ font: 400 16px/1.55 var(--font-body); color: #443F38; max-width: 48ch; margin-bottom: 24px; }
+.error-page__title{ max-width: 12ch; margin-bottom: 24px; }
+.error-page__text{ color: var(--text-secondary); max-width: 48ch; margin-bottom: 24px; }
 
 /* ==========================================================================
    Scroll reveal

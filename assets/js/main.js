@@ -77,7 +77,10 @@
     el.addEventListener("click", (e) => {
       const target = e.target.closest("[data-lang]");
       if (!target) return;
-      const lang = target.dataset.lang;
+      /* A "toggle" switch shows only the active language, so a click on
+         it means "the other one". */
+      const other = [...parts].find((p) => p !== target);
+      const lang = el.dataset.langSwitch === "toggle" && other ? other.dataset.lang : target.dataset.lang;
       localStorage.setItem(LANG_KEY, lang);
       applyState(lang);
     });

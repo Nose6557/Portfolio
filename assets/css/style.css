@@ -1309,10 +1309,10 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   background: var(--bg-page);
   color: var(--text);
   font-family: var(--font-geologica);
-  padding-bottom: 120px;              /* clear the fixed bottom navbar */
 }
 .redesign .wrap{
-  max-width: var(--page-max);
+  /* --page-max is the content width; the gutters sit outside it. */
+  max-width: calc(var(--page-max) + 2 * var(--page-pad-x));
   margin-inline: auto;
   padding-inline: var(--page-pad-x);
 }
@@ -1330,12 +1330,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   font: var(--fw-regular) var(--fs-h1)/var(--lh-h1) var(--font-geologica);
   letter-spacing: var(--ls-h1); text-transform: none; color: var(--text); margin: 0;
 }
-.redesign .hero__meta{ display: flex; flex-direction: column; gap: var(--gap-32); }
-.redesign .hero__lede,
-.redesign .hero__status{
-  font: 300 var(--fs-body-20)/var(--lh-body) var(--font-geologica);
-  letter-spacing: var(--ls-body); color: var(--text); margin: 0; max-width: 44ch;
-}
 
 /* ---- Обрані проєкти ------------------------------------------------------ */
 .redesign .projects{ background: var(--bg-muted); padding-block: var(--sp-section); }
@@ -1343,6 +1337,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign .projects__head{
   font: var(--fw-regular) var(--fs-h2)/var(--lh-h2) var(--font-geologica);
   letter-spacing: var(--ls-h2); color: var(--text); margin: 0;
+  border: 0; padding: 0;              /* the base head carries a rule + padding */
 }
 
 .redesign .projects__row{
@@ -1360,7 +1355,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign .projects__row--2 .card:nth-child(1){ grid-column: 1 / span 2; }
 .redesign .projects__row--2 .card:nth-child(2){ grid-column: 3 / span 3; }
 .redesign .projects__row--2 .card:nth-child(3){ grid-column: 6 / span 2; }
-.redesign .projects__row--2 .card:nth-child(4){ grid-column: 8 / span 3; }
+.redesign .projects__row--2 .projects__more{ grid-column: 8 / span 3; justify-self: center; }
+.redesign .projects__more{ margin: 0; }   /* base .projects__more is a text link with a top margin */
 
 .redesign .card{ height: auto; }
 .redesign .card__link{ display: block; color: var(--text); text-decoration: none; }
@@ -1392,8 +1388,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   font: 300 var(--fs-body-20)/var(--lh-body) var(--font-geologica);
   letter-spacing: var(--ls-body); color: var(--text); margin: 0;
 }
-.redesign .card--soon .card__title,
-.redesign .card--soon .card__desc{ color: #6e6e6e; }
 
 /* ---- Про мене ------------------------------------------------------------ */
 .redesign .about{
@@ -1438,7 +1432,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   font: var(--fw-regular) var(--fs-link-14)/var(--lh-link) var(--font-inter);
   color: var(--text-invert); text-decoration: none;
 }
-.redesign .contacts__cta{
+.redesign .contacts__cta,
+.redesign .projects__more{
   flex: none;
   width: 320px; height: 320px;
   border-radius: var(--radius-circle);
@@ -1447,51 +1442,50 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   text-decoration: none;
   transition: transform .3s var(--ease-out), background .3s var(--ease-out);
 }
-.redesign .contacts__cta-text{
+.redesign .contacts__cta-text,
+.redesign .projects__more-text{
   font: var(--fw-regular) var(--fs-cta)/var(--lh-cta) var(--font-geologica);
   letter-spacing: var(--ls-cta);
 }
 
-/* ---- Навбар (скляна панель знизу) --------------------------------------- */
+/* ---- Навбар (зверху, поверх hero) ---------------------------------------- */
 .redesign .site-nav{
-  position: fixed; inset: auto 0 0 0; top: auto;
+  position: fixed; inset: 0 0 auto 0;
   z-index: 90;
-  background: var(--nav-surface);
-  -webkit-backdrop-filter: blur(29px);
-  backdrop-filter: blur(29px);
+  background: var(--bg-page);
   mix-blend-mode: normal;
   transition: none;
 }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
   padding-block: var(--gap-32);
-  color: var(--text-invert); text-transform: none; letter-spacing: 0;
+  color: var(--text); text-transform: none; letter-spacing: 0;
   align-items: center;
-  /* Difference blend keeps the content legible over both the white page
-     and the black contacts section the glass navbar scrolls over. */
-  mix-blend-mode: difference;
 }
 .redesign .site-nav__name{
   font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
-  color: var(--text-invert);
+  color: var(--text);
 }
 .redesign .site-nav__links{ gap: var(--gap-32); align-items: center; }
 .redesign .site-nav__links a{
   font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
-  color: var(--text-invert); text-transform: none; letter-spacing: 0;
+  color: var(--text); text-transform: none; letter-spacing: 0;
 }
 .redesign .site-nav__links a[aria-current]{ text-decoration: underline; text-underline-offset: 6px; }
+.redesign .nav-toggle{ color: var(--text); }
 
-/* Lang pill 51×37, border 1px, radius 32, padding 4/8, gap 4 */
+/* Lang pill: only the active language shows, a click flips it (main.js).
+   font-size 0 swallows the " / " text node between the two buttons. */
 .redesign .lang-switch{
-  border: 1px solid var(--text-invert); border-radius: var(--radius-pill);
-  padding: 4px 8px; gap: 4px;
+  border: 1px solid var(--text); border-radius: var(--radius-pill);
+  padding: 4px 8px; gap: 0; font-size: 0;
 }
-.redesign .lang-switch__part{
-  font: var(--fw-regular) var(--fs-link-14)/1 var(--font-inter);
-  color: var(--text-invert); padding: 2px 6px; border-radius: 16px;
+.redesign .lang-switch__part,
+.redesign .site-nav .lang-switch__part[data-active="true"]{
+  font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
+  color: var(--text);
 }
-.redesign .lang-switch__part[data-active="true"]{ background: var(--text-invert); color: var(--text); }
+.redesign .lang-switch__part[data-active="false"]{ display: none; }
 
 /* ---- States (погоджено) ------------------------------------------------- */
 .redesign .card__link:hover .card__media img{ transform: scale(1.02); }
@@ -1499,7 +1493,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   text-decoration: underline; text-decoration-color: var(--accent);
   text-underline-offset: 4px;
 }
-.redesign .contacts__cta:hover{ transform: scale(1.03); background: #481180; }
+.redesign .contacts__cta:hover,
+.redesign .projects__more:hover{ transform: scale(1.03); background: #481180; }
 .redesign .site-nav__links a:hover,
 .redesign .contacts__link:hover,
 .redesign .text-link:hover{ text-decoration: underline; }
@@ -1509,13 +1504,16 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 /* ---- Responsive (погоджено) --------------------------------------------- */
 @media (max-width: 1199px){
   .redesign .projects__row{ grid-template-columns: repeat(2, 1fr); }
-  .redesign .projects__row .card{ grid-column: auto; }
+  /* :nth-child(n) matches the specificity of the per-card span rules above,
+     which otherwise win and keep the 10-column placement. */
+  .redesign .projects__row .card:nth-child(n),
+  .redesign .projects__row .projects__more{ grid-column: auto; }
   .redesign .hero__title{ font-size: clamp(56px, 11vw, 160px); }
   .redesign .about{ grid-template-columns: 300px 1fr; }
 }
 @media (max-width: 767px){
   .redesign .wrap{ padding-inline: 24px; }
-  .redesign .hero{ padding-block: 96px; }
+  .redesign .hero{ padding-block: 136px 96px; }   /* top clears the fixed header */
   .redesign .projects{ padding-block: 72px; }
   .redesign .projects__inner{ gap: 48px; }
   .redesign .projects__row{ grid-template-columns: 1fr; }
@@ -1523,5 +1521,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   .redesign .about__portrait{ width: 66%; }
   .redesign .contacts{ padding-block: 96px; }
   .redesign .contacts__inner{ flex-direction: column; align-items: flex-start; }
-  .redesign .contacts__cta{ width: 200px; height: 200px; }
+  .redesign .contacts__cta,
+  .redesign .projects__more{ width: 200px; height: 200px; }
+  /* The address can't wrap, so at 80px it widened the page and pushed the
+     fixed header's menu button off-screen. */
+  .redesign .contacts__email{ font-size: clamp(24px, 8.4vw, var(--fs-h2)); }
 }

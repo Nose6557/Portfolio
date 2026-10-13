@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#F0EEE9">
+<meta name="theme-color" content="#ffffff">
 <title>Резюме — Олександр Носач</title>
 <meta name="description" content="Резюме продуктового дизайнера Олександра Носача, A4, друкується чорно-білим.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,18 +12,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+<body class="redesign">
 <a class="skip-link" href="#main">Перейти до змісту</a>
 
 <header class="site-nav" data-site-nav>
   <div class="wrap site-nav__row">
     <a class="site-nav__name" href="index.html">Олександр Носач</a>
     <nav class="site-nav__links" aria-label="Основна навігація">
-      <a href="index.html">головна</a>
-      <a href="work.html">роботи</a>
-      <a href="about.html">про</a>
-      <a href="contact.html">контакт</a>
-      <div class="lang-switch" data-lang-switch role="group" aria-label="Мова сайту">
+      <a href="index.html">Головна</a>
+      <a href="work.html">Роботи</a>
+      <a href="about.html">Про мене</a>
+      <a href="contact.html">Контакт</a>
+      <div class="lang-switch" data-lang-switch="toggle" role="group" aria-label="Мова сайту">
         <button type="button" class="lang-switch__part" data-lang="ua">UA</button> / <button type="button" class="lang-switch__part" data-lang="en">EN</button>
       </div>
     </nav>
@@ -37,10 +37,10 @@
     <button type="button" class="mobile-menu__close" data-menu-close aria-label="Закрити меню">✕</button>
   </div>
   <nav class="mobile-menu__links" aria-label="Мобільна навігація">
-    <a href="index.html">головна</a>
-    <a href="work.html">роботи</a>
-    <a href="about.html">про</a>
-    <a href="contact.html">контакт</a>
+    <a href="index.html">Головна</a>
+    <a href="work.html">Роботи</a>
+    <a href="about.html">Про мене</a>
+    <a href="contact.html">Контакт</a>
   </nav>
   <div class="mobile-menu__bottom">
     <a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a>
@@ -52,7 +52,11 @@
 
 <p class="resume-print-hint">Ctrl/Cmd+P, щоб зберегти як PDF</p>
 
-<main id="main" class="resume-page">
+<main id="main">
+
+  <!-- Усе над футером: непрозора «кришка», з-під якої він відкривається -->
+  <div class="page-cover resume-page">
+
   <article class="resume">
     <div class="resume__head">
       <h1 class="resume__name">Олександр<br>Носач</h1>
@@ -124,6 +128,23 @@
       </div>
     </div>
   </article>
+
+  </div>
+
+  <!-- КОНТАКТИ -->
+  <section class="contacts" id="contact" aria-label="Контакти" data-footer-reveal>
+    <div class="contacts__inner wrap">
+      <div class="contacts__text">
+        <p class="contacts__label">Пишіть</p>
+        <h2 class="contacts__email"><a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a></h2>
+        <div class="contacts__links">
+          <a class="contacts__link" href="#" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="contacts__link" href="resume.html">Резюме PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <script src="assets/js/main.js" defer></script>

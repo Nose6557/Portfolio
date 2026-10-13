@@ -190,6 +190,7 @@
   if (heroLines.length && !prefersReducedMotion) {
     heroLines.forEach((line, i) => {
       line.style.transitionDelay = `${i * 60}ms`;
+      line.style.setProperty("--line-i", i);   /* homepage staggers its own, slower reveal */
       requestAnimationFrame(() => {
         requestAnimationFrame(() => { line.dataset.reveal = "in"; });
       });

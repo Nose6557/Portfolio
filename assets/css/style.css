@@ -36,6 +36,8 @@
   --bg-page:     #ffffff;
   --bg-muted:    #f4f4f4;   /* «Обрані проєкти» */
   --bg-dark:     #000000;   /* контакти */
+  --cta-bg:      #30d158;   /* коло «Більше робіт» */
+  --cta-text:    #1c1c1e;
   --text:        #000000;
   --text-invert: #ffffff;
   --border-soft: #dad6ce;   /* рамка портрета, 1px */
@@ -1292,7 +1294,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 
 @media print{
   @page{ margin: 1.2cm; }
-  .site-nav, .site-footer, .resume-print-hint, .skip-link{ display: none !important; }
+  .site-nav, .site-footer, .contacts, .resume-print-hint, .skip-link{ display: none !important; }
+  .page-cover{ min-height: 0 !important; }
   .resume-page{ background: #fff; padding: 0; }
   .resume{ max-width: none; padding: 0; }
   *{ print-color-adjust: exact; -webkit-print-color-adjust: exact; }
@@ -1324,7 +1327,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 
 /* ==========================================================================
    FIGMA REDESIGN — "My Portfolio", 1920 desktop (node 2917-445)
-   All scoped under body.redesign so the other six pages keep their styles.
+   Scoped under body.redesign, which every page now carries. This first part
+   is the homepage; the inner pages are re-themed at the end of the file.
    Values come from the mockup tables; nothing hard-coded outside :root.
    ========================================================================== */
 .redesign{
@@ -1344,6 +1348,29 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   padding-block: var(--sp-hero);
   display: flex; flex-direction: column; gap: var(--gap-32);
 }
+/* Entrance (every page): the kicker fades in, then each title line rises out
+   from behind its own clip edge, one after the other. main.js flips
+   data-reveal on the lines; :has() lets [data-hero-fade] follow them. */
+.js .redesign .hero-line[data-reveal]{
+  opacity: 1; transform: none; transition: none;
+  overflow: hidden; vertical-align: top;
+  /* room for descenders inside the clip, taken back out of the layout */
+  padding-block: 0.14em; margin-block: -0.14em;
+}
+.js .redesign .hero-line__inner{
+  display: inline-block;
+  transform: translateY(115%);
+  transition: transform 1.1s cubic-bezier(.16, 1, .3, 1);
+  transition-delay: calc(var(--line-i, 0) * 120ms + 120ms);
+}
+.js .redesign .hero-line[data-reveal="in"] .hero-line__inner{ transform: none; }
+.js .redesign [data-hero-fade]{
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+}
+.js .redesign [data-hero-fade="late"]{ transition-delay: .35s; }   /* ledes follow the title */
+.js .redesign section:has(.hero-line[data-reveal="in"]) [data-hero-fade]{ opacity: 1; transform: none; }
+
 .redesign .hero__kicker{
   font: var(--fw-regular) var(--fs-kicker)/var(--lh-kicker) var(--font-geologica);
   letter-spacing: 0; text-transform: uppercase; color: var(--text); margin: 0;
@@ -1453,7 +1480,10 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
    keeps it in the flow, so no spacer has to mirror its height.
    Only on viewports tall enough to show the whole footer — pinned to the
    bottom, a taller footer would have its top cut off for good. */
-.redesign .page-cover{ position: relative; z-index: 1; background: var(--bg-page); }
+.redesign .page-cover{
+  position: relative; z-index: 1; background: var(--bg-page);
+  min-height: 100svh;   /* short pages still hide the footer until you scroll */
+}
 @media (min-height: 700px){
   .redesign .contacts{ position: sticky; bottom: 0; z-index: 0; }
 }
@@ -1502,7 +1532,7 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   flex: none;
   width: 320px; height: 320px;
   border-radius: var(--radius-circle);
-  background: var(--accent); color: var(--text-invert);
+  background: var(--cta-bg); color: var(--cta-text);
   display: flex; align-items: center; justify-content: center; text-align: center;
   text-decoration: none;
   /* Magnetic: main.js feeds --mx/--my while the pointer is over the circle,
@@ -1583,7 +1613,8 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 .redesign .card__link:focus-visible .card__desc{ transform: translateY(0.7vw); }
 .redesign .projects__more:hover,
 .redesign .projects__more:focus-visible{
-  transform: translate(var(--mx), var(--my)) scale(1.04); background: #481180;
+  transform: translate(var(--mx), var(--my)) scale(1.04);
+  background: color-mix(in srgb, var(--cta-bg) 88%, #000);
   transition-duration: .25s, .3s; transition-timing-function: var(--ease-out);   /* follow the cursor tightly */
 }
 .redesign .projects__more:hover .projects__more-text{ transition-duration: .25s; transition-timing-function: var(--ease-out); }
@@ -1617,4 +1648,147 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   /* The address can't wrap, so at 80px it widened the page and pushed the
      fixed header's menu button off-screen. */
   .redesign .contacts__email{ font-size: clamp(24px, 8.4vw, var(--fs-h2)); }
+}
+
+/* ==========================================================================
+   REDESIGN — inner pages (Роботи, кейс, Про мене, Контакт, Резюме, 404)
+   These pages keep their own components. They take the redesign's look in
+   two steps: the tokens those components already read are re-pointed at the
+   redesign palette and typeface, then each text style is mapped onto the
+   redesign scale. Layout changes are limited to what the fixed header and
+   the shared footer require.
+   ========================================================================== */
+.redesign{
+  --bg: var(--bg-page);
+  --surface: var(--bg-muted);
+  --ink: var(--text);
+  --line: #e3e3e3;
+  --muted: #6e6e6e;
+  --text-primary: var(--text);
+  --text-secondary: #3c3c3c;
+  --text-tertiary: #6e6e6e;
+  --dark-bg: var(--bg-dark);
+  --text-inverse-primary: var(--text-invert);
+  --text-inverse-secondary: #c7c7c7;
+  --text-inverse-tertiary: #8e8e8e;
+  --font-display: var(--font-geologica);
+  --font-body: var(--font-geologica);
+  /* Geologica is loaded at 300 and 400 only: headings run Regular, body Light */
+  --fw-bold: 400;
+  --fw-medium: 400;
+  /* Sections that pad themselves with --gutter line up with .wrap */
+  --gutter: max(var(--page-pad-x), calc((100vw - var(--page-max)) / 2));
+}
+
+/* ---- Type: display ------------------------------------------------------- */
+.redesign .page-hero__title{
+  font-size: clamp(56px, 8.33vw, var(--fs-h1));
+  line-height: var(--lh-h1); letter-spacing: var(--ls-h1); text-transform: none;
+}
+.redesign :is(.case-hero__title, .about-hero__title, .error-page__title,
+              .case-decisions__title, .next-case__title, .stat-card__value){
+  font-size: clamp(36px, 4.17vw, var(--fs-h2));
+  line-height: var(--lh-h2); letter-spacing: var(--ls-h2); text-transform: none;
+}
+.redesign .mobile-menu__links a{
+  line-height: var(--lh-h2); letter-spacing: var(--ls-h2); text-transform: none;
+}
+.redesign .case-section__title{
+  font-size: clamp(28px, 2.08vw, var(--fs-cta));
+  line-height: var(--lh-cta); letter-spacing: var(--ls-cta);
+}
+.redesign .work-row__title{
+  font-size: clamp(24px, 1.67vw, var(--fs-card-title));
+  line-height: var(--lh-card); letter-spacing: var(--ls-card);
+}
+.redesign :is(.decision__fork, .work-nda__title, .case-constraints__item-title){
+  font-size: var(--fs-nav); line-height: var(--lh-nav); letter-spacing: 0;
+}
+
+/* ---- Type: body — Light 20, as on the homepage ----------------------------
+   Element selectors stay inside :where() so the label rules below can win by
+   order, the same way the base text styles are arranged. */
+.redesign :is(.page-hero__lede, .about-hero__text :where(p), .case-section :where(p),
+              .case-results__summary :where(p), .error-page__text, .work-nda__text,
+              .case-constraints__item-body, .decision__options, .decision__choice,
+              .about-tools :where(p), .exp-row, .contact-facts__item,
+              .case-facts__item, .stat-card__label){
+  font-weight: 300; font-size: var(--fs-body-20);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body);
+}
+.redesign :is(strong, b, .exp-row__org){ font-weight: var(--fw-regular); }
+
+/* ---- Type: labels — small meta 14, section kickers 24, hero kickers 32 ---- */
+.redesign :is(.mono-label, .contact-facts__item :where(dt), .case-facts__item :where(dt),
+              .decision__label, .work-row__descriptor, .work-row__meta, .work-row__index,
+              .work-row__thumb, .next-case__meta, .exp-row__years, .frame-label,
+              .mobile-menu__top, .mobile-menu__bottom){
+  font-weight: var(--fw-regular); font-size: var(--fs-link-14);
+  line-height: var(--lh-link); letter-spacing: 0; text-transform: uppercase;
+}
+.redesign :is(.case-section__kicker, .case-constraints__kicker, .case-decisions__kicker,
+              .case-results__kicker, .about-experience__kicker, .about-tools__kicker,
+              .next-case__kicker, .work-list__head){
+  font-weight: var(--fw-regular); font-size: var(--fs-label);
+  line-height: var(--lh-label); letter-spacing: 0; text-transform: uppercase;
+}
+.redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){
+  font-size: clamp(18px, 1.67vw, var(--fs-kicker));
+  line-height: var(--lh-kicker); letter-spacing: 0;
+  color: var(--text); margin-bottom: var(--gap-32);
+}
+
+/* ---- Layout: clear the fixed header, match the homepage rhythm ----------- */
+.redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: var(--sp-hero); }
+.redesign .page-hero{ padding-bottom: var(--sp-section); }
+.redesign .page-hero__lede{ color: var(--text); max-width: 44ch; margin-top: var(--gap-32); }
+.redesign .error-page{ padding-bottom: var(--sp-section); }
+.redesign :is(.case-hero__title, .about-hero__title){ max-width: none; }
+
+/* ---- Surfaces: neutral placeholders, rounded media, no outlines ---------- */
+.redesign :is(.work-row__thumb, .case-figure__frame, .stat-card, .about-tools){
+  border: 0; border-radius: var(--radius-media);
+}
+.redesign :is(.work-row__thumb, .case-figure__frame .frame-media){
+  background-image: repeating-linear-gradient(135deg,#e7e7e7 0 12px,#efefef 12px 24px);
+}
+.redesign .case-figure__frame .frame-media{ border-radius: 8px; }
+.redesign .frame-label{ border-radius: 4px; }
+.redesign .work-row--soon .work-row__thumb{ border: 1px dashed var(--line); background-image: none; }
+.redesign .case-constraints{ border-radius: var(--radius-media); }
+/* The black footer follows directly, so the last block steps down to grey */
+.redesign .next-case{ background: var(--bg-muted); color: var(--text); }
+.redesign :is(.next-case__kicker, .next-case__meta){ color: var(--text-tertiary); }
+
+/* ---- Про мене ------------------------------------------------------------ */
+.redesign .about-hero{
+  display: grid; grid-template-columns: 336px 1fr; gap: 0 var(--gap-32);
+  align-items: start;
+}
+.redesign .about-hero__photo{
+  grid-row: 1 / span 2;
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover;
+  border: 0; border-radius: var(--radius-media); background: none;
+}
+.redesign .about-hero__title{ margin: 0 0 var(--gap-32); }
+.redesign .about-footer{ grid-template-columns: 1fr; padding-bottom: var(--sp-section); }
+
+/* ---- Резюме: the sheet stays a print document on a grey desk ------------- */
+@media screen{
+  .redesign .resume-page{
+    background: var(--bg-muted);
+    padding-top: calc(var(--sp-section) + 72px); padding-bottom: var(--sp-section);
+  }
+}
+
+@media (max-width: 1199px){
+  .redesign .about-hero{ grid-template-columns: 240px 1fr; }
+}
+@media (max-width: 767px){
+  .redesign{ --gutter: 24px; }
+  .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: 136px; }
+  .redesign .page-hero{ padding-bottom: 72px; }
+  .redesign .about-hero{ grid-template-columns: 1fr; gap: var(--gap-32) 0; }
+  .redesign .about-hero__photo{ grid-row: auto; width: 66%; }
+  .redesign .work-list__head{ font-size: var(--fs-link-14); line-height: var(--lh-link); }
 }

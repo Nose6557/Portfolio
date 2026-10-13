@@ -1458,7 +1458,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
-  padding-block: var(--gap-32);
+  padding-block: var(--gap-16);
   color: var(--text); text-transform: none; letter-spacing: 0;
   align-items: center;
 }

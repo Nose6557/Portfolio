@@ -39,7 +39,7 @@
   --text:        #000000;
   --text-invert: #ffffff;
   --border-soft: #dad6ce;   /* рамка портрета, 1px */
-  --nav-surface: rgba(255, 255, 255, 0.10);
+  --nav-surface: rgba(255, 255, 255, 0.85);   /* скляний хедер */
 
   /* Radii */
   --radius-media:  16px;     /* зображення карток */
@@ -58,7 +58,9 @@
   --gap-48: 48px;   /* сітка проєктів */
   --gap-64: 64px;
   --gap-96: 96px;
-  --gap-20: 20px;
+  --underline-time: .5s;
+  --underline-ease: cubic-bezier(.65, 0, .35, 1);
+  --gap-40: 40px;   /* футер: підпис · пошта · посилання */
   --gap-16: 16px;
 
   /* Type scale — fixed px (макет лише десктоп 1920; адаптив окремо) */
@@ -555,14 +557,39 @@ button:focus-visible,
 /* ==========================================================================
    Text-level components
    ========================================================================== */
-.text-link{
-  color: var(--text-primary);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition: text-decoration-thickness .15s var(--ease-out);
+.text-link{ color: var(--text-primary); padding-bottom: 2px; }
+
+/* Animated underline — appears on hover: slides in from the left, leaves to
+   the right. It is a background, not text-decoration, so its length can
+   animate; background-position is deliberately not transitioned, it flips
+   sides while the line has no visible length to jump.
+   --underline sets the thickness, --underline-color the colour.
+   Work-row titles carry it on an inner span so it hugs the text, line by
+   line. */
+.text-link,
+.redesign .contacts__email a,
+.redesign .contacts__link,
+.redesign .site-nav__links a,
+.work-row__title span{
+  text-decoration: none;
+  background: linear-gradient(var(--underline-color, currentColor) 0 0)
+              100% 100% / 0 var(--underline, 1px) no-repeat;
+  transition: background-size var(--underline-time) var(--underline-ease);
 }
-.text-link:hover{ text-decoration-thickness: 2px; }
+.text-link:hover,
+.text-link:focus-visible,
+.redesign .contacts__email a:hover,
+.redesign .contacts__email a:focus-visible,
+.redesign .contacts__link:hover,
+.redesign .contacts__link:focus-visible,
+.redesign .site-nav__links a:hover,
+.redesign .site-nav__links a:focus-visible,
+.redesign .site-nav__links a[aria-current],
+a.work-row:hover .work-row__title span,
+a.work-row:focus-visible .work-row__title span{
+  background-size: 100% var(--underline, 1px);
+  background-position: 0 100%;
+}
 .text-link--accent{ color: var(--text-accent); }
 .text-link--external::after{ content: ' \2197'; }
 
@@ -1017,18 +1044,13 @@ button:focus-visible,
 .work-row__title{
   /* Held in check now that the row spans the whole window. */
   max-width: 28ch;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
-  text-decoration-color: transparent;
-  transition: text-decoration-color .2s var(--ease-out);
 }
+.work-row__title span{ --underline: 2px; padding-bottom: 4px; }
 .work-row__descriptor{
   color: var(--text-tertiary); margin-top: 16px;
 }
 .work-row__meta{ color: var(--text-tertiary); }
 
-a.work-row:hover .work-row__title{ text-decoration-color: currentColor; }
 a.work-row:hover .work-row__thumb img{ transform: scale(1.02); }
 a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 
@@ -1358,7 +1380,11 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign .projects__row--2 .projects__more{ grid-column: 8 / span 3; justify-self: center; }
 .redesign .projects__more{ margin: 0; }   /* base .projects__more is a text link with a top margin */
 
-.redesign .card{ height: auto; }
+/* Card hover: the image grows inside its clipped frame while the title and
+   description sink by slightly different amounts. */
+.redesign .card{ height: auto; --card-time: .6s; --card-ease: cubic-bezier(.215, .61, .355, 1); }
+.redesign .card__title,
+.redesign .card__desc{ transition: transform var(--card-time) var(--card-ease); }
 .redesign .card__link{ display: block; color: var(--text); text-decoration: none; }
 .redesign .card__media{
   border-radius: var(--radius-media);
@@ -1368,13 +1394,17 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 }
 .redesign .card__media img{
   width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform .4s var(--ease-out);
+  transition: transform var(--card-time) var(--card-ease);
 }
 .redesign .card__media--square{ aspect-ratio: 1 / 1; }
 .redesign .card__media--wide{ aspect-ratio: 16 / 10; }
-.redesign .card__media--empty{
-  background:
-    repeating-linear-gradient(135deg,#e7e7e7 0 12px,#efefef 12px 24px);
+/* Placeholder pattern sits on a pseudo-element so it can scale inside the
+   clipped frame the same way a real image does. */
+.redesign .card__media--empty{ position: relative; }
+.redesign .card__media--empty::before{
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(135deg,#e7e7e7 0 12px,#efefef 12px 24px);
+  transition: transform var(--card-time) var(--card-ease);
 }
 .redesign .card__body{
   padding: 24px 0;
@@ -1392,19 +1422,19 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 /* ---- Про мене ------------------------------------------------------------ */
 .redesign .about{
   padding-block: var(--sp-section);
-  display: grid; grid-template-columns: 420px 1fr; gap: var(--gap-32);
-  align-items: start;
+  display: grid; grid-template-columns: 336px 1fr; gap: var(--gap-32);
+  align-items: center;
 }
 .redesign .about__portrait{
-  width: 100%; aspect-ratio: 4 / 5;
-  border: 1px solid var(--border-soft);
+  display: block;
+  width: 100%; height: auto; aspect-ratio: 4 / 5;
+  object-fit: cover;
   border-radius: var(--radius-media);
-  background: repeating-linear-gradient(135deg,#efefef 0 12px,#f6f6f6 12px 24px);
 }
 .redesign .about__text{ display: flex; flex-direction: column; gap: var(--gap-64); }
 .redesign .about__lead{
-  font: 300 var(--fs-body-20)/var(--lh-body) var(--font-geologica);
-  letter-spacing: var(--ls-body); color: var(--text); margin: 0; max-width: 44ch;
+  font: var(--fw-regular) var(--fs-h2)/var(--lh-h2) var(--font-geologica);
+  letter-spacing: var(--ls-h2); color: var(--text); margin: 0;
 }
 .redesign .about__more{ margin: 0; }
 
@@ -1412,12 +1442,42 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign .contacts{
   background: var(--bg-dark); color: var(--text-invert);
   padding-block: var(--sp-contacts);
+  /* Section heights are fractional, so the page can end a fraction of a pixel
+     below the footer, which shows as a light hairline under it. The shadow
+     paints over that sliver without adding to the scroll height. */
+  box-shadow: 0 2px 0 var(--bg-dark);
+}
+
+/* Footer reveal: the footer is pinned to the bottom of the viewport underneath
+   the page, and the opaque .page-cover scrolls away to uncover it. Sticky
+   keeps it in the flow, so no spacer has to mirror its height.
+   Only on viewports tall enough to show the whole footer — pinned to the
+   bottom, a taller footer would have its top cut off for good. */
+.redesign .page-cover{ position: relative; z-index: 1; background: var(--bg-page); }
+@media (min-height: 700px){
+  .redesign .contacts{ position: sticky; bottom: 0; z-index: 0; }
+}
+/* Colour behind the page for the overscroll bounce past the footer; main.js
+   sets data-page-end within one screen of the bottom. Set on body as well:
+   browsers differ on which of the two they sample for the bounce area, and
+   body is fully covered by .page-cover and the footer, so it never shows. */
+html[data-page-end="true"],
+html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
+/* Its content zooms in once about a third of the footer is uncovered and
+   steps back when it gets covered again; main.js flips data-footer-reveal. */
+.redesign .contacts__inner{
+  transform-origin: 50% 50%;
+  transition: opacity .4s cubic-bezier(.165, .84, .44, 1), transform .4s cubic-bezier(.165, .84, .44, 1);
+}
+.redesign .contacts[data-footer-reveal="out"] .contacts__inner{
+  opacity: 0; transform: scale(.95);
+  transition-duration: .3s; transition-timing-function: ease;
 }
 .redesign .contacts__inner{
   display: flex; justify-content: space-between; align-items: center;
   gap: var(--gap-64); flex-wrap: wrap;
 }
-.redesign .contacts__text{ display: flex; flex-direction: column; gap: var(--gap-20); }
+.redesign .contacts__text{ display: flex; flex-direction: column; gap: var(--gap-40); }
 .redesign .contacts__label{
   font: var(--fw-regular) var(--fs-label)/var(--lh-label) var(--font-geologica);
   text-transform: uppercase; color: var(--text-invert); margin: 0;
@@ -1426,13 +1486,18 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   font: var(--fw-regular) var(--fs-h2)/var(--lh-h2) var(--font-geologica);
   letter-spacing: var(--ls-h2); color: var(--text-invert); margin: 0;
 }
-.redesign .contacts__email a{ color: inherit; text-decoration: none; }
+.redesign .contacts__email a{
+  --underline: 0.04em;
+  color: inherit; text-decoration: none;
+  padding-bottom: 0.06em;
+}
 .redesign .contacts__links{ display: flex; gap: var(--gap-32); }
 .redesign .contacts__link{
-  font: var(--fw-regular) var(--fs-link-14)/var(--lh-link) var(--font-inter);
+  font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
+  letter-spacing: 0;
   color: var(--text-invert); text-decoration: none;
+  padding-bottom: 4px;
 }
-.redesign .contacts__cta,
 .redesign .projects__more{
   flex: none;
   width: 320px; height: 320px;
@@ -1440,38 +1505,57 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   background: var(--accent); color: var(--text-invert);
   display: flex; align-items: center; justify-content: center; text-align: center;
   text-decoration: none;
-  transition: transform .3s var(--ease-out), background .3s var(--ease-out);
+  /* Magnetic: main.js feeds --mx/--my while the pointer is over the circle,
+     so it leans toward the cursor; the label leans a little further for
+     depth. Leaving lets it spring back with a slight overshoot. */
+  --mx: 0px; --my: 0px;
+  transform: translate(var(--mx), var(--my));
+  transition: transform .8s cubic-bezier(.3, 1.6, .5, 1), background .3s var(--ease-out);
 }
-.redesign .contacts__cta-text,
 .redesign .projects__more-text{
+  display: inline-block;
   font: var(--fw-regular) var(--fs-cta)/var(--lh-cta) var(--font-geologica);
   letter-spacing: var(--ls-cta);
+  transform: translate(calc(var(--mx) * .4), calc(var(--my) * .4));
+  transition: transform .8s cubic-bezier(.3, 1.6, .5, 1);
+}
+.redesign .projects__more-plus{
+  display: inline-block;
+  transition: transform .6s cubic-bezier(.215, .61, .355, 1);
 }
 
 /* ---- Навбар (зверху, поверх hero) ---------------------------------------- */
+/* Frosted surface: invisible over the white hero, tints whatever scrolls
+   under it. main.js drives --nav-shrink from 0 to 1 over the first 600px of
+   scroll, and the row padding and type scale down with it. */
 .redesign .site-nav{
+  --nav-shrink: 0;
+  --nav-fs: calc(var(--fs-nav) * (1 - 0.125 * var(--nav-shrink)));
   position: fixed; inset: 0 0 auto 0;
   z-index: 90;
-  background: var(--bg-page);
+  background: var(--nav-surface);
+  -webkit-backdrop-filter: saturate(1.7) blur(40px);
+  backdrop-filter: saturate(1.7) blur(40px);
   mix-blend-mode: normal;
   transition: none;
 }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
-  padding-block: var(--gap-32);
+  padding-block: calc(var(--gap-32) - 12px * var(--nav-shrink));
   color: var(--text); text-transform: none; letter-spacing: 0;
   align-items: center;
 }
 .redesign .site-nav__name{
-  font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
+  font: var(--fw-regular) var(--nav-fs)/var(--lh-nav) var(--font-geologica);
   color: var(--text);
 }
 .redesign .site-nav__links{ gap: var(--gap-32); align-items: center; }
 .redesign .site-nav__links a{
-  font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
+  font: var(--fw-regular) var(--nav-fs)/var(--lh-nav) var(--font-geologica);
   color: var(--text); text-transform: none; letter-spacing: 0;
 }
-.redesign .site-nav__links a[aria-current]{ text-decoration: underline; text-underline-offset: 6px; }
+.redesign .site-nav__links a{ --underline: max(1px, 0.06em); }
+.redesign .site-nav__links a[aria-current]{ text-decoration: none; }   /* the line above replaces it */
 .redesign .nav-toggle{ color: var(--text); }
 
 /* Lang pill: only the active language shows, a click flips it (main.js).
@@ -1482,22 +1566,29 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 }
 .redesign .lang-switch__part,
 .redesign .site-nav .lang-switch__part[data-active="true"]{
-  font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
+  font: var(--fw-regular) var(--nav-fs)/var(--lh-nav) var(--font-geologica);
   color: var(--text);
 }
 .redesign .lang-switch__part[data-active="false"]{ display: none; }
 
 /* ---- States (погоджено) ------------------------------------------------- */
-.redesign .card__link:hover .card__media img{ transform: scale(1.02); }
-.redesign .card__link:hover .card__title{
-  text-decoration: underline; text-decoration-color: var(--accent);
-  text-underline-offset: 4px;
+/* On every card, linked or not — the links come later. */
+.redesign .card:hover .card__media img,
+.redesign .card:hover .card__media--empty::before,
+.redesign .card__link:focus-visible .card__media img,
+.redesign .card__link:focus-visible .card__media--empty::before{ transform: scale(1.05); }
+.redesign .card:hover .card__title,
+.redesign .card__link:focus-visible .card__title{ transform: translateY(0.5vw); }
+.redesign .card:hover .card__desc,
+.redesign .card__link:focus-visible .card__desc{ transform: translateY(0.7vw); }
+.redesign .projects__more:hover,
+.redesign .projects__more:focus-visible{
+  transform: translate(var(--mx), var(--my)) scale(1.04); background: #481180;
+  transition-duration: .25s, .3s; transition-timing-function: var(--ease-out);   /* follow the cursor tightly */
 }
-.redesign .contacts__cta:hover,
-.redesign .projects__more:hover{ transform: scale(1.03); background: #481180; }
-.redesign .site-nav__links a:hover,
-.redesign .contacts__link:hover,
-.redesign .text-link:hover{ text-decoration: underline; }
+.redesign .projects__more:hover .projects__more-text{ transition-duration: .25s; transition-timing-function: var(--ease-out); }
+.redesign .projects__more:hover .projects__more-plus,
+.redesign .projects__more:focus-visible .projects__more-plus{ transform: rotate(180deg); }
 .redesign a:focus-visible,
 .redesign button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -1510,6 +1601,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   .redesign .projects__row .projects__more{ grid-column: auto; }
   .redesign .hero__title{ font-size: clamp(56px, 11vw, 160px); }
   .redesign .about{ grid-template-columns: 300px 1fr; }
+  .redesign .about__lead{ font-size: clamp(32px, 5.5vw, 80px); }
 }
 @media (max-width: 767px){
   .redesign .wrap{ padding-inline: 24px; }
@@ -1521,7 +1613,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   .redesign .about__portrait{ width: 66%; }
   .redesign .contacts{ padding-block: 96px; }
   .redesign .contacts__inner{ flex-direction: column; align-items: flex-start; }
-  .redesign .contacts__cta,
   .redesign .projects__more{ width: 200px; height: 200px; }
   /* The address can't wrap, so at 80px it widened the page and pushed the
      fixed header's menu button off-screen. */

@@ -21,12 +21,16 @@
       const y = window.scrollY;
       const menuOpen = document.querySelector("[data-mobile-menu]")?.dataset.open === "true";
       nav.dataset.hidden = String(!menuOpen && y > lastY && y > nav.offsetHeight);
+      /* 0 → 1 over the first 600px; the homepage header shrinks with it
+         (see --nav-shrink in style.css). */
+      nav.style.setProperty("--nav-shrink", Math.min(Math.max(y / 600, 0), 1).toFixed(3));
       lastY = y;
       ticking = false;
     };
     window.addEventListener("scroll", () => {
       if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
     }, { passive: true });
+    onScroll();   /* a reload can land mid-page */
   }
 
   /* ---------------------------------------------------------------------
@@ -192,5 +196,64 @@
     });
   } else {
     heroLines.forEach((line) => { line.dataset.reveal = "in"; });
+  }
+
+  /* ---------------------------------------------------------------------
+     Footer reveal: show the footer's content near the end of the page
+
+     The footer itself is uncovered by CSS (sticky under .page-cover). This
+     only flips its content in once SHOWN of the footer's height has been
+     uncovered, and back out when it gets covered again.
+  --------------------------------------------------------------------- */
+  const footerReveal = document.querySelector("[data-footer-reveal]");
+  if (footerReveal) {
+    const SHOWN = 0.35;
+    let pending = false;
+    const update = () => {
+      const doc = document.documentElement;
+      const hidden = doc.scrollHeight - (window.scrollY + window.innerHeight);
+      const reached = hidden <= footerReveal.offsetHeight * (1 - SHOWN);
+      footerReveal.dataset.footerReveal = reached ? "in" : "out";
+      /* Rubber-band overscroll shows the root background. Near the end of
+         the page make it match the footer, so bouncing past the bottom
+         doesn't flash a white strip under it; near the top it stays light. */
+      doc.dataset.pageEnd = String(hidden < window.innerHeight);
+      pending = false;
+    };
+    const request = () => {
+      if (!pending) { pending = true; requestAnimationFrame(update); }
+    };
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
+    update();
+  }
+
+  /* ---------------------------------------------------------------------
+     Magnetic button: leans toward the cursor while hovered
+
+     Only writes --mx/--my; the transforms and the spring back live in
+     style.css. Mouse-only — a touch has no hover to follow.
+  --------------------------------------------------------------------- */
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (canHover && !prefersReducedMotion) {
+    const PULL = 0.3;
+    document.querySelectorAll("[data-magnet]").forEach((el) => {
+      let mx = 0;
+      let my = 0;
+      const set = (x, y) => {
+        mx = x; my = y;
+        el.style.setProperty("--mx", `${x.toFixed(1)}px`);
+        el.style.setProperty("--my", `${y.toFixed(1)}px`);
+      };
+      el.addEventListener("pointermove", (e) => {
+        /* The rect already includes the current offset — take it back out
+           so the pull is measured from the resting centre. */
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2 - mx;
+        const cy = r.top + r.height / 2 - my;
+        set((e.clientX - cx) * PULL, (e.clientY - cy) * PULL);
+      });
+      el.addEventListener("pointerleave", () => set(0, 0));
+    });
   }
 })();

@@ -18,7 +18,7 @@
   --line: #DAD6CE;
   --bg: #F0EEE9;
   --surface: #F7F6F3;
-  --accent: #2436D8;
+  --accent: #541495;         /* site accent — purple (from the redesign) */
   --accent-hover: #14161A;
 
   --dark-bg: #111112;
@@ -40,11 +40,6 @@
   --text-invert: #ffffff;
   --border-soft: #dad6ce;   /* рамка портрета, 1px */
   --nav-surface: rgba(255, 255, 255, 0.10);
-
-  /* Accent — the single redesign accent (was #2436D8). Flipping it here
-     also recolours focus rings/accent links on the not-yet-redesigned
-     pages from blue to purple; that is the intended new accent. */
-  --accent: #541495;         /* фіолетове коло «Більше робіт +» */
 
   /* Radii */
   --radius-media:  16px;     /* зображення карток */

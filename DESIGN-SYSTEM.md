@@ -207,7 +207,7 @@ CSS тримає безрозмірні числа, Figma — відсотки. 
 | `Text/Inverse/Primary` | `#F0EEE9` | те саме на темних секціях |
 | `Text/Inverse/Secondary` | `#B9B8B3` | |
 | `Text/Inverse/Tertiary` | `#8A8A85` | |
-| `Text/Accent` | `#2436D8` | акцентні посилання |
+| `Text/Accent` | `#541495` | акцентні посилання (фіолетовий, редизайн) |
 | `Print/Ink` | `#000000` | резюме |
 | `Print/Secondary` | `#333333` | |
 | `Print/Tertiary` | `#555555` | |

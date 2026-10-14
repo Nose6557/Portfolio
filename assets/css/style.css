@@ -12,36 +12,75 @@
    listed in its selector, and only carry layout + colour of their own.
    ========================================================================== */
 :root{
-  /* ---- Surface & line ------------------------------------------------- */
-  --ink: #111112;
-  --muted: #7A776F;
-  --line: #DAD6CE;
-  --bg: #F0EEE9;
-  --surface: #F7F6F3;
-  --accent: #541495;         /* site accent — purple (from the redesign) */
-  --accent-hover: #14161A;
-
-  --dark-bg: #111112;
-  --dark-fg: #F0EEE9;
-  --dark-muted: #8A8A85;
-
   /* ====================================================================
-     FIGMA REDESIGN — "My Portfolio", 1920 desktop (node 2917-445)
-     Values taken verbatim from the mockup. These are added alongside the
-     existing tokens and consumed section by section as the redesign
-     lands, so the other pages keep working until each is converted.
+     COLOUR
+     Two layers, the same split as Figma:
+
+       Palette — Apple's raw values, named by what they are. Components
+                 never use these directly. Figma: collection `Palette`.
+       Roles   — what a colour is for (background, label, separator…).
+                 Components use only these. Figma: collection `Color`,
+                 each variable an alias of a palette swatch.
+
+     To recolour the site, re-point a role at another swatch. To change a
+     swatch itself, edit its hex once — every role using it follows.
+
+     Neutrals follow apple.com's web palette (built for text on the web and
+     AA-legible); accents are Apple's system colours (Human Interface
+     Guidelines), light appearance unless noted.
      ==================================================================== */
 
-  /* Surfaces & lines */
-  --bg-page:     #ffffff;
-  --bg-muted:    #f4f4f4;   /* «Обрані проєкти» */
-  --bg-dark:     #000000;   /* контакти */
-  --cta-bg:      #30d158;   /* коло «Більше робіт» */
-  --cta-text:    #1c1c1e;
-  --text:        #000000;
-  --text-invert: #ffffff;
-  --border-soft: #dad6ce;   /* рамка портрета, 1px */
-  --nav-surface: rgba(255, 255, 255, 0.85);   /* скляний хедер */
+  /* ---- Palette: neutrals (apple.com) ---- */
+  --white:     #ffffff;
+  --gray-50:   #f5f5f7;
+  --gray-100:  #e8e8ed;
+  --gray-200:  #d2d2d7;
+  --gray-400:  #86868b;
+  --gray-500:  #6e6e73;
+  --gray-800:  #424245;
+  --gray-900:  #1d1d1f;
+  --gray-950:  #1c1c1e;   /* HIG systemGray6, dark appearance — the CTA label in the mockup */
+  --black:     #000000;
+
+  /* ---- Palette: system colours (Apple HIG) ---- */
+  --blue:         #0071e3;   /* apple.com action blue */
+  --green:        #34c759;
+  --green-bright: #30d158;   /* HIG systemGreen, dark appearance — the CTA in the mockup */
+  --indigo:       #5856d6;
+  --orange:       #ff9500;
+  --pink:         #ff2d55;
+  --purple:       #af52de;
+  --red:          #ff3b30;
+  --teal:         #30b0c7;
+  --yellow:       #ffcc00;
+
+  /* ---- Roles: backgrounds ---- */
+  --color-bg:              var(--white);     /* the page */
+  --color-bg-secondary:    var(--gray-50);   /* «Обрані проєкти», plates, cards */
+  --color-bg-inverse:      var(--black);     /* the footer, dark blocks */
+  --color-bg-glass:        color-mix(in srgb, var(--color-bg) 85%, transparent);   /* the header */
+
+  /* ---- Roles: text ----
+     Contrast on --color-bg: label 16.8:1, secondary 5.1:1 (AA for any size),
+     tertiary 3.6:1 — large text or disabled states only. */
+  --color-label:           var(--gray-900);
+  --color-label-secondary: var(--gray-500);
+  --color-label-tertiary:  var(--gray-400);
+  --color-label-inverse:            var(--gray-50);    /* on --color-bg-inverse */
+  --color-label-inverse-secondary:  var(--gray-400);
+
+  /* ---- Roles: lines and fills ---- */
+  --color-separator:         var(--gray-200);
+  --color-separator-inverse: var(--gray-800);
+  --color-fill:              var(--gray-100);   /* image wells, placeholders */
+  --color-fill-alt:          color-mix(in srgb, var(--gray-100) 50%, var(--gray-50));   /* second placeholder stripe */
+
+  /* ---- Roles: accent and call to action ---- */
+  --color-accent:     var(--blue);              /* focus ring, accent links */
+  --color-selection:  color-mix(in srgb, var(--color-accent) 20%, transparent);
+  --color-cta:        var(--green-bright);
+  --color-cta-hover:  color-mix(in srgb, var(--color-cta) 88%, var(--black));
+  --color-on-cta:     var(--gray-950);
 
   /* Radii */
   --radius-media:  16px;     /* зображення карток */
@@ -65,33 +104,12 @@
   --gap-40: 40px;   /* футер: підпис · пошта · посилання */
   --gap-16: 16px;
 
-  /* ---- Text colour ----------------------------------------------------
-     Three tiers on each background. In Figma these are colour styles,
-     kept separate from the text styles — a text style never carries a
-     fill, so any style can appear in any tier. */
-  --text-primary: var(--ink);                /* #111112 — headings, body */
-  --text-secondary: #443F38;                 /* supporting copy, ledes   */
-  --text-tertiary: var(--muted);             /* #7A776F — labels, meta   */
-
-  --text-inverse-primary: var(--dark-fg);    /* #F0EEE9 on dark surfaces */
-  --text-inverse-secondary: #B9B8B3;
-  --text-inverse-tertiary: var(--dark-muted);/* #8A8A85 */
-
-  --text-accent: var(--accent);
-
   /* Print sheet (résumé) runs on plain black-on-white, not the palette. */
   --print-bg: #fff;
   --print-ink: #000;
   --print-secondary: #333;
   --print-tertiary: #555;
   --print-line: #ccc;
-
-  /* Pre-inversion values for the difference-blended header. Chosen so the
-     blend resolves to the palette over the cream page background:
-     #fff → #0F1116 (≈ --ink), rgb(118,119,122) → #7A776F (= --muted).
-     Over the dark sections they land on #EEEEED and a mid grey. */
-  --nav-bright: #fff;
-  --nav-dim: rgb(118,119,122);
 
   /* Wider ceiling than before: with no max-width holding content in,
      48px of gutter looked pinched on large monitors. */
@@ -167,14 +185,14 @@ html{
 }
 body{
   margin: 0;
-  background: var(--bg);
-  color: var(--text-primary);
+  background: var(--color-bg);
+  color: var(--color-label);
   -webkit-font-smoothing: antialiased;   /* type: see Body in Text styles */
 }
 img{ max-width: 100%; display: block; }
 h1,h2,h3,p,dl,dd{ margin: 0; }
 ul{ margin: 0; padding: 0; list-style: none; }
-::selection{ background: rgba(36,54,216,.2); }
+::selection{ background: var(--color-selection); }
 
 a{ color: inherit; text-decoration: none; }
 /* Buttons don't inherit font-family by default, so without this the ✕
@@ -183,7 +201,7 @@ button{ font-family: inherit; }
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible{
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 1px;
 }
@@ -383,7 +401,7 @@ body,
 /* ==========================================================================
    Text-level components
    ========================================================================== */
-.text-link{ color: var(--text-primary); padding-bottom: 2px; }
+.text-link{ color: var(--color-label); padding-bottom: 2px; }
 
 /* Animated underline — appears on hover: slides in from the left, leaves to
    the right. It is a background, not text-decoration, so its length can
@@ -416,11 +434,11 @@ a.work-row:focus-visible .work-row__title span{
   background-size: 100% var(--underline, 1px);
   background-position: 0 100%;
 }
-.text-link--accent{ color: var(--text-accent); }
+.text-link--accent{ color: var(--color-accent); }
 .text-link--external::after{ content: ' \2197'; }
 
 /* Label/S in the tertiary tier — the combination used for every kicker. */
-.mono-label{ color: var(--text-tertiary); }
+.mono-label{ color: var(--color-label-secondary); }
 
 .visually-hidden{
   position: absolute;
@@ -434,8 +452,8 @@ a.work-row:focus-visible .work-row__title span{
 .skip-link{
   position: absolute;
   left: 16px; top: -48px;
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--color-bg-inverse);
+  color: var(--color-label-inverse);
   padding: 8px 16px;
   z-index: 200;
   transition: top .15s var(--ease-out);
@@ -469,13 +487,13 @@ a.work-row:focus-visible .work-row__title span{
   top: 0; left: 0;
   width: 100%;
   height: 2px;
-  background: var(--line);
+  background: var(--color-separator);
   z-index: 100;
 }
 .progress-bar__fill{
   height: 100%;
   width: 0%;
-  background: var(--ink);
+  background: var(--color-bg-inverse);
   transition: width .1s linear;
 }
 
@@ -510,24 +528,24 @@ a.work-row:focus-visible .work-row__title span{
   justify-content: space-between;
   gap: 24px;
   padding-block: 16px;
-  color: var(--nav-dim);
+  color: var(--color-label);
 }
-.site-nav__name{ color: var(--nav-bright); }
+.site-nav__name{ color: var(--color-label); }
 .site-nav__links{
   display: flex;
   align-items: center;
   gap: 32px;
 }
-.site-nav__links a{ color: var(--nav-dim); }
+.site-nav__links a{ color: var(--color-label); }
 /* "page" marks the exact current page; "location" marks the parent
    section (a case page highlights Роботи without claiming to be it). */
 .site-nav__links a[aria-current]{
-  color: var(--nav-bright);
+  color: var(--color-label);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 6px;
 }
-.site-nav__links a:hover{ color: var(--nav-bright); }
+.site-nav__links a:hover{ color: var(--color-label); }
 
 /* The focus ring is inside the blended group too, so a fixed colour would
    shift hue with the backdrop. currentColor rides the same inversion as
@@ -558,23 +576,23 @@ a.work-row:focus-visible .work-row__title span{
   letter-spacing: inherit;
   text-transform: inherit;
   cursor: pointer;
-  color: var(--text-tertiary);
+  color: var(--color-label-secondary);
 }
-.lang-switch__part[data-active="true"]{ color: var(--text-primary); }
-.mobile-menu .lang-switch__part{ color: var(--text-inverse-tertiary); }
-.mobile-menu .lang-switch__part[data-active="true"]{ color: var(--text-inverse-primary); }
+.lang-switch__part[data-active="true"]{ color: var(--color-label); }
+.mobile-menu .lang-switch__part{ color: var(--color-label-inverse-secondary); }
+.mobile-menu .lang-switch__part[data-active="true"]{ color: var(--color-label-inverse); }
 
 /* Scoped to the header so the footer and mobile-menu switches keep the
    ordinary palette — only the blended group needs pre-inversion values. */
-.site-nav .lang-switch__part{ color: var(--nav-dim); }
-.site-nav .lang-switch__part[data-active="true"]{ color: var(--nav-bright); }
+.site-nav .lang-switch__part{ color: var(--color-label); }
+.site-nav .lang-switch__part[data-active="true"]{ color: var(--color-label); }
 
 .nav-toggle{
   display: none;
   background: none;
   border: 0;
   padding: 8px;
-  color: var(--nav-bright);
+  color: var(--color-label);
   cursor: pointer;
 }
 @media (max-width: 700px){
@@ -585,8 +603,8 @@ a.work-row:focus-visible .work-row__title span{
 .mobile-menu{
   position: fixed;
   inset: 0;
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--color-bg-inverse);
+  color: var(--color-label-inverse);
   z-index: 110;
   padding: 24px var(--gutter);
   display: flex;
@@ -610,7 +628,7 @@ a.work-row:focus-visible .work-row__title span{
   flex-direction: column;
   gap: 16px;
 }
-.mobile-menu__links a{ color: var(--bg); }
+.mobile-menu__links a{ color: var(--color-label-inverse); }
 .mobile-menu__links a[aria-current]{
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -620,7 +638,7 @@ a.work-row:focus-visible .work-row__title span{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-inverse-tertiary);
+  color: var(--color-label-inverse-secondary);
 }
 
 /* ==========================================================================
@@ -631,15 +649,15 @@ a.work-row:focus-visible .work-row__title span{
   align-items: center;
   gap: 8px;
   padding: 16px 16px;
-  border: 1px solid var(--ink);
-  color: var(--text-primary);
+  border: 1px solid var(--color-label);
+  color: var(--color-label);
   background: transparent;
   cursor: pointer;
   transition: background .15s var(--ease-out), color .15s var(--ease-out);
 }
-.btn:hover{ background: var(--ink); color: var(--bg); }
-.btn--solid{ background: var(--ink); color: var(--bg); }
-.btn--solid:hover{ background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn:hover{ background: var(--color-bg-inverse); color: var(--color-label-inverse); }
+.btn--solid{ background: var(--color-bg-inverse); color: var(--color-label-inverse); }
+.btn--solid:hover{ background: var(--color-label); border-color: var(--color-label); }
 
 /* ==========================================================================
    Hero (homepage)
@@ -647,7 +665,7 @@ a.work-row:focus-visible .work-row__title span{
 .hero{ padding-block: clamp(56px,10vw,88px) clamp(48px,8vw,72px); }
 .hero__kicker{ margin-bottom: clamp(24px,4vw,40px); }
 .hero__title{
-  color: var(--text-primary);
+  color: var(--color-label);
   overflow-wrap: anywhere;
 }
 .hero__meta{
@@ -655,11 +673,11 @@ a.work-row:focus-visible .work-row__title span{
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   padding-top: 24px;
 }
-.hero__lede{ color: var(--text-secondary); max-width: 44ch; }
-.hero__status{ color: var(--text-tertiary); }
+.hero__lede{ color: var(--color-label-secondary); max-width: 44ch; }
+.hero__status{ color: var(--color-label-secondary); }
 .hero__status a {
   color: inherit;
   text-decoration: none;
@@ -668,7 +686,7 @@ a.work-row:focus-visible .work-row__title span{
 }
 .hero__status a:hover,
 .hero__status a:focus-visible {
-  color: var(--text-secondary);
+  color: var(--color-label-secondary);
 }
 
 @media (min-width: 860px){
@@ -689,7 +707,7 @@ a.work-row:focus-visible .work-row__title span{
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid var(--color-label);
   padding: 16px 0 32px;
 }
 
@@ -698,7 +716,7 @@ a.work-row:focus-visible .work-row__title span{
   grid-template-columns: repeat(6, 1fr);
   column-gap: 8px;
   row-gap: 32px;
-  color: var(--text-primary);
+  color: var(--color-label);
   align-items: start;
 }
 .project:not(:last-of-type){ margin-bottom: 48px; }
@@ -706,7 +724,7 @@ a.work-row:focus-visible .work-row__title span{
 .project__details{ grid-column: 1 / 7; }
 .project__index{
   display: block;
-  color: var(--text-tertiary);
+  color: var(--color-label-secondary);
   margin-bottom: 16px;
 }
 .project__title{
@@ -718,11 +736,11 @@ a.work-row:focus-visible .work-row__title span{
   transition: text-decoration-color .25s var(--curve-ref);
 }
 .project__descriptor{
-  color: var(--text-tertiary);
+  color: var(--color-label-secondary);
   margin-top: 16px;
 }
 .project__summary{
-  color: var(--text-secondary);
+  color: var(--color-label-secondary);
   max-width: 300px;
   margin: 32px 0 32px;
 }
@@ -743,7 +761,7 @@ a.work-row:focus-visible .work-row__title span{
   position: relative;
   width: 100%;
   height: 118%;
-  background-image: repeating-linear-gradient(135deg,#E2DFD8 0 12px,#EDEBE5 12px 24px);
+  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
   display: flex; align-items: flex-end; padding: 24px;
   will-change: transform;
 }
@@ -758,7 +776,7 @@ a.work-row:focus-visible .work-row__title span{
   object-fit: cover;
 }
 .project__img-label{
-  color: var(--text-tertiary); background: var(--surface); padding: 8px 16px;
+  color: var(--color-label-secondary); background: var(--color-bg-secondary); padding: 8px 16px;
 }
 
 .project:hover .project__media{ transform: scale3d(1.05,1.05,1.05); }
@@ -809,7 +827,7 @@ a.work-row:focus-visible .work-row__title span{
 .page-hero__kicker{ margin-bottom: clamp(24px,3vw,32px); }
 .page-hero__title{ overflow-wrap: anywhere; }
 .page-hero__lede{
-  color: var(--text-secondary);
+  color: var(--color-label-secondary);
   max-width: 52ch;
   margin-top: clamp(24px,3vw,32px);
 }
@@ -826,11 +844,11 @@ a.work-row:focus-visible .work-row__title span{
 
 .contact-facts{ display: grid; gap: 0 48px; padding-bottom: clamp(56px,10vw,88px); }
 .contact-facts__item{
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   padding: 16px 0;
   display: flex; justify-content: space-between; gap: 16px;
 }
-.contact-facts__item dt{ color: var(--text-tertiary); }
+.contact-facts__item dt{ color: var(--color-label-secondary); }
 @media (min-width: 780px){
   .contact-facts{ grid-template-columns: 1fr 1fr; }
 }
@@ -845,25 +863,25 @@ a.work-row:focus-visible .work-row__title span{
 }
 
 .work-row{
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   padding: 32px 0;
   display: grid;
   gap: 24px;
   align-items: center;
-  color: var(--text-primary);
+  color: var(--color-label);
 }
-.work-row:last-of-type{ border-bottom: 1px solid var(--line); }
-.work-row__index{ color: var(--text-tertiary); }
+.work-row:last-of-type{ border-bottom: 1px solid var(--color-separator); }
+.work-row__index{ color: var(--color-label-secondary); }
 .work-row__main{ display: flex; align-items: center; gap: clamp(16px,3vw,32px); }
 /* min-width:0 lets the text column shrink instead of shoving itself
    below the thumbnail at mid widths. */
 .work-row__text{ min-width: 0; }
 .work-row__thumb{
   width: 180px; height: 104px; flex: none;
-  background-image: repeating-linear-gradient(135deg,#E2DFD8 0 10px,#EDEBE5 10px 20px);
-  border: 1px solid var(--line);
+  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 10px, var(--color-fill-alt) 10px 20px);
+  border: 1px solid var(--color-separator);
   display: flex; align-items: center; justify-content: center;
-  color: var(--text-tertiary);
+  color: var(--color-label-secondary);
   overflow: hidden;
 }
 .work-row__thumb img{ width: 100%; height: 100%; object-fit: cover; transition: transform .4s var(--ease-out); }
@@ -873,28 +891,28 @@ a.work-row:focus-visible .work-row__title span{
 }
 .work-row__title span{ --underline: 2px; padding-bottom: 4px; }
 .work-row__descriptor{
-  color: var(--text-tertiary); margin-top: 16px;
+  color: var(--color-label-secondary); margin-top: 16px;
 }
-.work-row__meta{ color: var(--text-tertiary); }
+.work-row__meta{ color: var(--color-label-secondary); }
 
 a.work-row:hover .work-row__thumb img{ transform: scale(1.02); }
-a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
+a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 
-.work-row--soon{ color: var(--text-tertiary); }
-.work-row--soon .work-row__title{ color: var(--text-tertiary); text-decoration: none; }
+.work-row--soon{ color: var(--color-label-tertiary); }   /* disabled: not yet published */
+.work-row--soon .work-row__title{ color: var(--color-label-tertiary); text-decoration: none; }
 .work-row--soon .work-row__thumb{
   background-image: none;
   border-style: dashed;
 }
 
 .work-nda{
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   margin-top: 0;
   padding-top: 32px;
   display: grid;
   gap: 16px;
 }
-.work-nda__text{ color: var(--text-secondary); max-width: 60ch; }
+.work-nda__text{ color: var(--color-label-secondary); max-width: 60ch; }
 
 @media (min-width: 860px){
   .work-row{ grid-template-columns: 60px 1fr 200px; gap: 32px; }
@@ -908,28 +926,28 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 /* ==========================================================================
    About + contact strip (homepage)
    ========================================================================== */
-.about-strip{ padding-block: clamp(56px,10vw,88px); border-top: 1px solid var(--line); }
+.about-strip{ padding-block: clamp(56px,10vw,88px); border-top: 1px solid var(--color-separator); }
 .about-strip__inner{ display: grid; gap: 32px; align-items: start; }
 .about-strip__photo{
   aspect-ratio: 4/5;
-  background-image: repeating-linear-gradient(135deg,#E2DFD8 0 12px,#EDEBE5 12px 24px);
-  border: 1px solid var(--line);
+  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
+  border: 1px solid var(--color-separator);
 }
 .about-strip__text{ max-width: 48ch; }
 @media (min-width: 700px){
   .about-strip__inner{ grid-template-columns: 220px 1fr; }
 }
 
-.contact-block{ padding-block: clamp(56px,10vw,88px) clamp(40px,6vw,56px); border-top: 1px solid var(--line); }
+.contact-block{ padding-block: clamp(56px,10vw,88px) clamp(40px,6vw,56px); border-top: 1px solid var(--color-separator); }
 .contact-block__kicker{ margin-bottom: 24px; }
 .contact-block__email{ word-break: break-word; }
 .contact-block__links{ display: flex; gap: 24px; margin-top: 24px; }
 
 .site-footer{
   display: flex; align-items: center; justify-content: space-between;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   padding-block: 24px;
-  color: var(--text-tertiary);
+  color: var(--color-label-secondary);
 }
 
 /* ==========================================================================
@@ -937,11 +955,11 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
    ========================================================================== */
 .case-header{
   padding: 16px var(--gutter);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--color-separator);
   display: flex; align-items: center; justify-content: space-between;
-  color: var(--text-tertiary);
+  color: var(--color-label-secondary);
 }
-.case-header a{ color: var(--text-primary); }
+.case-header a{ color: var(--color-label); }
 
 .case-hero{ padding: clamp(48px,10vw,80px) var(--gutter) 0; }
 .case-hero__kicker{ margin-bottom: 32px; }
@@ -952,12 +970,12 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   display: grid; gap: 24px;
 }
 .case-facts__item{
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   padding: 16px 0;
   display: flex; justify-content: space-between; gap: 16px;
 }
-.case-facts__item--strong{ border-top-color: var(--ink); }
-.case-facts__item dt{ color: var(--text-tertiary); }
+.case-facts__item--strong{ border-top-color: var(--color-label); }
+.case-facts__item dt{ color: var(--color-label-secondary); }
 @media (min-width: 780px){
   .case-facts{ grid-template-columns: repeat(3,1fr); }
 }
@@ -967,15 +985,15 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-section__kicker{ margin-bottom: 16px; }
 .case-section__title{ margin-bottom: 24px; }
 .case-section p{ margin-bottom: 16px; }
-.case-section p:last-child{ margin-bottom: 0; color: var(--text-secondary); }
+.case-section p:last-child{ margin-bottom: 0; color: var(--color-label-secondary); }
 
 .case-figure{ padding: clamp(40px,7vw,56px) var(--gutter) 0; }
 .case-figure__frame{
-  background: var(--surface); border: 1px solid var(--line); padding: 16px;
+  background: var(--color-bg-secondary); border: 1px solid var(--color-separator); padding: 16px;
 }
 .case-figure__frame .frame-media{
   aspect-ratio: 2/1;
-  background-image: repeating-linear-gradient(135deg,#E2DFD8 0 12px,#EDEBE5 12px 24px);
+  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
   display: flex; align-items: flex-end; padding: 24px;
 }
 .case-figure__frame img{ width: 100%; height: 100%; object-fit: cover; }
@@ -984,21 +1002,21 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-figure-grid .case-figure__frame{ padding: 16px; }
 .case-figure-grid .frame-media{ aspect-ratio: 4/3; padding: 16px; }
 .frame-label{
-  color: var(--text-tertiary); background: var(--surface); padding: 8px 8px;
+  color: var(--color-label-secondary); background: var(--color-bg-secondary); padding: 8px 8px;
 }
 
 .case-constraints{
   margin: clamp(56px,10vw,88px) var(--gutter) 0;
-  background: var(--ink); color: var(--bg);
+  background: var(--color-bg-inverse); color: var(--color-label-inverse);
   padding: clamp(32px,6vw,56px) clamp(24px,5vw,48px);
   display: grid; gap: 32px;
 }
-.case-constraints__kicker{ color: var(--text-inverse-tertiary); }
+.case-constraints__kicker{ color: var(--color-label-inverse-secondary); }
 .case-constraints__list{ display: flex; flex-direction: column; gap: 24px; max-width: 64ch; }
-.case-constraints__item{ border-bottom: 1px solid #2A2A2E; padding-bottom: 24px; }
+.case-constraints__item{ border-bottom: 1px solid var(--color-separator-inverse); padding-bottom: 24px; }
 .case-constraints__item:last-child{ border-bottom: 0; padding-bottom: 0; }
 .case-constraints__item-title{ margin-bottom: 8px; }
-.case-constraints__item-body{ color: var(--text-inverse-secondary); }
+.case-constraints__item-body{ color: var(--color-label-inverse-secondary); }
 @media (min-width: 780px){
   .case-constraints{ grid-template-columns: 220px 1fr; }
 }
@@ -1007,14 +1025,14 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-decisions__kicker{ margin-bottom: 24px; }
 .case-decisions__title{ max-width: 20ch; margin-bottom: 40px; }
 .decision{
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   display: grid; gap: 24px;
   padding: 24px 0 40px;
 }
-.decision:first-child{ border-top: 2px solid var(--ink); }
-.decision:last-child{ border-bottom: 2px solid var(--ink); }
-.decision__label{ color: var(--text-tertiary); margin-bottom: 16px; }
-.decision__options{ color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; }
+.decision:first-child{ border-top: 2px solid var(--color-label); }
+.decision:last-child{ border-bottom: 2px solid var(--color-label); }
+.decision__label{ color: var(--color-label-secondary); margin-bottom: 16px; }
+.decision__options{ color: var(--color-label-secondary); display: flex; flex-direction: column; gap: 8px; }
 @media (min-width: 860px){
   .decision{ grid-template-columns: repeat(3,1fr); }
 }
@@ -1023,8 +1041,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .case-results__kicker{ margin-bottom: 24px; }
 .case-results__stats{ display: grid; gap: 24px; margin-bottom: 32px; }
 @media (min-width: 700px){ .case-results__stats{ grid-template-columns: repeat(3,1fr); } }
-.stat-card{ background: var(--surface); border: 1px solid var(--line); padding: 32px; }
-.stat-card__label{ color: var(--text-tertiary); margin-top: 8px; }
+.stat-card{ background: var(--color-bg-secondary); border: 1px solid var(--color-separator); padding: 32px; }
+.stat-card__label{ color: var(--color-label-secondary); margin-top: 8px; }
 .case-results__summary{ display: flex; justify-content: center; }
 .case-results__summary p{ max-width: 68ch; text-align: left; }
 
@@ -1032,11 +1050,11 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   display: block;
   margin-top: 96px;
   padding: clamp(40px,8vw,72px) var(--gutter);
-  background: var(--ink); color: var(--bg);
+  background: var(--color-bg-inverse); color: var(--color-label-inverse);
 }
-.next-case__kicker{ color: var(--text-inverse-tertiary); margin-bottom: 24px; }
+.next-case__kicker{ color: var(--color-label-inverse-secondary); margin-bottom: 24px; }
 .next-case__title{ max-width: 18ch; margin-bottom: 24px; }
-.next-case__meta{ color: var(--text-inverse-tertiary); }
+.next-case__meta{ color: var(--color-label-inverse-secondary); }
 
 /* ==========================================================================
    About page
@@ -1045,45 +1063,45 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .about-hero__photo{
   width: min(66%, 420px);
   aspect-ratio: 4/5;
-  background-image: repeating-linear-gradient(135deg,#E2DFD8 0 12px,#EDEBE5 12px 24px);
-  border: 1px solid var(--line);
+  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
+  border: 1px solid var(--color-separator);
 }
 .about-hero__title{
   max-width: 16ch;
   margin: clamp(32px,6vw,48px) 0 32px;
 }
 .about-hero__text{ max-width: 68ch; display: flex; flex-direction: column; gap: 16px; }
-.about-hero__text p:first-child{ color: var(--text-primary); }
-.about-hero__text p:not(:first-child){ color: var(--text-secondary); }
+.about-hero__text p:first-child{ color: var(--color-label); }
+.about-hero__text p:not(:first-child){ color: var(--color-label-secondary); }
 
 .about-experience{ padding: clamp(48px,8vw,72px) var(--gutter) 0; }
 .about-experience__kicker{ margin-bottom: 24px; }
 .exp-row{
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--color-separator);
   display: grid; gap: 8px 24px;
   padding: 16px 0;
 }
-.exp-row:first-child{ border-top: 2px solid var(--ink); }
-.exp-row:last-child{ border-bottom: 2px solid var(--ink); }
-.exp-row__years{ color: var(--text-tertiary); }
-.exp-row__role{ color: var(--text-tertiary); }
+.exp-row:first-child{ border-top: 2px solid var(--color-label); }
+.exp-row:last-child{ border-bottom: 2px solid var(--color-label); }
+.exp-row__years{ color: var(--color-label-secondary); }
+.exp-row__role{ color: var(--color-label-secondary); }
 @media (min-width: 700px){
   .exp-row{ grid-template-columns: 110px 1fr 1fr; align-items: baseline; }
 }
 
 .about-footer{ padding: clamp(40px,7vw,56px) var(--gutter) clamp(56px,9vw,72px); display: grid; gap: 24px; }
 @media (min-width: 700px){ .about-footer{ grid-template-columns: 1fr 1fr; } }
-.about-tools{ background: var(--surface); border: 1px solid var(--line); padding: 24px; }
+.about-tools{ background: var(--color-bg-secondary); border: 1px solid var(--color-separator); padding: 24px; }
 .about-tools__kicker{ margin-bottom: 16px; }
-.about-contact-card{ background: var(--ink); color: var(--bg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
-.about-contact-card__kicker{ color: var(--text-inverse-tertiary); margin-bottom: 16px; }
-.about-contact-card__links{ display: flex; gap: 24px; margin-top: 16px; color: var(--text-inverse-tertiary); }
-.about-contact-card__links a:hover{ color: var(--text-inverse-primary); }
+.about-contact-card{ background: var(--color-bg-inverse); color: var(--color-label-inverse); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+.about-contact-card__kicker{ color: var(--color-label-inverse-secondary); margin-bottom: 16px; }
+.about-contact-card__links{ display: flex; gap: 24px; margin-top: 16px; color: var(--color-label-inverse-secondary); }
+.about-contact-card__links a:hover{ color: var(--color-label-inverse); }
 
 /* ==========================================================================
    Resume (screen + print)
    ========================================================================== */
-.resume-page{ background: #DAD6CE; padding: clamp(24px,5vw,56px) var(--gutter); display: flex; justify-content: center; }
+.resume-page{ background: var(--color-bg-secondary); padding: clamp(24px,5vw,56px) var(--gutter); display: flex; justify-content: center; }
 .resume{
   width: 100%; max-width: 794px;
   background: var(--print-bg); color: var(--print-ink);
@@ -1112,14 +1130,14 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 
 .resume-print-hint{
   max-width: 794px; margin: 0 auto clamp(16px,3vw,24px);
-  color: var(--text-tertiary); text-align: center;
+  color: var(--color-label-secondary); text-align: center;
 }
 
 @media print{
   @page{ margin: 1.2cm; }
   .site-nav, .site-footer, .contacts, .resume-print-hint, .skip-link{ display: none !important; }
   .page-cover{ min-height: 0 !important; }
-  .resume-page{ background: #fff; padding: 0; }
+  .resume-page{ background: var(--print-bg); padding: 0; }
   .resume{ max-width: none; padding: 0; }
   *{ print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
@@ -1130,7 +1148,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .error-page{ padding: clamp(72px,14vw,144px) var(--gutter); }
 .error-page__kicker{ margin-bottom: 24px; }
 .error-page__title{ max-width: 12ch; margin-bottom: 24px; }
-.error-page__text{ color: var(--text-secondary); max-width: 48ch; margin-bottom: 24px; }
+.error-page__text{ color: var(--color-label-secondary); max-width: 48ch; margin-bottom: 24px; }
 
 /* ==========================================================================
    Scroll reveal
@@ -1155,8 +1173,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
    Values come from the mockup tables; nothing hard-coded outside :root.
    ========================================================================== */
 .redesign{
-  background: var(--bg-page);
-  color: var(--text);
+  background: var(--color-bg);
+  color: var(--color-label);
 }
 .redesign .wrap{
   /* --page-max is the content width; the gutters sit outside it. */
@@ -1194,13 +1212,13 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .js .redesign section:has(.hero-line[data-reveal="in"]) [data-hero-fade]{ opacity: 1; transform: none; }
 
 .redesign .hero__kicker,
-.redesign .hero__title{ color: var(--text); margin: 0; }
+.redesign .hero__title{ color: var(--color-label); margin: 0; }
 
 /* ---- Обрані проєкти ------------------------------------------------------ */
-.redesign .projects{ background: var(--bg-muted); padding-block: var(--sp-section); }
+.redesign .projects{ background: var(--color-bg-secondary); padding-block: var(--sp-section); }
 .redesign .projects__inner{ display: flex; flex-direction: column; gap: var(--gap-96); }
 .redesign .projects__head{
-  color: var(--text); margin: 0;
+  color: var(--color-label); margin: 0;
   border: 0; padding: 0;              /* the base head carries a rule + padding */
 }
 
@@ -1227,12 +1245,12 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign .card{ height: auto; --card-time: .6s; --card-ease: cubic-bezier(.215, .61, .355, 1); }
 .redesign .card__title,
 .redesign .card__desc{ transition: transform var(--card-time) var(--card-ease); }
-.redesign .card__link{ display: block; color: var(--text); text-decoration: none; }
+.redesign .card__link{ display: block; color: var(--color-label); text-decoration: none; }
 .redesign .card__media{
   border-radius: var(--radius-media);
   overflow: hidden;
   aspect-ratio: 4 / 5;
-  background: #ededed;
+  background: var(--color-fill);
 }
 .redesign .card__media img{
   width: 100%; height: 100%; object-fit: cover; display: block;
@@ -1245,7 +1263,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign .card__media--empty{ position: relative; }
 .redesign .card__media--empty::before{
   content: ""; position: absolute; inset: 0;
-  background: repeating-linear-gradient(135deg,#e7e7e7 0 12px,#efefef 12px 24px);
+  background: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
   transition: transform var(--card-time) var(--card-ease);
 }
 .redesign .card__body{
@@ -1253,7 +1271,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   display: flex; flex-direction: column; gap: var(--gap-16);
 }
 .redesign .card__title,
-.redesign .card__desc{ color: var(--text); margin: 0; }
+.redesign .card__desc{ color: var(--color-label); margin: 0; }
 
 /* ---- Про мене ------------------------------------------------------------ */
 .redesign .about{
@@ -1268,17 +1286,17 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   border-radius: var(--radius-media);
 }
 .redesign .about__text{ display: flex; flex-direction: column; gap: var(--gap-64); }
-.redesign .about__lead{ color: var(--text); margin: 0; }
+.redesign .about__lead{ color: var(--color-label); margin: 0; }
 .redesign .about__more{ margin: 0; }
 
 /* ---- Контакти ------------------------------------------------------------ */
 .redesign .contacts{
-  background: var(--bg-dark); color: var(--text-invert);
+  background: var(--color-bg-inverse); color: var(--color-label-inverse);
   padding-block: var(--sp-contacts);
   /* Section heights are fractional, so the page can end a fraction of a pixel
      below the footer, which shows as a light hairline under it. The shadow
      paints over that sliver without adding to the scroll height. */
-  box-shadow: 0 2px 0 var(--bg-dark);
+  box-shadow: 0 2px 0 var(--color-bg-inverse);
 }
 
 /* Footer reveal: the footer is pinned to the bottom of the viewport underneath
@@ -1287,7 +1305,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
    Only on viewports tall enough to show the whole footer — pinned to the
    bottom, a taller footer would have its top cut off for good. */
 .redesign .page-cover{
-  position: relative; z-index: 1; background: var(--bg-page);
+  position: relative; z-index: 1; background: var(--color-bg);
   min-height: 100svh;   /* short pages still hide the footer until you scroll */
 }
 @media (min-height: 700px){
@@ -1298,7 +1316,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
    browsers differ on which of the two they sample for the bounce area, and
    body is fully covered by .page-cover and the footer, so it never shows. */
 html[data-page-end="true"],
-html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
+html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 /* Its content zooms in once about a third of the footer is uncovered and
    steps back when it gets covered again; main.js flips data-footer-reveal. */
 .redesign .contacts__inner{
@@ -1315,7 +1333,7 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 }
 .redesign .contacts__text{ display: flex; flex-direction: column; gap: var(--gap-40); }
 .redesign .contacts__label,
-.redesign .contacts__email{ color: var(--text-invert); margin: 0; }
+.redesign .contacts__email{ color: var(--color-label-inverse); margin: 0; }
 .redesign .contacts__email{ overflow-wrap: anywhere; }   /* a long address never widens the page */
 .redesign .contacts__email a{
   --underline: 0.04em;
@@ -1324,14 +1342,14 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 }
 .redesign .contacts__links{ display: flex; gap: var(--gap-32); }
 .redesign .contacts__link{
-  color: var(--text-invert); text-decoration: none;
+  color: var(--color-label-inverse); text-decoration: none;
   padding-bottom: 4px;
 }
 .redesign .projects__more{
   flex: none;
   width: 320px; height: 320px;
   border-radius: var(--radius-circle);
-  background: var(--cta-bg); color: var(--cta-text);
+  background: var(--color-cta); color: var(--color-on-cta);
   display: flex; align-items: center; justify-content: center; text-align: center;
   text-decoration: none;
   /* Magnetic: main.js feeds --mx/--my while the pointer is over the circle,
@@ -1360,7 +1378,7 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   --nav-fs: calc(var(--fs-title) * (1 - 0.125 * var(--nav-shrink)));
   position: fixed; inset: 0 0 auto 0;
   z-index: 90;
-  background: var(--nav-surface);
+  background: var(--color-bg-glass);
   -webkit-backdrop-filter: saturate(1.7) blur(40px);
   backdrop-filter: saturate(1.7) blur(40px);
   mix-blend-mode: normal;
@@ -1369,28 +1387,28 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
   padding-block: calc(var(--gap-32) - 12px * var(--nav-shrink));
-  color: var(--text);
+  color: var(--color-label);
   align-items: center;
 }
 /* Type is the Title style; only its size follows the shrink. */
 .redesign .site-nav :is(.site-nav__name, .site-nav__links a, .lang-switch__part, .nav-toggle){
   font-size: var(--nav-fs);
 }
-.redesign .site-nav__name{ color: var(--text); }
+.redesign .site-nav__name{ color: var(--color-label); }
 .redesign .site-nav__links{ gap: var(--gap-32); align-items: center; }
-.redesign .site-nav__links a{ color: var(--text); }
+.redesign .site-nav__links a{ color: var(--color-label); }
 .redesign .site-nav__links a{ --underline: max(1px, 0.06em); }
 .redesign .site-nav__links a[aria-current]{ text-decoration: none; }   /* the line above replaces it */
-.redesign .nav-toggle{ color: var(--text); padding: 8px 0 8px 8px; }
+.redesign .nav-toggle{ color: var(--color-label); padding: 8px 0 8px 8px; }
 
 /* Lang pill: only the active language shows, a click flips it (main.js).
    font-size 0 swallows the " / " text node between the two buttons. */
 .redesign .site-nav .lang-switch{
-  border: 1px solid var(--text); border-radius: var(--radius-pill);
+  border: 1px solid var(--color-label); border-radius: var(--radius-pill);
   padding: 4px 8px; gap: 0; font-size: 0;
 }
 .redesign .site-nav .lang-switch__part,
-.redesign .site-nav .lang-switch__part[data-active="true"]{ color: var(--text); }
+.redesign .site-nav .lang-switch__part[data-active="true"]{ color: var(--color-label); }
 .redesign .site-nav .lang-switch__part[data-active="false"]{ display: none; }
 
 /* ---- States (погоджено) ------------------------------------------------- */
@@ -1406,14 +1424,14 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 .redesign .projects__more:hover,
 .redesign .projects__more:focus-visible{
   transform: translate(var(--mx), var(--my)) scale(1.04);
-  background: color-mix(in srgb, var(--cta-bg) 88%, #000);
+  background: var(--color-cta-hover);
   transition-duration: .25s, .3s; transition-timing-function: var(--ease-out);   /* follow the cursor tightly */
 }
 .redesign .projects__more:hover .projects__more-text{ transition-duration: .25s; transition-timing-function: var(--ease-out); }
 .redesign .projects__more:hover .projects__more-plus,
 .redesign .projects__more:focus-visible .projects__more-plus{ transform: rotate(180deg); }
 .redesign a:focus-visible,
-.redesign button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+.redesign button:focus-visible{ outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 /* ---- Responsive (погоджено) --------------------------------------------- */
 @media (max-width: 1199px){
@@ -1439,34 +1457,20 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 
 /* ==========================================================================
    REDESIGN — inner pages (Роботи, кейс, Про мене, Контакт, Резюме, 404)
-   These pages keep their own components. They take the redesign's look in
-   two steps: the tokens those components already read are re-pointed at the
-   redesign palette and typeface, then each text style is mapped onto the
-   redesign scale. Layout changes are limited to what the fixed header and
-   the shared footer require.
+   These pages keep their own components; colour and type come from the
+   shared roles and text styles. Below is only what the fixed header, the
+   shared footer and the redesign's surfaces require.
    ========================================================================== */
 .redesign{
-  --bg: var(--bg-page);
-  --surface: var(--bg-muted);
-  --ink: var(--text);
-  --line: #e3e3e3;
-  --muted: #6e6e6e;
-  --text-primary: var(--text);
-  --text-secondary: #3c3c3c;
-  --text-tertiary: #6e6e6e;
-  --dark-bg: var(--bg-dark);
-  --text-inverse-primary: var(--text-invert);
-  --text-inverse-secondary: #c7c7c7;
-  --text-inverse-tertiary: #8e8e8e;
   /* Sections that pad themselves with --gutter line up with .wrap */
   --gutter: max(var(--page-pad-x), calc((100vw - var(--page-max)) / 2));
 }
 
 /* ---- Layout: clear the fixed header, match the homepage rhythm ----------- */
 .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: var(--sp-hero); }
-.redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){ color: var(--text); margin-bottom: var(--gap-32); }
+.redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){ color: var(--color-label); margin-bottom: var(--gap-32); }
 .redesign .page-hero{ padding-bottom: var(--sp-section); }
-.redesign .page-hero__lede{ color: var(--text); max-width: 44ch; margin-top: var(--gap-32); }
+.redesign .page-hero__lede{ color: var(--color-label); max-width: 44ch; margin-top: var(--gap-32); }
 .redesign .error-page{ padding-bottom: var(--sp-section); }
 .redesign :is(.case-hero__title, .about-hero__title){ max-width: none; }
 
@@ -1475,15 +1479,15 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   border: 0; border-radius: var(--radius-media);
 }
 .redesign :is(.work-row__thumb, .case-figure__frame .frame-media){
-  background-image: repeating-linear-gradient(135deg,#e7e7e7 0 12px,#efefef 12px 24px);
+  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
 }
 .redesign .case-figure__frame .frame-media{ border-radius: 8px; }
 .redesign .frame-label{ border-radius: 4px; }
-.redesign .work-row--soon .work-row__thumb{ border: 1px dashed var(--line); background-image: none; }
+.redesign .work-row--soon .work-row__thumb{ border: 1px dashed var(--color-separator); background-image: none; }
 .redesign .case-constraints{ border-radius: var(--radius-media); }
 /* The black footer follows directly, so the last block steps down to grey */
-.redesign .next-case{ background: var(--bg-muted); color: var(--text); }
-.redesign :is(.next-case__kicker, .next-case__meta){ color: var(--text-tertiary); }
+.redesign .next-case{ background: var(--color-bg-secondary); color: var(--color-label); }
+.redesign :is(.next-case__kicker, .next-case__meta){ color: var(--color-label-secondary); }
 
 /* ---- Про мене ------------------------------------------------------------ */
 .redesign .about-hero{
@@ -1501,7 +1505,7 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 /* ---- Резюме: the sheet stays a print document on a grey desk ------------- */
 @media screen{
   .redesign .resume-page{
-    background: var(--bg-muted);
+    background: var(--color-bg-secondary);
     padding-top: calc(var(--sp-section) + 72px); padding-bottom: var(--sp-section);
   }
 }

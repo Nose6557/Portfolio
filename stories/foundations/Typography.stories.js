@@ -12,7 +12,6 @@ const STYLES = [
   ['Heading/2', 'h2', 't-h2', 'Regular', 'As typed', 'Більше робіт +'],
   ['Heading/3', 'h3', 't-h3', 'Regular', 'As typed', 'Шлях менеджера до угоди: з 11 кроків до 4'],
   ['Title', 'title', 't-title', 'Regular', 'As typed', 'Головна · Роботи · Про мене · Контакт'],
-  ['Overline/L', 'overline-l', 't-overline-l', 'Regular', 'Upper', 'Product Design Engineer'],
   ['Overline/M', 'overline-m', 't-overline-m', 'Regular', 'Upper', 'Пишіть'],
   ['Body', 'body', 't-body', 'Light', 'As typed', 'Менеджер вводив те, що система вже знала. Прибрали чотири кроки, які лише підтверджували побачене на попередньому екрані.'],
   ['Label', 'label', 't-label', 'Regular', 'As typed', 'Детальніше →'],

@@ -1390,7 +1390,7 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
-  padding-block: calc(var(--gap-32) - 12px * var(--nav-shrink));
+  padding-block: calc(var(--gap-16) - 12px * var(--nav-shrink));
   color: var(--color-label);
   align-items: center;
 }

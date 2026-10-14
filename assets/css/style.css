@@ -65,23 +65,6 @@
   --gap-40: 40px;   /* футер: підпис · пошта · посилання */
   --gap-16: 16px;
 
-  /* Type scale — fixed px (макет лише десктоп 1920; адаптив окремо) */
-  --fs-h1: 160px;      --lh-h1: 1;    --ls-h1: -0.05em;
-  --fs-h2: 80px;       --lh-h2: 1;    --ls-h2: -0.04em;
-  --fs-cta: 40px;      --lh-cta: 1;   --ls-cta: -0.04em;
-  --fs-kicker: 32px;   --lh-kicker: 1.2;                 /* UPPERCASE */
-  --fs-card-title: 32px; --lh-card: 1; --ls-card: -0.04em;
-  --fs-label: 24px;    --lh-label: 1.2;                  /* на темному, UPPERCASE */
-  --fs-nav: 24px;      --lh-nav: 1.2;                    /* лого + навігація */
-  --fs-body-20: 20px;  --lh-body: 1.32; --ls-body: -0.02em;  /* Light 300 */
-  --fs-link-14: 14px;  --lh-link: 1.2;                   /* Inter 400 */
-
-  /* Families for the redesign (loaded in each page head). Kept separate
-     from --font-display/--font-body so the current pages stay on Inter
-     until their sections are converted. */
-  --font-geologica: 'Geologica', sans-serif;
-  --font-inter:     'Inter', sans-serif;
-
   /* ---- Text colour ----------------------------------------------------
      Three tiers on each background. In Figma these are colour styles,
      kept separate from the text styles — a text style never carries a
@@ -114,79 +97,58 @@
      48px of gutter looked pinched on large monitors. */
   --gutter: clamp(24px, 3vw, 72px);
 
-  /* ---- Family ---------------------------------------------------------
-     One typeface throughout (Inter). The display/body split is kept as
-     two names so the intent stays readable at the call site; the real
-     difference is weight — display runs 700, body is capped at 500. */
-  --font-sans: Inter, sans-serif;
-  --font-display: var(--font-sans);
-  --font-body: var(--font-sans);
+  /* ====================================================================
+     TYPOGRAPHY
+     One typeface, one scale. Every size is fluid between two viewports,
+     and those two viewports are the two modes of the Figma variable
+     collection `Type`:
 
-  /* ---- Weight ---------------------------------------------------------
-     Only these three are loaded (see the Google Fonts link in each page).
-     Nothing may ask for a weight outside this set. */
-  --fw-regular: 400;
-  --fw-medium: 500;
-  --fw-bold: 700;
+       Mobile  = 375px     Desktop = 1920px  (the mockup's frame)
 
-  /* ---- Size -----------------------------------------------------------
-     Fluid steps interpolate linearly between a 375px and a 1440px
-     viewport, so every step has one exact value at each end:
+     To change a size, edit its two px numbers below — nothing else.
+     The fluid value (--fs-*) is derived from them further down.
+     Line-height is a multiplier (Figma: the same number as a %),
+     tracking is in em (Figma: 1em = 100%).
+     ==================================================================== */
+  --font-sans: 'Geologica', sans-serif;
+  --fw-light: 300;      /* body copy */
+  --fw-regular: 400;    /* everything else — only these two are loaded */
 
-       clamp(<375px value>, <intercept> + <slope>vw, <1440px value>)
+  --vp-mobile: 375;
+  --vp-desktop: 1920;
 
-     Those two ends are the Mobile and Desktop modes of the size variable
-     in Figma — no clamp() equivalent is needed there, and no step has to
-     be eyeballed.
+  /*                     Mobile          Desktop          Line-height       Tracking */
+  --display-mobile: 44;  --display-desktop: 160;  --display-lh: 1;    --display-ls: -0.05em;
+  --h1-mobile: 32;       --h1-desktop: 80;        --h1-lh: 1;         --h1-ls: -0.04em;
+  --h2-mobile: 24;       --h2-desktop: 40;        --h2-lh: 1;         --h2-ls: -0.04em;
+  --h3-mobile: 22;       --h3-desktop: 32;        --h3-lh: 1.05;      --h3-ls: -0.04em;
+  --title-mobile: 18;    --title-desktop: 24;     --title-lh: 1.2;    --title-ls: 0;
+  --overline-l-mobile: 18; --overline-l-desktop: 32; --overline-l-lh: 1.2; --overline-l-ls: 0;
+  --overline-m-mobile: 16; --overline-m-desktop: 24; --overline-m-lh: 1.2; --overline-m-ls: 0;
+  --body-mobile: 17;     --body-desktop: 20;      --body-lh: 1.4;     --body-ls: -0.02em;
+  --label-mobile: 14;    --label-desktop: 14;     --label-lh: 1.2;    --label-ls: 0;
+  --caption-mobile: 12;  --caption-desktop: 14;   --caption-lh: 1.2;  --caption-ls: 0;
 
-     Display ladder is geometric at ≈1.33: 128 · 96 · 72 · (56) · 44.
-     Body sizes are fixed: reading text should not track the viewport. */
+  /* Résumé sheet — an A4 page, so a fixed print ladder, not fluid */
+  --fs-print-name:  2rem;       /* 32 */
+  --fs-print-title: 0.875rem;   /* 14 */
+  --fs-print-body:  0.6875rem;  /* 11 */
+  --fs-print-label: 0.625rem;   /* 10 */
+  --print-lh: 1.6;  --print-title-lh: 1.2;  --print-ls-label: 0.1em;
 
-  /* Display — 700, set in caps or as typed */
-  --fs-display-2xl: clamp(2.75rem,  0.901rem + 7.89vw, 8rem);      /*  44 → 128 */
-  --fs-display-xl:  clamp(2.375rem, 1.099rem + 5.45vw, 6rem);      /*  38 →  96 */
-  --fs-display-l:   clamp(2.125rem, 1.289rem + 3.57vw, 4.5rem);    /*  34 →  72 */
-  --fs-display-ml:  clamp(1.875rem, 1.303rem + 2.44vw, 3.5rem);    /*  30 →  56 — reserved rung, keeps the ladder regular */
-  --fs-display-m:   clamp(1.75rem,  1.398rem + 1.50vw, 2.75rem);   /*  28 →  44 */
-
-  /* Heading — 700, sentence case */
-  --fs-heading-l:   clamp(1.5rem,   1.280rem + 0.94vw, 2.125rem);  /*  24 →  34 */
-  --fs-heading-m:   clamp(1.25rem,  1.118rem + 0.56vw, 1.625rem);  /*  20 →  26 */
-  --fs-heading-s:   clamp(1.125rem, 1.081rem + 0.19vw, 1.25rem);   /*  18 →  20 */
-
-  /* Body — 400/500 */
-  --fs-body-xl:     clamp(1.0625rem, 0.996rem + 0.28vw, 1.25rem);  /*  17 →  20 — ledes only */
-  --fs-body-l:      1.0625rem;                                     /*  17 */
-  --fs-body-m:      0.9375rem;                                     /*  15 */
-  --fs-body-s:      0.8125rem;                                     /*  13 */
-
-  /* Label — 400, caps, tracked out */
-  --fs-label-m:     0.75rem;                                       /*  12 */
-  --fs-label-s:     0.6875rem;                                     /*  11 */
-  --fs-label-xs:    0.625rem;                                      /*  10 */
-
-  /* Print sheet — fixed, sized for A4 rather than for a screen */
-  --fs-print-title: 0.875rem;                                      /*  14 */
-  --fs-print-body:  0.6875rem;                                     /*  11 */
-  --fs-print-label: 0.625rem;                                      /*  10 */
-
-  /* ---- Leading --------------------------------------------------------
-     Six values, unitless. Figma wants percentages, given alongside. */
-  --lh-display: 0.92;  /*  92% — display sizes, always short lines */
-  --lh-flat: 1;        /* 100% — single-line labels, buttons, chips */
-  --lh-tight: 1.05;    /* 105% — Display/M and Heading/L */
-  --lh-snug: 1.2;      /* 120% — small headings */
-  --lh-normal: 1.5;    /* 150% — UI text, definition lists, ledes */
-  --lh-relaxed: 1.6;   /* 160% — running prose and wrapping labels */
-
-  /* ---- Tracking -------------------------------------------------------
-     Optical, tied to size: the larger the type, the tighter it is set.
-     Figma wants percentages — an em here is 100% there. */
-  --ls-display: -0.045em;  /* -4.5% — 56px and up */
-  --ls-heading: -0.03em;   /* -3.0% — 24…44px      */
-  --ls-tight: -0.02em;     /* -2.0% — 14…26px      */
-  --ls-normal: 0;          /*    0% — all body copy */
-  --ls-label: 0.1em;       /* +10%  — caps labels   */
+  /* ---- Derived: fluid sizes. Don't edit — change the pairs above. ----
+     Linear from Mobile to Desktop, held at both ends. Bounds are in rem so
+     the browser's font-size setting still scales the text. */
+  --fs-display:    clamp(calc(var(--display-mobile) * 1rem / 16), calc(var(--display-mobile) * 1rem / 16 + (var(--display-desktop) - var(--display-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--display-desktop) * 1rem / 16));
+  --fs-h1:         clamp(calc(var(--h1-mobile) * 1rem / 16), calc(var(--h1-mobile) * 1rem / 16 + (var(--h1-desktop) - var(--h1-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--h1-desktop) * 1rem / 16));
+  --fs-h2:         clamp(calc(var(--h2-mobile) * 1rem / 16), calc(var(--h2-mobile) * 1rem / 16 + (var(--h2-desktop) - var(--h2-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--h2-desktop) * 1rem / 16));
+  --fs-h3:         clamp(calc(var(--h3-mobile) * 1rem / 16), calc(var(--h3-mobile) * 1rem / 16 + (var(--h3-desktop) - var(--h3-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--h3-desktop) * 1rem / 16));
+  --fs-title:      clamp(calc(var(--title-mobile) * 1rem / 16), calc(var(--title-mobile) * 1rem / 16 + (var(--title-desktop) - var(--title-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--title-desktop) * 1rem / 16));
+  --fs-overline-l: clamp(calc(var(--overline-l-mobile) * 1rem / 16), calc(var(--overline-l-mobile) * 1rem / 16 + (var(--overline-l-desktop) - var(--overline-l-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--overline-l-desktop) * 1rem / 16));
+  --fs-overline-m: clamp(calc(var(--overline-m-mobile) * 1rem / 16), calc(var(--overline-m-mobile) * 1rem / 16 + (var(--overline-m-desktop) - var(--overline-m-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--overline-m-desktop) * 1rem / 16));
+  --fs-body:       clamp(calc(var(--body-mobile) * 1rem / 16), calc(var(--body-mobile) * 1rem / 16 + (var(--body-desktop) - var(--body-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--body-desktop) * 1rem / 16));
+  --fs-label:      clamp(calc(var(--label-mobile) * 1rem / 16), calc(var(--label-mobile) * 1rem / 16 + (var(--label-desktop) - var(--label-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--label-desktop) * 1rem / 16));
+  --fs-caption:    clamp(calc(var(--caption-mobile) * 1rem / 16), calc(var(--caption-mobile) * 1rem / 16 + (var(--caption-desktop) - var(--caption-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--caption-desktop) * 1rem / 16));
 
   --ease-out: cubic-bezier(.16,1,.3,1);
   /* Long, late-settling curve used by the project covers. */
@@ -207,11 +169,7 @@ body{
   margin: 0;
   background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: var(--fs-body-l);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-relaxed);
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;   /* type: see Body in Text styles */
 }
 img{ max-width: 100%; display: block; }
 h1,h2,h3,p,dl,dd{ margin: 0; }
@@ -222,9 +180,6 @@ a{ color: inherit; text-decoration: none; }
 /* Buttons don't inherit font-family by default, so without this the ✕
    close control and any bare button fall back to the UA font. */
 button{ font-family: inherit; }
-/* Semantic bold is capped at Medium too, so <strong> in the case and
-   resume copy never asks for a weight the font isn't loaded at. */
-strong, b{ font-weight: var(--fw-medium); }
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible{
@@ -236,279 +191,158 @@ button:focus-visible,
 /* ==========================================================================
    Text styles
    ==========================================================================
-   Every typographic rule in the site lives in this section — nothing
-   below it sets font-family, font-size, font-weight, line-height or
-   letter-spacing. Each block is one Figma text style; the selectors after
-   the .t-* utility are the components that use it, so the rule doubles as
-   the "where is this style applied" list.
+   Every typographic rule on the site lives here. Nothing below this section
+   sets font-family, font-size, font-weight, line-height, letter-spacing or
+   text-transform (the one exception is the shrinking header, which scales
+   its own size — see .site-nav). Each block is one Figma text style, and
+   the selectors in it are the components that use it, so the rule doubles
+   as the "where is this style used" list.
 
-   Colour is deliberately absent: it is a separate token, applied by the
-   component. The one exception is the `caps` pairs, where Case is part of
-   the style because Figma cannot override case without detaching.
+   Colour is deliberately absent: it is a separate token, set by the
+   component. Case is part of the style, because Figma can't override it on
+   a layer without detaching the style.
 
-   Element selectors here are always wrapped in :where(), so they weigh
-   nothing. A style is chosen by class, never won by nesting depth — which
-   is what used to break the kickers: `.case-section p` and `.about-tools p`
-   both out-specified `.mono-label`, so `01 контекст` and `інструменти`
-   rendered as 17px body copy instead of an 11px label. With :where() the
-   two are level and the later rule wins, so the label blocks below are
-   ordered last on purpose.
+   Tag selectors are wrapped in :where() so they weigh nothing: a style is
+   chosen by class, never won by nesting depth. Blocks of equal weight are
+   ordered on purpose — labels and overlines come last, so a kicker inside a
+   prose section keeps its label style.
    -------------------------------------------------------------------------- */
 
-/* Display/2XL — 40→128 · 700 · 92% · -4.5% · Upper ------------------------ */
-.t-display-2xl,
-.hero__title{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-display-2xl);
-  line-height: var(--lh-display);
-  letter-spacing: var(--ls-display);
-  text-transform: uppercase;
+/* Display — 44→160 · Regular · 100% · -5% ---------------------------------- */
+.hero__title,
+.page-hero__title{
+  font: var(--fw-regular) var(--fs-display)/var(--display-lh) var(--font-sans);
+  letter-spacing: var(--display-ls);
+  text-transform: none;
 }
 
-/* Display/XL — 36→96 · 700 · 92% · -4.5% · Upper -------------------------- */
-.t-display-xl,
-.page-hero__title,
-.case-hero__title{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-display-xl);
-  line-height: var(--lh-display);
-  letter-spacing: var(--ls-display);
-  text-transform: uppercase;
-}
-
-/* Display/L — 32→72 · 700 · 92% · -4.5% ----------------------------------- */
-.t-display-l, .t-display-l--caps,
-.contact-main__email,
-.contact-block__email,
+/* Heading/1 — 32→80 · Regular · 100% · -4% -------------------------------- */
+.projects__head,
+.about__lead,
+.contacts__email,
+.case-hero__title,
+.about-hero__title,
+.error-page__title,
+.case-decisions__title,
+.next-case__title,
 .stat-card__value,
-.about-hero__title,
-.next-case__title,
-.case-decisions__title,
-.error-page__title,
 .mobile-menu__links :where(a){
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-display-l);
-  line-height: var(--lh-display);
-  letter-spacing: var(--ls-display);
+  font: var(--fw-regular) var(--fs-h1)/var(--h1-lh) var(--font-sans);
+  letter-spacing: var(--h1-ls);
+  text-transform: none;
 }
-/* Display/L Caps — same metrics, Case: Upper */
-.t-display-l--caps,
-.about-hero__title,
-.next-case__title,
-.case-decisions__title,
-.error-page__title,
-.mobile-menu__links :where(a){ text-transform: uppercase; }
 
-/* Display/M — 26→44 · 700 · 105% · -3% ------------------------------------ */
-.t-display-m, .t-display-m--caps,
-.project__title,
-.resume__name{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-display-m);
-  line-height: var(--lh-tight);
-  letter-spacing: var(--ls-heading);
-}
-/* Display/M Caps — same metrics, Case: Upper */
-.t-display-m--caps,
-.resume__name{ text-transform: uppercase; }
-
-/* Heading/L — 24→34 · 700 · 105% · -3% ------------------------------------ */
-.t-heading-l,
-.work-row__title,
+/* Heading/2 — 24→40 · Regular · 100% · -4% -------------------------------- */
+.projects__more-text,
 .case-section__title{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-heading-l);
-  line-height: var(--lh-tight);
-  letter-spacing: var(--ls-heading);
+  font: var(--fw-regular) var(--fs-h2)/var(--h2-lh) var(--font-sans);
+  letter-spacing: var(--h2-ls);
+  text-transform: none;
 }
 
-/* Heading/M — 20→26 · 700 · 120% · -2% ------------------------------------ */
-.t-heading-m,
+/* Heading/3 — 22→32 · Regular · 105% · -4% -------------------------------- */
+.card__title,
+.work-row__title{
+  font: var(--fw-regular) var(--fs-h3)/var(--h3-lh) var(--font-sans);
+  letter-spacing: var(--h3-ls);
+  text-transform: none;
+}
+
+/* Title — 18→24 · Regular · 120% · 0 --------------------------------------
+   Navigation, footer links, small headings. */
+.site-nav__name,
+.site-nav__links :where(a),
+.site-nav .lang-switch__part,
+.nav-toggle,
+.mobile-menu__top,
+.contacts__link,
 .decision__fork,
-.about-contact-card__email{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-heading-m);
-  line-height: var(--lh-snug);
-  letter-spacing: var(--ls-tight);
-}
-
-/* Heading/S — 18→20 · 700 · 120% · -2% ------------------------------------ */
-.t-heading-s,
 .work-nda__title,
 .case-constraints__item-title{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-heading-s);
-  line-height: var(--lh-snug);
-  letter-spacing: var(--ls-tight);
+  font: var(--fw-regular) var(--fs-title)/var(--title-lh) var(--font-sans);
+  letter-spacing: var(--title-ls);
+  text-transform: none;
 }
 
-/* Body/XL — 17→20 · 400 · 150% · 0 · ledes only --------------------------- */
-.t-body-xl,
-.hero__lede,
-.page-hero__lede{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-body-xl);
-  line-height: var(--lh-normal);
-  letter-spacing: var(--ls-normal);
-}
-
-/* Body/L — 17 · 400 · 160% · 0 · running prose ---------------------------- */
-.t-body-l,
-.about-strip__text,
+/* Body — 17→20 · Light · 140% · -2% ---------------------------------------
+   Also the page default, so anything without a style reads as body. */
+body,
+.card__desc,
+.page-hero__lede,
 .about-hero__text :where(p),
 .case-section :where(p),
 .case-results__summary :where(p),
-.error-page__text{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-body-l);
-  line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-normal);
-}
-
-/* Body/L Medium — 17 · 500 · 100% · 0 · standalone links ------------------ */
-.t-body-l-medium,
-.projects__more{
-  font-family: var(--font-body);
-  font-weight: var(--fw-medium);
-  font-size: var(--fs-body-l);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--ls-normal);
-}
-
-/* Body/M — 15 · 400 · 160% · 0 · secondary copy --------------------------- */
-.t-body-m,
-.project__summary,
+.error-page__text,
 .work-nda__text,
 .case-constraints__item-body,
 .decision__options,
 .decision__choice,
 .about-tools :where(p),
-.exp-row{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-body-m);
-  line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-normal);
-}
-
-/* Body/M Medium — 15 · 500 · 100% · 0 · inline link rows ------------------ */
-.t-body-m-medium,
-.contact-main__links{
-  font-family: var(--font-body);
-  font-weight: var(--fw-medium);
-  font-size: var(--fs-body-m);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--ls-normal);
-}
-
-/* Body/S — 13 · 400 · 150% · 0 · dense rows, captions --------------------- */
-.t-body-s,
+.exp-row,
 .contact-facts__item,
 .case-facts__item,
-.stat-card__label,
-.resume-print-hint{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-body-s);
-  line-height: var(--lh-normal);
-  letter-spacing: var(--ls-normal);
+.stat-card__label{
+  font: var(--fw-light) var(--fs-body)/var(--body-lh) var(--font-sans);
+  letter-spacing: var(--body-ls);
+  text-transform: none;
 }
+/* Emphasis inside body steps up one weight — Regular is the heaviest loaded */
+:where(strong, b),
+.exp-row__org{ font-weight: var(--fw-regular); }
 
-/* Label/Button — 13 · 500 · 100% · 0 · Case: as typed --------------------- */
-.t-button,
-.btn,
-.skip-link{
-  font-family: var(--font-body);
-  font-weight: var(--fw-medium);
-  font-size: var(--fs-body-s);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--ls-normal);
-}
-
-/* Label/M — 12 · 400 · 160% · +10% · Upper · wraps ------------------------ */
-.t-label-m,
-.hero__status{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-label-m);
-  line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
-
-/* Label/M Compact — 12 · 400 · 100% · +10% · Upper · single line ---------- */
-.t-label-m-compact,
-.site-nav__row,
-.nav-toggle,
-.mobile-menu__top,
-.site-footer,
-.case-header,
-.work-row__index{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-label-m);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
-
-/* Label/S — 11 · 400 · 160% · +10% · Upper · wraps ------------------------
-   The workhorse label. `.mono-label` is its named entry point in markup. */
-.t-label-s,
+/* Caption — 12→14 · Regular · 120% · 0 · Upper ----------------------------
+   Meta and small labels. `.mono-label` is its named entry point in markup. */
 .mono-label,
-.project__index,
-.project__descriptor,
 .contact-facts__item :where(dt),
 .case-facts__item :where(dt),
-.case-constraints__kicker,
 .decision__label,
 .work-row__descriptor,
 .work-row__meta,
+.work-row__index,
+.work-row__thumb,
 .next-case__meta,
-.exp-row__years{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-label-s);
-  line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
-
-/* Label/S Compact — 11 · 400 · 100% · +10% · Upper · chips ----------------
-   Same style with flat leading, so a padded chip is exactly as tall as
-   its padding plus the cap height. */
-.t-label-s-compact,
-.mobile-menu__bottom,
-.project__img-label,
+.exp-row__years,
 .frame-label,
-.next-case__kicker,
-.about-contact-card__kicker,
-.about-contact-card__links{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-label-s);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--ls-label);
+.mobile-menu__bottom{
+  font: var(--fw-regular) var(--fs-caption)/var(--caption-lh) var(--font-sans);
+  letter-spacing: var(--caption-ls);
   text-transform: uppercase;
 }
 
-/* Label/XS — 10 · 400 · 100% · +10% · Upper ------------------------------- */
-.t-label-xs,
-.work-row__thumb{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-label-xs);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--ls-label);
+/* Label — 14 · Regular · 120% · 0 · as typed ------------------------------
+   Small standalone links and controls. */
+.about__more :where(a),
+.btn,
+.skip-link{
+  font: var(--fw-regular) var(--fs-label)/var(--label-lh) var(--font-sans);
+  letter-spacing: var(--label-ls);
+  text-transform: none;
+}
+
+/* Overline/M — 16→24 · Regular · 120% · 0 · Upper -------------------------
+   Section kickers and the footer's label. */
+.contacts__label,
+.work-list__head,
+.case-section__kicker,
+.case-constraints__kicker,
+.case-decisions__kicker,
+.case-results__kicker,
+.about-experience__kicker,
+.about-tools__kicker,
+.next-case__kicker{
+  font: var(--fw-regular) var(--fs-overline-m)/var(--overline-m-lh) var(--font-sans);
+  letter-spacing: var(--overline-m-ls);
+  text-transform: uppercase;
+}
+
+/* Overline/L — 18→32 · Regular · 120% · 0 · Upper -------------------------
+   The kicker above each page's title. */
+.hero__kicker,
+.page-hero__kicker,
+.case-hero__kicker,
+.error-page__kicker{
+  font: var(--fw-regular) var(--fs-overline-l)/var(--overline-l-lh) var(--font-sans);
+  letter-spacing: var(--overline-l-ls);
   text-transform: uppercase;
 }
 
@@ -522,37 +356,27 @@ button:focus-visible,
    -------------------------------------------------------------------------- */
 
 /* Print/Title — 14 · 700 · 120% · -2% ------------------------------------- */
-.t-print-title,
-.resume-entry__title{
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-print-title);
-  line-height: var(--lh-snug);
-  letter-spacing: var(--ls-tight);
+.resume-entry__title,
+.resume__name{
+  font: var(--fw-regular) var(--fs-print-title)/var(--print-title-lh) var(--font-sans);
+  letter-spacing: 0;
 }
+.resume__name{ font-size: var(--fs-print-name); text-transform: uppercase; }
 
 /* Print/Body — 11 · 400 · 160% · 0 ---------------------------------------- */
-.t-print-body,
 .resume__contact,
 .resume__block-body,
 .resume-entry__desc{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-print-body);
-  line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-normal);
+  font: var(--fw-light) var(--fs-print-body)/var(--print-lh) var(--font-sans);
+  letter-spacing: 0;
 }
 
 /* Print/Label — 10 · 400 · 160% · +10% · Upper ---------------------------- */
-.t-print-label,
 .resume__block-label,
 .resume-entry__years,
 .resume-entry__org{
-  font-family: var(--font-body);
-  font-weight: var(--fw-regular);
-  font-size: var(--fs-print-label);
-  line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-label);
+  font: var(--fw-regular) var(--fs-print-label)/var(--print-lh) var(--font-sans);
+  letter-spacing: var(--print-ls-label);
   text-transform: uppercase;
 }
 
@@ -779,7 +603,7 @@ a.work-row:focus-visible .work-row__title span{
 }
 .mobile-menu__close{
   background: none; border: 0; color: inherit;
-  font-size: 18px; line-height: 1; cursor: pointer; padding: 8px;
+  font-size: var(--fs-title); line-height: 1; cursor: pointer; padding: 8px;   /* the ✕ glyph, sized with the menu's Title */
 }
 .mobile-menu__links{
   display: flex;
@@ -1242,7 +1066,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .exp-row:first-child{ border-top: 2px solid var(--ink); }
 .exp-row:last-child{ border-bottom: 2px solid var(--ink); }
 .exp-row__years{ color: var(--text-tertiary); }
-.exp-row__org{ font-weight: var(--fw-medium); }
 .exp-row__role{ color: var(--text-tertiary); }
 @media (min-width: 700px){
   .exp-row{ grid-template-columns: 110px 1fr 1fr; align-items: baseline; }
@@ -1272,7 +1095,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 }
 .resume__name{ margin: 0; }
 .resume__contact{ text-align: right; color: var(--print-secondary); }
-.resume__contact strong{ display: block; color: var(--print-ink); font-weight: var(--fw-medium); }
+.resume__contact strong{ display: block; color: var(--print-ink); }
 
 .resume__body{ display: grid; gap: 32px; padding-top: 24px; }
 @media (min-width: 640px){ .resume__body{ grid-template-columns: 170px 1fr; } }
@@ -1334,7 +1157,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .redesign{
   background: var(--bg-page);
   color: var(--text);
-  font-family: var(--font-geologica);
 }
 .redesign .wrap{
   /* --page-max is the content width; the gutters sit outside it. */
@@ -1371,21 +1193,14 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
 .js .redesign [data-hero-fade="late"]{ transition-delay: .35s; }   /* ledes follow the title */
 .js .redesign section:has(.hero-line[data-reveal="in"]) [data-hero-fade]{ opacity: 1; transform: none; }
 
-.redesign .hero__kicker{
-  font: var(--fw-regular) var(--fs-kicker)/var(--lh-kicker) var(--font-geologica);
-  letter-spacing: 0; text-transform: uppercase; color: var(--text); margin: 0;
-}
-.redesign .hero__title{
-  font: var(--fw-regular) var(--fs-h1)/var(--lh-h1) var(--font-geologica);
-  letter-spacing: var(--ls-h1); text-transform: none; color: var(--text); margin: 0;
-}
+.redesign .hero__kicker,
+.redesign .hero__title{ color: var(--text); margin: 0; }
 
 /* ---- Обрані проєкти ------------------------------------------------------ */
 .redesign .projects{ background: var(--bg-muted); padding-block: var(--sp-section); }
 .redesign .projects__inner{ display: flex; flex-direction: column; gap: var(--gap-96); }
 .redesign .projects__head{
-  font: var(--fw-regular) var(--fs-h2)/var(--lh-h2) var(--font-geologica);
-  letter-spacing: var(--ls-h2); color: var(--text); margin: 0;
+  color: var(--text); margin: 0;
   border: 0; padding: 0;              /* the base head carries a rule + padding */
 }
 
@@ -1437,14 +1252,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   padding: 24px 0;
   display: flex; flex-direction: column; gap: var(--gap-16);
 }
-.redesign .card__title{
-  font: var(--fw-regular) var(--fs-card-title)/var(--lh-card) var(--font-geologica);
-  letter-spacing: var(--ls-card); color: var(--text); margin: 0;
-}
-.redesign .card__desc{
-  font: 300 var(--fs-body-20)/var(--lh-body) var(--font-geologica);
-  letter-spacing: var(--ls-body); color: var(--text); margin: 0;
-}
+.redesign .card__title,
+.redesign .card__desc{ color: var(--text); margin: 0; }
 
 /* ---- Про мене ------------------------------------------------------------ */
 .redesign .about{
@@ -1459,10 +1268,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--ink); }
   border-radius: var(--radius-media);
 }
 .redesign .about__text{ display: flex; flex-direction: column; gap: var(--gap-64); }
-.redesign .about__lead{
-  font: var(--fw-regular) var(--fs-h2)/var(--lh-h2) var(--font-geologica);
-  letter-spacing: var(--ls-h2); color: var(--text); margin: 0;
-}
+.redesign .about__lead{ color: var(--text); margin: 0; }
 .redesign .about__more{ margin: 0; }
 
 /* ---- Контакти ------------------------------------------------------------ */
@@ -1508,14 +1314,9 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   gap: var(--gap-64); flex-wrap: wrap;
 }
 .redesign .contacts__text{ display: flex; flex-direction: column; gap: var(--gap-40); }
-.redesign .contacts__label{
-  font: var(--fw-regular) var(--fs-label)/var(--lh-label) var(--font-geologica);
-  text-transform: uppercase; color: var(--text-invert); margin: 0;
-}
-.redesign .contacts__email{
-  font: var(--fw-regular) var(--fs-h2)/var(--lh-h2) var(--font-geologica);
-  letter-spacing: var(--ls-h2); color: var(--text-invert); margin: 0;
-}
+.redesign .contacts__label,
+.redesign .contacts__email{ color: var(--text-invert); margin: 0; }
+.redesign .contacts__email{ overflow-wrap: anywhere; }   /* a long address never widens the page */
 .redesign .contacts__email a{
   --underline: 0.04em;
   color: inherit; text-decoration: none;
@@ -1523,8 +1324,6 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 }
 .redesign .contacts__links{ display: flex; gap: var(--gap-32); }
 .redesign .contacts__link{
-  font: var(--fw-regular) var(--fs-nav)/var(--lh-nav) var(--font-geologica);
-  letter-spacing: 0;
   color: var(--text-invert); text-decoration: none;
   padding-bottom: 4px;
 }
@@ -1544,8 +1343,6 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 }
 .redesign .projects__more-text{
   display: inline-block;
-  font: var(--fw-regular) var(--fs-cta)/var(--lh-cta) var(--font-geologica);
-  letter-spacing: var(--ls-cta);
   transform: translate(calc(var(--mx) * .4), calc(var(--my) * .4));
   transition: transform .8s cubic-bezier(.3, 1.6, .5, 1);
 }
@@ -1560,7 +1357,7 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
    scroll, and the row padding and type scale down with it. */
 .redesign .site-nav{
   --nav-shrink: 0;
-  --nav-fs: calc(var(--fs-nav) * (1 - 0.125 * var(--nav-shrink)));
+  --nav-fs: calc(var(--fs-title) * (1 - 0.125 * var(--nav-shrink)));
   position: fixed; inset: 0 0 auto 0;
   z-index: 90;
   background: var(--nav-surface);
@@ -1572,34 +1369,29 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
   padding-block: calc(var(--gap-32) - 12px * var(--nav-shrink));
-  color: var(--text); text-transform: none; letter-spacing: 0;
+  color: var(--text);
   align-items: center;
 }
-.redesign .site-nav__name{
-  font: var(--fw-regular) var(--nav-fs)/var(--lh-nav) var(--font-geologica);
-  color: var(--text);
+/* Type is the Title style; only its size follows the shrink. */
+.redesign .site-nav :is(.site-nav__name, .site-nav__links a, .lang-switch__part, .nav-toggle){
+  font-size: var(--nav-fs);
 }
+.redesign .site-nav__name{ color: var(--text); }
 .redesign .site-nav__links{ gap: var(--gap-32); align-items: center; }
-.redesign .site-nav__links a{
-  font: var(--fw-regular) var(--nav-fs)/var(--lh-nav) var(--font-geologica);
-  color: var(--text); text-transform: none; letter-spacing: 0;
-}
+.redesign .site-nav__links a{ color: var(--text); }
 .redesign .site-nav__links a{ --underline: max(1px, 0.06em); }
 .redesign .site-nav__links a[aria-current]{ text-decoration: none; }   /* the line above replaces it */
-.redesign .nav-toggle{ color: var(--text); }
+.redesign .nav-toggle{ color: var(--text); padding: 8px 0 8px 8px; }
 
 /* Lang pill: only the active language shows, a click flips it (main.js).
    font-size 0 swallows the " / " text node between the two buttons. */
-.redesign .lang-switch{
+.redesign .site-nav .lang-switch{
   border: 1px solid var(--text); border-radius: var(--radius-pill);
   padding: 4px 8px; gap: 0; font-size: 0;
 }
-.redesign .lang-switch__part,
-.redesign .site-nav .lang-switch__part[data-active="true"]{
-  font: var(--fw-regular) var(--nav-fs)/var(--lh-nav) var(--font-geologica);
-  color: var(--text);
-}
-.redesign .lang-switch__part[data-active="false"]{ display: none; }
+.redesign .site-nav .lang-switch__part,
+.redesign .site-nav .lang-switch__part[data-active="true"]{ color: var(--text); }
+.redesign .site-nav .lang-switch__part[data-active="false"]{ display: none; }
 
 /* ---- States (погоджено) ------------------------------------------------- */
 /* On every card, linked or not — the links come later. */
@@ -1630,9 +1422,7 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
      which otherwise win and keep the 10-column placement. */
   .redesign .projects__row .card:nth-child(n),
   .redesign .projects__row .projects__more{ grid-column: auto; }
-  .redesign .hero__title{ font-size: clamp(56px, 11vw, 160px); }
   .redesign .about{ grid-template-columns: 300px 1fr; }
-  .redesign .about__lead{ font-size: clamp(32px, 5.5vw, 80px); }
 }
 @media (max-width: 767px){
   .redesign .wrap{ padding-inline: 24px; }
@@ -1645,9 +1435,6 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   .redesign .contacts{ padding-block: 96px; }
   .redesign .contacts__inner{ flex-direction: column; align-items: flex-start; }
   .redesign .projects__more{ width: 200px; height: 200px; }
-  /* The address can't wrap, so at 80px it widened the page and pushed the
-     fixed header's menu button off-screen. */
-  .redesign .contacts__email{ font-size: clamp(24px, 8.4vw, var(--fs-h2)); }
 }
 
 /* ==========================================================================
@@ -1671,75 +1458,13 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
   --text-inverse-primary: var(--text-invert);
   --text-inverse-secondary: #c7c7c7;
   --text-inverse-tertiary: #8e8e8e;
-  --font-display: var(--font-geologica);
-  --font-body: var(--font-geologica);
-  /* Geologica is loaded at 300 and 400 only: headings run Regular, body Light */
-  --fw-bold: 400;
-  --fw-medium: 400;
   /* Sections that pad themselves with --gutter line up with .wrap */
   --gutter: max(var(--page-pad-x), calc((100vw - var(--page-max)) / 2));
 }
 
-/* ---- Type: display ------------------------------------------------------- */
-.redesign .page-hero__title{
-  font-size: clamp(56px, 8.33vw, var(--fs-h1));
-  line-height: var(--lh-h1); letter-spacing: var(--ls-h1); text-transform: none;
-}
-.redesign :is(.case-hero__title, .about-hero__title, .error-page__title,
-              .case-decisions__title, .next-case__title, .stat-card__value){
-  font-size: clamp(36px, 4.17vw, var(--fs-h2));
-  line-height: var(--lh-h2); letter-spacing: var(--ls-h2); text-transform: none;
-}
-.redesign .mobile-menu__links a{
-  line-height: var(--lh-h2); letter-spacing: var(--ls-h2); text-transform: none;
-}
-.redesign .case-section__title{
-  font-size: clamp(28px, 2.08vw, var(--fs-cta));
-  line-height: var(--lh-cta); letter-spacing: var(--ls-cta);
-}
-.redesign .work-row__title{
-  font-size: clamp(24px, 1.67vw, var(--fs-card-title));
-  line-height: var(--lh-card); letter-spacing: var(--ls-card);
-}
-.redesign :is(.decision__fork, .work-nda__title, .case-constraints__item-title){
-  font-size: var(--fs-nav); line-height: var(--lh-nav); letter-spacing: 0;
-}
-
-/* ---- Type: body — Light 20, as on the homepage ----------------------------
-   Element selectors stay inside :where() so the label rules below can win by
-   order, the same way the base text styles are arranged. */
-.redesign :is(.page-hero__lede, .about-hero__text :where(p), .case-section :where(p),
-              .case-results__summary :where(p), .error-page__text, .work-nda__text,
-              .case-constraints__item-body, .decision__options, .decision__choice,
-              .about-tools :where(p), .exp-row, .contact-facts__item,
-              .case-facts__item, .stat-card__label){
-  font-weight: 300; font-size: var(--fs-body-20);
-  line-height: var(--lh-body); letter-spacing: var(--ls-body);
-}
-.redesign :is(strong, b, .exp-row__org){ font-weight: var(--fw-regular); }
-
-/* ---- Type: labels — small meta 14, section kickers 24, hero kickers 32 ---- */
-.redesign :is(.mono-label, .contact-facts__item :where(dt), .case-facts__item :where(dt),
-              .decision__label, .work-row__descriptor, .work-row__meta, .work-row__index,
-              .work-row__thumb, .next-case__meta, .exp-row__years, .frame-label,
-              .mobile-menu__top, .mobile-menu__bottom){
-  font-weight: var(--fw-regular); font-size: var(--fs-link-14);
-  line-height: var(--lh-link); letter-spacing: 0; text-transform: uppercase;
-}
-.redesign :is(.case-section__kicker, .case-constraints__kicker, .case-decisions__kicker,
-              .case-results__kicker, .about-experience__kicker, .about-tools__kicker,
-              .next-case__kicker, .work-list__head){
-  font-weight: var(--fw-regular); font-size: var(--fs-label);
-  line-height: var(--lh-label); letter-spacing: 0; text-transform: uppercase;
-}
-.redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){
-  font-size: clamp(18px, 1.67vw, var(--fs-kicker));
-  line-height: var(--lh-kicker); letter-spacing: 0;
-  color: var(--text); margin-bottom: var(--gap-32);
-}
-
 /* ---- Layout: clear the fixed header, match the homepage rhythm ----------- */
 .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: var(--sp-hero); }
+.redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){ color: var(--text); margin-bottom: var(--gap-32); }
 .redesign .page-hero{ padding-bottom: var(--sp-section); }
 .redesign .page-hero__lede{ color: var(--text); max-width: 44ch; margin-top: var(--gap-32); }
 .redesign .error-page{ padding-bottom: var(--sp-section); }
@@ -1784,11 +1509,17 @@ html[data-page-end="true"] body.redesign{ background: var(--bg-dark); }
 @media (max-width: 1199px){
   .redesign .about-hero{ grid-template-columns: 240px 1fr; }
 }
+/* Below a laptop the four links and the pill no longer fit one row next to
+   the name, so the header switches to the menu button. */
+.redesign .site-nav :is(.site-nav__name, .site-nav__links a){ white-space: nowrap; }
+@media (max-width: 1023px){
+  .redesign .site-nav__links{ display: none; }
+  .redesign .nav-toggle{ display: inline-flex; }
+}
 @media (max-width: 767px){
   .redesign{ --gutter: 24px; }
   .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: 136px; }
   .redesign .page-hero{ padding-bottom: 72px; }
   .redesign .about-hero{ grid-template-columns: 1fr; gap: var(--gap-32) 0; }
   .redesign .about-hero__photo{ grid-row: auto; width: 66%; }
-  .redesign .work-list__head{ font-size: var(--fs-link-14); line-height: var(--lh-link); }
 }

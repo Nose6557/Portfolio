@@ -224,9 +224,13 @@ button:focus-visible,
    chosen by class, never won by nesting depth. Blocks of equal weight are
    ordered on purpose — labels and overlines come last, so a kicker inside a
    prose section keeps its label style.
+
+   Each block also has a .t-* class named after its Figma style — the entry
+   point for markup that isn't a component yet, and for Storybook.
    -------------------------------------------------------------------------- */
 
 /* Display — 44→160 · Regular · 100% · -5% ---------------------------------- */
+.t-display,
 .hero__title,
 .page-hero__title{
   font: var(--fw-regular) var(--fs-display)/var(--display-lh) var(--font-sans);
@@ -235,6 +239,7 @@ button:focus-visible,
 }
 
 /* Heading/1 — 32→80 · Regular · 100% · -4% -------------------------------- */
+.t-h1,
 .projects__head,
 .about__lead,
 .contacts__email,
@@ -251,6 +256,7 @@ button:focus-visible,
 }
 
 /* Heading/2 — 24→40 · Regular · 100% · -4% -------------------------------- */
+.t-h2,
 .projects__more-text,
 .case-section__title{
   font: var(--fw-regular) var(--fs-h2)/var(--h2-lh) var(--font-sans);
@@ -259,6 +265,7 @@ button:focus-visible,
 }
 
 /* Heading/3 — 22→32 · Regular · 105% · -4% -------------------------------- */
+.t-h3,
 .card__title,
 .work-row__title{
   font: var(--fw-regular) var(--fs-h3)/var(--h3-lh) var(--font-sans);
@@ -268,6 +275,7 @@ button:focus-visible,
 
 /* Title — 18→24 · Regular · 120% · 0 --------------------------------------
    Navigation, footer links, small headings. */
+.t-title,
 .site-nav__name,
 .site-nav__links :where(a),
 .site-nav .lang-switch__part,
@@ -284,6 +292,7 @@ button:focus-visible,
 
 /* Body — 17→20 · Light · 140% · -2% ---------------------------------------
    Also the page default, so anything without a style reads as body. */
+.t-body,
 body,
 .card__desc,
 .page-hero__lede,
@@ -310,6 +319,7 @@ body,
 
 /* Caption — 12→14 · Regular · 120% · 0 · Upper ----------------------------
    Meta and small labels. `.mono-label` is its named entry point in markup. */
+.t-caption,
 .mono-label,
 .contact-facts__item :where(dt),
 .case-facts__item :where(dt),
@@ -329,6 +339,7 @@ body,
 
 /* Label — 14 · Regular · 120% · 0 · as typed ------------------------------
    Small standalone links and controls. */
+.t-label,
 .about__more :where(a),
 .btn,
 .skip-link{
@@ -339,6 +350,7 @@ body,
 
 /* Overline/M — 16→24 · Regular · 120% · 0 · Upper -------------------------
    Section kickers and the footer's label. */
+.t-overline-m,
 .contacts__label,
 .work-list__head,
 .case-section__kicker,
@@ -355,6 +367,7 @@ body,
 
 /* Overline/L — 18→32 · Regular · 120% · 0 · Upper -------------------------
    The kicker above each page's title. */
+.t-overline-l,
 .hero__kicker,
 .page-hero__kicker,
 .case-hero__kicker,

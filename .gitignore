@@ -1,2 +1,7 @@
 .DS_Store
 .claude/
+
+# Storybook
+node_modules/
+*storybook.log
+storybook-static

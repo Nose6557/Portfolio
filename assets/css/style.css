@@ -102,6 +102,7 @@
   --underline-time: .5s;
   --underline-ease: cubic-bezier(.65, 0, .35, 1);
   --gap-40: 40px;   /* футер: підпис · пошта · посилання */
+  --gap-24: 24px;   /* поля сторінки й хедер на телефоні */
   --gap-16: 16px;
 
   /* Print sheet (résumé) runs on plain black-on-white, not the palette. */
@@ -1447,8 +1448,12 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
   .redesign .about{ grid-template-columns: 300px 1fr; }
 }
 @media (max-width: 767px){
-  .redesign .wrap{ padding-inline: 24px; }
-  .redesign .hero{ padding-block: 136px 96px; }   /* top clears the fixed header */
+  .redesign .wrap{ padding-inline: var(--gap-24); }
+  /* Header on phones: 24 at the top of the page, 16 once scrolled */
+  .redesign .site-nav__row{
+    padding-block: calc(var(--gap-24) - (var(--gap-24) - var(--gap-16)) * var(--nav-shrink));
+  }
+  .redesign .hero{ padding-block: 120px 96px; }   /* top clears the fixed header (86px) */
   .redesign .projects{ padding-block: 72px; }
   .redesign .projects__inner{ gap: 48px; }
   .redesign .projects__row{ grid-template-columns: 1fr; }
@@ -1525,8 +1530,8 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
   .redesign .nav-toggle{ display: inline-flex; }
 }
 @media (max-width: 767px){
-  .redesign{ --gutter: 24px; }
-  .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: 136px; }
+  .redesign{ --gutter: var(--gap-24); }
+  .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: 120px; }
   .redesign .page-hero{ padding-bottom: 72px; }
   .redesign .about-hero{ grid-template-columns: 1fr; gap: var(--gap-32) 0; }
   .redesign .about-hero__photo{ grid-row: auto; width: 66%; }

@@ -285,6 +285,7 @@ button:focus-visible,
 .mobile-menu__top,
 .contacts__link,
 .decision__fork,
+.page-hero__lede,
 .work-nda__title,
 .case-constraints__item-title{
   font: var(--fw-regular) var(--fs-title)/var(--title-lh) var(--font-sans);
@@ -297,7 +298,6 @@ button:focus-visible,
 .t-body,
 body,
 .card__desc,
-.page-hero__lede,
 .about-hero__text :where(p),
 .case-section :where(p),
 .case-results__summary :where(p),
@@ -1236,6 +1236,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 .redesign .projects__row--2 .card:nth-child(3){ grid-column: 6 / span 2; }
 .redesign .projects__row--2 .projects__more{ grid-column: 8 / span 3; justify-self: center; }
 .redesign .projects__more{ margin: 0; }   /* base .projects__more is a text link with a top margin */
+/* Роботи — чотири однакові карточки в ряд */
+.redesign .projects__row--even{ grid-template-columns: repeat(4, 1fr); }
+.redesign .projects__inner--full{ max-width: none; }   /* на всю ширину вікна, поля лишаються */
 
 /* Card hover: the image grows inside its clipped frame while the title and
    description sink by slightly different amounts. */
@@ -1431,13 +1434,23 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 .redesign button:focus-visible{ outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 /* ---- Responsive (погоджено) --------------------------------------------- */
+@media (max-width: 1536px){
+  .redesign .projects__row--even{ column-gap: var(--gap-32); }   /* Роботи: вужчі проміжки між колонками */
+}
+@media (max-width: 1280px){
+  .redesign .projects__row--even{ column-gap: var(--gap-24); }
+}
 @media (max-width: 1199px){
   .redesign .projects__row{ grid-template-columns: repeat(2, 1fr); }
   /* :nth-child(n) matches the specificity of the per-card span rules above,
      which otherwise win and keep the 10-column placement. */
   .redesign .projects__row .card:nth-child(n),
   .redesign .projects__row .projects__more{ grid-column: auto; }
+  .redesign .projects__row--even{ grid-template-columns: repeat(4, 1fr); }   /* Роботи: 4 в ряд до 1025px */
   .redesign .about{ grid-template-columns: 300px 1fr; }
+}
+@media (max-width: 1024px){
+  .redesign .projects__row--even{ grid-template-columns: repeat(2, 1fr); }   /* Роботи: 2 в ряд на планшетах */
 }
 @media (max-width: 767px){
   .redesign .wrap{ padding-inline: var(--gap-24); }

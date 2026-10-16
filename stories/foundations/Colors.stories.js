@@ -13,7 +13,7 @@ const swatch = (name, alias) => {
     <figure style="margin:0; display:flex; flex-direction:column; gap:8px; width:176px;">
       <div style="height:88px; border-radius:var(--radius-media); background:var(${name});
                   box-shadow: inset 0 0 0 1px var(--color-separator);"></div>
-      <figcaption class="t-label" style="display:flex; flex-direction:column; gap:2px;">
+      <figcaption class="t-title" style="display:flex; flex-direction:column; gap:2px;">
         <span>${name}</span>
         <span style="color:var(--color-label-secondary)">${hex(value)}${alias ? ` · ${alias}` : ''}</span>
       </figcaption>

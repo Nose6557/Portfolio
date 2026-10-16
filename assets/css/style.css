@@ -98,10 +98,10 @@
   --gap-32: 32px;
   --gap-48: 48px;   /* сітка проєктів */
   --gap-64: 64px;
-  --gap-96: 96px;
+  --gap-80: 80px;   /* «Обрані проєкти»: під заголовком і між рядами */
   --underline-time: .5s;
   --underline-ease: cubic-bezier(.65, 0, .35, 1);
-  --gap-40: 40px;   /* футер: підпис · пошта · посилання */
+  --gap-40: 40px;   /* футер: підпис · пошта · посилання (десктоп); «Обрані проєкти» на телефоні */
   --gap-24: 24px;   /* поля сторінки й хедер на телефоні */
   --gap-16: 16px;
 
@@ -144,7 +144,6 @@
   --title-mobile: 18;    --title-desktop: 24;     --title-lh: 1.2;    --title-ls: 0;
   --overline-m-mobile: 16; --overline-m-desktop: 24; --overline-m-lh: 1.2; --overline-m-ls: 0;
   --body-mobile: 16;     --body-desktop: 16;      --body-lh: 1.5;     --body-ls: -0.02em;
-  --label-mobile: 16;    --label-desktop: 16;     --label-lh: 1.2;    --label-ls: 0;
   --caption-mobile: 12;  --caption-desktop: 14;   --caption-lh: 1.2;  --caption-ls: 0;
 
   /* Résumé sheet — an A4 page, so a fixed print ladder, not fluid */
@@ -164,7 +163,6 @@
   --fs-title:      clamp(calc(var(--title-mobile) * 1rem / 16), calc(var(--title-mobile) * 1rem / 16 + (var(--title-desktop) - var(--title-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--title-desktop) * 1rem / 16));
   --fs-overline-m: clamp(calc(var(--overline-m-mobile) * 1rem / 16), calc(var(--overline-m-mobile) * 1rem / 16 + (var(--overline-m-desktop) - var(--overline-m-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--overline-m-desktop) * 1rem / 16));
   --fs-body:       clamp(calc(var(--body-mobile) * 1rem / 16), calc(var(--body-mobile) * 1rem / 16 + (var(--body-desktop) - var(--body-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--body-desktop) * 1rem / 16));
-  --fs-label:      clamp(calc(var(--label-mobile) * 1rem / 16), calc(var(--label-mobile) * 1rem / 16 + (var(--label-desktop) - var(--label-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--label-desktop) * 1rem / 16));
   --fs-caption:    clamp(calc(var(--caption-mobile) * 1rem / 16), calc(var(--caption-mobile) * 1rem / 16 + (var(--caption-desktop) - var(--caption-mobile)) * (100vw - var(--vp-mobile) * 1px) / (var(--vp-desktop) - var(--vp-mobile))), calc(var(--caption-desktop) * 1rem / 16));
 
   --ease-out: cubic-bezier(.16,1,.3,1);
@@ -210,8 +208,10 @@ button:focus-visible,
    ==========================================================================
    Every typographic rule on the site lives here. Nothing below this section
    sets font-family, font-size, font-weight, line-height, letter-spacing or
-   text-transform (the one exception is the shrinking header, which scales
-   its own size — see .site-nav). Each block is one Figma text style, and
+   text-transform. Three exceptions, each only a size: the shrinking header,
+   which scales its own size (see .site-nav), and on phones «Обрані проєкти»
+   and the footer email, which drop to the Heading/2 size (see the 767px
+   block under Responsive). Each block is one Figma text style, and
    the selectors in it are the components that use it, so the rule doubles
    as the "where is this style used" list.
 
@@ -228,7 +228,7 @@ button:focus-visible,
    point for markup that isn't a component yet, and for Storybook.
    -------------------------------------------------------------------------- */
 
-/* Display — 44→160 · Regular · 100% · -5% ---------------------------------- */
+/* Display — 56→160 · Regular · 100% · -5% ---------------------------------- */
 .t-display,
 .hero__title,
 .page-hero__title{
@@ -237,7 +237,7 @@ button:focus-visible,
   text-transform: none;
 }
 
-/* Heading/1 — 32→80 · Regular · 100% · -4% -------------------------------- */
+/* Heading/1 — 40→80 · Regular · 100% · -4% -------------------------------- */
 .t-h1,
 .projects__head,
 .about__lead,
@@ -254,17 +254,17 @@ button:focus-visible,
   text-transform: none;
 }
 
-/* Heading/2 — 24→40 · Regular · 100% · -4% -------------------------------- */
+/* Heading/2 — 32→40 · Regular · 100% · -4% -------------------------------- */
 .t-h2,
-.projects__more-text,
 .case-section__title{
   font: var(--fw-regular) var(--fs-h2)/var(--h2-lh) var(--font-sans);
   letter-spacing: var(--h2-ls);
   text-transform: none;
 }
 
-/* Heading/3 — 22→32 · Regular · 105% · -4% -------------------------------- */
+/* Heading/3 — 24→32 · Regular · 105% · -4% -------------------------------- */
 .t-h3,
+.projects__more-text,
 .card__title,
 .work-row__title{
   font: var(--fw-regular) var(--fs-h3)/var(--h3-lh) var(--font-sans);
@@ -273,8 +273,11 @@ button:focus-visible,
 }
 
 /* Title — 18→24 · Regular · 120% · 0 --------------------------------------
-   Navigation, footer links, small headings. */
+   Navigation, footer links, small headings, standalone links and controls. */
 .t-title,
+.about__more :where(a),
+.btn,
+.skip-link,
 .site-nav__name,
 .site-nav__links :where(a),
 .site-nav .lang-switch__part,
@@ -334,17 +337,6 @@ body,
   font: var(--fw-regular) var(--fs-caption)/var(--caption-lh) var(--font-sans);
   letter-spacing: var(--caption-ls);
   text-transform: uppercase;
-}
-
-/* Label — 14 · Regular · 120% · 0 · as typed ------------------------------
-   Small standalone links and controls. */
-.t-label,
-.about__more :where(a),
-.btn,
-.skip-link{
-  font: var(--fw-regular) var(--fs-label)/var(--label-lh) var(--font-sans);
-  letter-spacing: var(--label-ls);
-  text-transform: none;
 }
 
 /* Overline/M — 16→24 · Regular · 120% · 0 · Upper -------------------------
@@ -1221,7 +1213,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 
 /* ---- Обрані проєкти ------------------------------------------------------ */
 .redesign .projects{ background: var(--color-bg-secondary); padding-block: var(--sp-section); }
-.redesign .projects__inner{ display: flex; flex-direction: column; gap: var(--gap-96); }
+.redesign .projects__inner{ display: flex; flex-direction: column; gap: var(--gap-80); }
 .redesign .projects__head{
   color: var(--color-label); margin: 0;
   border: 0; padding: 0;              /* the base head carries a rule + padding */
@@ -1455,11 +1447,16 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
   }
   .redesign .hero{ padding-block: 120px 96px; }   /* top clears the fixed header (86px) */
   .redesign .projects{ padding-block: 48px; }
-  .redesign .projects__inner{ gap: 48px; }
+  .redesign .projects__inner{ gap: var(--gap-40); }
+  /* «Обрані проєкти»: Heading/1 on desktop, Heading/2 size (32) on phones */
+  .redesign .projects__head{ font-size: var(--fs-h2); }
   .redesign .projects__row{ grid-template-columns: 1fr; }
   .redesign .about{ grid-template-columns: 1fr; padding-block: 72px; }
-  .redesign .about__portrait{ width: 66%; }
+  .redesign .about__text{ gap: var(--gap-32); }
   .redesign .contacts{ padding-block: 96px; }
+  /* Пошта у футері: Heading/1 on desktop, Heading/2 size (32) on phones */
+  .redesign .contacts__email{ font-size: var(--fs-h2); }
+  .redesign .contacts__text{ gap: var(--gap-32); }
   .redesign .contacts__inner{ flex-direction: column; align-items: flex-start; }
   .redesign .projects__more{ width: 200px; height: 200px; }
 }
@@ -1534,5 +1531,5 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
   .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: 120px; }
   .redesign .page-hero{ padding-bottom: 72px; }
   .redesign .about-hero{ grid-template-columns: 1fr; gap: var(--gap-32) 0; }
-  .redesign .about-hero__photo{ grid-row: auto; width: 66%; }
+  .redesign .about-hero__photo{ grid-row: auto; }
 }

@@ -9,12 +9,11 @@ export default {
 const STYLES = [
   ['Display', 'display', 't-display', 'Regular', 'As typed', 'Роблю складні продукти простими'],
   ['Heading/1', 'h1', 't-h1', 'Regular', 'As typed', 'Обрані проєкти'],
-  ['Heading/2', 'h2', 't-h2', 'Regular', 'As typed', 'Більше робіт +'],
+  ['Heading/2', 'h2', 't-h2', 'Regular', 'As typed', 'Виграє той, хто швидше оформить рейс'],
   ['Heading/3', 'h3', 't-h3', 'Regular', 'As typed', 'Шлях менеджера до угоди: з 11 кроків до 4'],
   ['Title', 'title', 't-title', 'Regular', 'As typed', 'Головна · Роботи · Про мене · Контакт'],
   ['Overline/M', 'overline-m', 't-overline-m', 'Regular', 'Upper', 'Пишіть'],
   ['Body', 'body', 't-body', 'Light', 'As typed', 'Менеджер вводив те, що система вже знала. Прибрали чотири кроки, які лише підтверджували побачене на попередньому екрані.'],
-  ['Label', 'label', 't-label', 'Regular', 'As typed', 'Детальніше →'],
   ['Caption', 'caption', 't-caption', 'Regular', 'Upper', 'B2B SaaS · логістика · команда 60'],
 ];
 

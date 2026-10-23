@@ -1235,7 +1235,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 .redesign .projects__more{ margin: 0; }   /* base .projects__more is a text link with a top margin */
 /* Роботи — чотири однакові карточки в ряд */
 .redesign .projects__row--even{ grid-template-columns: repeat(4, 1fr); }
-.redesign .projects__inner--full{ max-width: none; }   /* на всю ширину вікна, поля лишаються */
 
 /* Card hover: the image grows inside its clipped frame while the title and
    description sink by slightly different amounts. */

@@ -243,7 +243,6 @@ button:focus-visible,
 .about__lead,
 .contacts__email,
 .case-hero__title,
-.about-hero__title,
 .error-page__title,
 .case-decisions__title,
 .next-case__title,
@@ -286,6 +285,7 @@ button:focus-visible,
 .contacts__link,
 .decision__fork,
 .page-hero__lede,
+.about-story__lede,
 .work-nda__title,
 .case-constraints__item-title{
   font: var(--fw-regular) var(--fs-title)/var(--title-lh) var(--font-sans);
@@ -298,7 +298,7 @@ button:focus-visible,
 .t-body,
 body,
 .card__desc,
-.about-hero__text :where(p),
+.about-story__text :where(p),
 .case-section :where(p),
 .case-results__summary :where(p),
 .error-page__text,
@@ -1056,20 +1056,17 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 /* ==========================================================================
    About page
    ========================================================================== */
-.about-hero{ padding: clamp(48px,8vw,64px) var(--gutter) 0; }
+.about-hero{
+  display: grid; grid-template-columns: 1fr 336px; gap: var(--gap-32);
+  align-items: end;
+}
 .about-hero__photo{
-  width: min(66%, 420px);
-  aspect-ratio: 4/5;
-  background-image: repeating-linear-gradient(135deg, var(--color-fill) 0 12px, var(--color-fill-alt) 12px 24px);
-  border: 1px solid var(--color-separator);
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover;
+  border-radius: var(--radius-media);
 }
-.about-hero__title{
-  max-width: 16ch;
-  margin: clamp(32px,6vw,48px) 0 32px;
-}
-.about-hero__text{ max-width: 68ch; display: flex; flex-direction: column; gap: 16px; }
-.about-hero__text p:first-child{ color: var(--color-label); }
-.about-hero__text p:not(:first-child){ color: var(--color-label-secondary); }
+.about-story{ display: flex; flex-direction: column; gap: var(--gap-32); }
+.about-story__lede{ color: var(--color-label); max-width: 44ch; }
+.about-story__text{ max-width: 68ch; display: flex; flex-direction: column; gap: 16px; color: var(--color-label-secondary); }
 
 .about-experience{ padding: clamp(48px,8vw,72px) var(--gutter) 0; }
 .about-experience__kicker{ margin-bottom: 24px; }
@@ -1486,12 +1483,12 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 }
 
 /* ---- Layout: clear the fixed header, match the homepage rhythm ----------- */
-.redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: var(--sp-hero); }
+.redesign :is(.page-hero, .case-hero, .error-page){ padding-top: var(--sp-hero); }
 .redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){ color: var(--color-label); margin-bottom: var(--gap-32); }
 .redesign .page-hero{ padding-bottom: var(--sp-section); }
 .redesign .page-hero__lede{ color: var(--color-label); max-width: 44ch; margin-top: var(--gap-32); }
 .redesign .error-page{ padding-bottom: var(--sp-section); }
-.redesign :is(.case-hero__title, .about-hero__title){ max-width: none; }
+.redesign .case-hero__title{ max-width: none; }
 
 /* ---- Surfaces: neutral placeholders, rounded media, no outlines ---------- */
 .redesign :is(.work-row__thumb, .case-figure__frame, .stat-card, .about-tools){
@@ -1509,16 +1506,6 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 .redesign :is(.next-case__kicker, .next-case__meta){ color: var(--color-label-secondary); }
 
 /* ---- Про мене ------------------------------------------------------------ */
-.redesign .about-hero{
-  display: grid; grid-template-columns: 336px 1fr; gap: 0 var(--gap-32);
-  align-items: start;
-}
-.redesign .about-hero__photo{
-  grid-row: 1 / span 2;
-  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover;
-  border: 0; border-radius: var(--radius-media); background: none;
-}
-.redesign .about-hero__title{ margin: 0 0 var(--gap-32); }
 .redesign .about-footer{ grid-template-columns: 1fr; padding-bottom: var(--sp-section); }
 
 /* ---- Резюме: the sheet stays a print document on a grey desk ------------- */
@@ -1530,7 +1517,7 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 }
 
 @media (max-width: 1199px){
-  .redesign .about-hero{ grid-template-columns: 240px 1fr; }
+  .about-hero{ grid-template-columns: 1fr 240px; }
 }
 /* Below a laptop the four links and the pill no longer fit one row next to
    the name, so the header switches to the menu button. */
@@ -1541,8 +1528,8 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 }
 @media (max-width: 767px){
   .redesign{ --gutter: var(--gap-24); }
-  .redesign :is(.page-hero, .case-hero, .about-hero, .error-page){ padding-top: 120px; }
+  .redesign :is(.page-hero, .case-hero, .error-page){ padding-top: 120px; }
   .redesign .page-hero{ padding-bottom: 72px; }
-  .redesign .about-hero{ grid-template-columns: 1fr; gap: var(--gap-32) 0; }
-  .redesign .about-hero__photo{ grid-row: auto; }
+  .about-hero{ grid-template-columns: 1fr; }
+  .about-hero__photo{ max-width: 336px; }
 }

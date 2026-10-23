@@ -984,7 +984,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 .case-section p{ margin-bottom: 16px; }
 .case-section p:last-child{ margin-bottom: 0; color: var(--color-label-secondary); }
 
-.case-figure{ padding: clamp(40px,7vw,56px) var(--gutter) 0; }
+.case-figure{ margin: 0; padding: clamp(40px,7vw,56px) var(--gutter) 0; }
 .case-figure__frame{
   background: var(--color-bg-secondary); border: 1px solid var(--color-separator); padding: 16px;
 }

@@ -97,6 +97,9 @@
      50vh − 220 дає 240 при висоті ≥920, 164 при 768; не нижче 120,
      бо фіксована шапка займає 86px. Телефони мають своє правило нижче. */
   --sp-hero:      clamp(120px, 50vh - 220px, 240px);
+  /* Заголовок hero → опис під ним. Еталон — головна: 72 на десктопі,
+     56 на телефоні. Однаковий на всіх сторінках. */
+  --sp-hero-lede: clamp(56px, 32px + 4vw, 72px);
   --sp-section:   96px;      /* «Обрані проєкти», «Про мене» */
   --sp-contacts:  160px;
   --gap-32: 32px;
@@ -1304,6 +1307,8 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 
 .redesign .hero__kicker,
 .redesign .hero__title{ color: var(--color-label); margin: 0; }
+/* hero — flex із gap 32, тому від токена віднімаємо цей gap */
+.redesign .hero__lead{ margin-top: calc(var(--sp-hero-lede) - var(--gap-32)); }
 
 /* ---- Обрані проєкти ------------------------------------------------------ */
 .redesign .projects{ background: var(--color-bg-secondary); padding-block: var(--sp-section); }
@@ -1583,7 +1588,9 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 .redesign :is(.page-hero, .case-hero, .error-page){ padding-top: var(--sp-hero); }
 .redesign :is(.page-hero__kicker, .case-hero__kicker, .error-page__kicker){ color: var(--color-label); margin-bottom: var(--gap-32); }
 .redesign .page-hero{ padding-bottom: var(--sp-section); }
-.redesign .page-hero__lede{ color: var(--color-label); max-width: 44ch; margin-top: var(--gap-32); }
+.redesign .page-hero__lede{ color: var(--color-label); max-width: 44ch; margin-top: var(--sp-hero-lede); }
+.redesign .error-page__title{ margin-bottom: 0; }
+.redesign .error-page__text{ margin-top: var(--sp-hero-lede); }
 .redesign .error-page{ padding-bottom: var(--sp-section); }
 .redesign .case-hero__title{ max-width: none; }
 

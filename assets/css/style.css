@@ -1063,7 +1063,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 .case-hero__title{ max-width: 20ch; }
 
 .case-facts{
-  padding: clamp(40px,7vw,56px) var(--gutter) 0;
+  padding: var(--sp-hero-lede) var(--gutter) 0;   /* як заголовок → опис на головній */
   display: grid; gap: 24px;
 }
 .case-facts__item{
@@ -1156,7 +1156,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
    About page
    ========================================================================== */
 .about-hero{
-  display: grid; grid-template-columns: 1fr 336px; gap: var(--gap-32);
+  display: grid; grid-template-columns: 1fr 336px;
+  /* row-gap спрацьовує, коли фото падає під заголовок (телефони) */
+  row-gap: var(--sp-hero-lede); column-gap: var(--gap-32);
   align-items: end;
 }
 .about-hero__photo{

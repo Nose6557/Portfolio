@@ -714,11 +714,19 @@ a.work-row:focus-visible .work-row__title span{
   height: var(--badge-size);
   pointer-events: none;
 }
+.hero__badge-svg{ width: 100%; height: 100%; }
 .hero__badge-ring{
-  width: 100%;
-  height: 100%;
   transform-origin: 50% 50%;
   animation: hero-badge-spin 28s linear infinite;
+}
+/* Стрілка: дві лінії, як у макеті. Товщина в одиницях viewBox —
+   2px на колі 391 з макета дають тут приблизно одиницю. */
+.hero__badge-arrow path{
+  fill: none;
+  stroke: var(--color-label);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .hero__badge text{
   font-family: var(--font-sans);
@@ -1257,7 +1265,9 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
   opacity: 1; transform: none; transition: none;
   overflow: hidden; vertical-align: top;
   /* room for descenders inside the clip, taken back out of the layout */
-  padding-block: 0.14em; margin-block: -0.14em;
+  /* 0.19, а не 0.14: курсивна антиква в акценті підіймає діакритику на
+     7.5px вище за Manrope при кеглі 160 — крапка над «і» зрізалась. */
+  padding-block: 0.19em; margin-block: -0.19em;
 }
 .js .redesign .hero-line__inner{
   display: inline-block;

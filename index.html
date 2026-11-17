@@ -52,11 +52,18 @@
     <!-- Напис по колу. Декоративний: сенс дублює статус у футері, тож
          екранній читалці віддаємо один короткий підпис, а не 50 літер. -->
     <div class="hero__badge" role="img" aria-label="Відкритий до пропозицій">
-      <svg class="hero__badge-ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+      <svg class="hero__badge-svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
         <defs>
           <path id="hero-badge-path" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"></path>
         </defs>
-        <text textLength="488" lengthAdjust="spacing"><textPath href="#hero-badge-path">Відкритий до пропозицій&#160;·&#160;Відкритий до пропозицій&#160;·&#160;</textPath></text>
+        <!-- обертається лише напис; стрілка стоїть нерухомо -->
+        <g class="hero__badge-ring">
+          <text textLength="488" lengthAdjust="spacing"><textPath href="#hero-badge-path">Відкритий до пропозицій&#160;·&#160;Відкритий до пропозицій&#160;·&#160;</textPath></text>
+        </g>
+        <g class="hero__badge-arrow">
+          <path d="M83,83 L117,83 L117,117"></path>
+          <path d="M83,117 L117,83"></path>
+        </g>
       </svg>
     </div>
   </section>

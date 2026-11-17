@@ -305,7 +305,6 @@ button:focus-visible,
 .decision__fork,
 .hero__lead,
 .page-hero__lede,
-.about-story__lede,
 .work-nda__title,
 .case-constraints__item-title{
   font: var(--fw-regular) var(--fs-title)/var(--title-lh) var(--font-sans);
@@ -1166,7 +1165,6 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
   border-radius: var(--radius-media);
 }
 .about-story{ display: flex; flex-direction: column; gap: var(--gap-32); }
-.about-story__lede{ color: var(--color-label); max-width: 44ch; }
 .about-story__text{ max-width: 68ch; display: flex; flex-direction: column; gap: 16px; color: var(--color-label-secondary); }
 
 .about-experience{ padding: clamp(48px,8vw,72px) var(--gutter) 0; }

@@ -138,6 +138,13 @@
      -5% стискає Manrope у міру, а Playfair на тому ж значенні злипається. */
   --accent-ls: -0.02em;
 
+  /* Діаметр напису по колу в герої (у макеті — 390 при 1920). */
+  --badge-size: 196px;
+
+  /* Перемикач мови — коло, а не пігулка: діаметр фіксований, бо
+     font-size: 0 на контейнері знімає будь-яку прив'язку до em. */
+  --lang-size: 48px;
+
   --vp-mobile: 375;
   --vp-desktop: 1920;
 
@@ -687,6 +694,45 @@ a.work-row:focus-visible .work-row__title span{
   text-decoration-thickness: 0.04em;
   text-underline-offset: 0.135em;
   text-decoration-skip-ink: auto;
+}
+/* Лід під заголовком. Стиль Body успадковується від body; тут лише міра
+   рядка — вужча за решту сторінки, щоб абзац читався як підпис. */
+.hero__lead{
+  margin-top: clamp(24px, 4vw, 40px);
+  max-width: 25em;
+}
+
+/* Напис по колу. Фраза вкладена двічі — так шов між повтореннями
+   припадає на роздільник, а не на середину слова. */
+.hero{ position: relative; }
+.hero__badge{
+  display: none;
+  position: absolute;
+  right: var(--page-pad-x);
+  bottom: clamp(48px, 8vw, 72px);
+  width: var(--badge-size);
+  height: var(--badge-size);
+  pointer-events: none;
+}
+.hero__badge-ring{
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+  animation: hero-badge-spin 28s linear infinite;
+}
+.hero__badge text{
+  font-family: var(--font-sans);
+  font-size: 15px;          /* 0.077 від діаметра — пропорція з макета */
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.01em;
+  fill: var(--color-label);
+}
+@keyframes hero-badge-spin{ to{ transform: rotate(360deg); } }
+
+/* Колу потрібне місце: нижче 1024 воно б налізло на лід. Відсувати лід
+   не треба — його міра (25em) і так не дістає до правого краю. */
+@media (min-width: 1024px){
+  .hero__badge{ display: block; }
 }
 .hero__meta{
   margin-top: clamp(32px,6vw,56px);
@@ -1422,8 +1468,10 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 /* Lang pill: only the active language shows, a click flips it (main.js).
    font-size 0 swallows the " / " text node between the two buttons. */
 .redesign .site-nav .lang-switch{
-  border: 1px solid var(--color-label); border-radius: var(--radius-pill);
-  padding: 4px 8px; gap: 0; font-size: 0;
+  border: 1px solid var(--color-label); border-radius: 50%;
+  width: var(--lang-size); height: var(--lang-size);
+  padding: 0; gap: 0; font-size: 0;
+  justify-content: center;
 }
 .redesign .site-nav .lang-switch__part,
 .redesign .site-nav .lang-switch__part[data-active="true"]{ color: var(--color-label); }

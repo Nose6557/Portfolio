@@ -712,7 +712,20 @@ a.work-row:focus-visible .work-row__title span{
   bottom: clamp(48px, 8vw, 72px);
   width: var(--badge-size);
   height: var(--badge-size);
-  pointer-events: none;
+  border-radius: 50%;
+}
+.hero__badge:focus-visible{
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+/* Стрілка підтягується у свій бік — рух уздовж тієї самої діагоналі,
+   що її малює, тож підказка читається без нової фігури. */
+.hero__badge-arrow{
+  transition: transform .4s var(--ease-out);
+}
+.hero__badge:hover .hero__badge-arrow,
+.hero__badge:focus-visible .hero__badge-arrow{
+  transform: translate(4px, -4px);
 }
 .hero__badge-svg{ width: 100%; height: 100%; }
 .hero__badge-ring{

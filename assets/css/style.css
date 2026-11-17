@@ -1470,29 +1470,24 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 }
 
 /* ---- Навбар (зверху, поверх hero) ---------------------------------------- */
-/* Frosted surface: invisible over the white hero, tints whatever scrolls
-   under it. main.js drives --nav-shrink from 0 to 1 over the first 600px of
-   scroll, and the row padding and type scale down with it. */
+/* Без фону й без зміни розміру при скролі. Увесь хедер білий і
+   накладається через difference: на білому він стає чорним, на чорному —
+   білим, тобто завжди інвертований до того, що під ним. Перевизначення
+   --color-label всередині хедера фарбує в білий усе, що бере цей токен
+   (текст, лінію активного пункту, рамку перемикача мови). */
 .redesign .site-nav{
-  --nav-shrink: 0;
-  --nav-fs: calc(var(--fs-title) * (1 - 0.125 * var(--nav-shrink)));
+  --color-label: var(--white);
   position: fixed; inset: 0 0 auto 0;
   z-index: 90;
-  background: var(--color-bg-glass);
-  -webkit-backdrop-filter: saturate(1.7) blur(40px);
-  backdrop-filter: saturate(1.7) blur(40px);
-  mix-blend-mode: normal;
+  background: transparent;
+  mix-blend-mode: difference;
   transition: none;
 }
 .redesign .site-nav[data-hidden="true"]{ transform: none; }   /* stays visible */
 .redesign .site-nav__row{
-  padding-block: calc(var(--gap-16) - 12px * var(--nav-shrink));
+  padding-block: var(--gap-16);
   color: var(--color-label);
   align-items: center;
-}
-/* Type is the Title style; only its size follows the shrink. */
-.redesign .site-nav :is(.site-nav__name, .site-nav__links a, .lang-switch__part, .nav-toggle){
-  font-size: var(--nav-fs);
 }
 .redesign .site-nav__name{ color: var(--color-label); }
 .redesign .site-nav__links{ gap: var(--gap-32); align-items: center; }
@@ -1555,10 +1550,7 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 }
 @media (max-width: 767px){
   .redesign .wrap{ padding-inline: var(--gap-24); }
-  /* Header on phones: 24 at the top of the page, 16 once scrolled */
-  .redesign .site-nav__row{
-    padding-block: calc(var(--gap-24) - (var(--gap-24) - var(--gap-16)) * var(--nav-shrink));
-  }
+  .redesign .site-nav__row{ padding-block: var(--gap-24); }   /* хедер на телефонах */
   .redesign .hero{ padding-block: 120px 96px; }   /* top clears the fixed header (86px) */
   .redesign .projects{ padding-block: 48px; }
   .redesign .projects__inner{ gap: var(--gap-40); }

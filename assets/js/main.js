@@ -21,9 +21,6 @@
       const y = window.scrollY;
       const menuOpen = document.querySelector("[data-mobile-menu]")?.dataset.open === "true";
       nav.dataset.hidden = String(!menuOpen && y > lastY && y > nav.offsetHeight);
-      /* 0 → 1 over the first 600px; the homepage header shrinks with it
-         (see --nav-shrink in style.css). */
-      nav.style.setProperty("--nav-shrink", Math.min(Math.max(y / 600, 0), 1).toFixed(3));
       lastY = y;
       ticking = false;
     };

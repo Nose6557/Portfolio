@@ -977,7 +977,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
   .case-facts{ grid-template-columns: repeat(3,1fr); }
 }
 
-.case-section{ padding: clamp(56px,10vw,88px) var(--gutter) 0; display: flex; justify-content: center; }
+.case-section{ padding: clamp(56px,10vw,88px) var(--gutter) 0; }
 .case-section__inner{ max-width: 68ch; width: 100%; }
 .case-section__kicker{ margin-bottom: 16px; }
 .case-section__title{ margin-bottom: 24px; }
@@ -1040,8 +1040,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
 @media (min-width: 700px){ .case-results__stats{ grid-template-columns: repeat(3,1fr); } }
 .stat-card{ background: var(--color-bg-secondary); border: 1px solid var(--color-separator); padding: 32px; }
 .stat-card__label{ color: var(--color-label-secondary); margin-top: 8px; }
-.case-results__summary{ display: flex; justify-content: center; }
-.case-results__summary p{ max-width: 68ch; text-align: left; }
+.case-results__summary p{ max-width: 68ch; }
 
 .next-case{
   display: block;

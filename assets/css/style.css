@@ -694,6 +694,7 @@ a.work-row:focus-visible .work-row__title span{
   font-style: italic;
   font-weight: var(--fw-regular);
   letter-spacing: var(--accent-ls);
+  padding-right: 6px;
 }
 /* Підкреслення останнього слова. Товщина й відступ — в em, щоб трималися
    пропорції на всій плинній шкалі 56→160: у Figma це 4% і 13.5% від кегля.

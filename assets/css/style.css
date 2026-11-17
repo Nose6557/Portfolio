@@ -130,8 +130,13 @@
      tracking is in em (Figma: 1em = 100%).
      ==================================================================== */
   --font-sans: 'Manrope', sans-serif;
+  --font-accent: 'Playfair Display', serif;   /* одне слово в заголовку героя */
   --fw-light: 300;      /* body copy */
   --fw-regular: 400;    /* everything else — only these two are loaded */
+
+  /* Акцент у Display: курсивна антиква замість гротеску. Трекінг свій —
+     -5% стискає Manrope у міру, а Playfair на тому ж значенні злипається. */
+  --accent-ls: -0.02em;
 
   --vp-mobile: 375;
   --vp-desktop: 1920;
@@ -664,6 +669,15 @@ a.work-row:focus-visible .work-row__title span{
 .hero__title{
   color: var(--color-label);
   overflow-wrap: anywhere;
+}
+/* Акцентне слово. Кегель і інтерліньяж успадковуються від Display, щоб
+   обидві гарнітури сиділи на одній сітці — змінюється тільки накреслення
+   і трекінг. */
+.hero__accent{
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--accent-ls);
 }
 .hero__meta{
   margin-top: clamp(32px,6vw,56px);

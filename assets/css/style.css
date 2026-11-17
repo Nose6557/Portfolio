@@ -129,7 +129,7 @@
      Line-height is a multiplier (Figma: the same number as a %),
      tracking is in em (Figma: 1em = 100%).
      ==================================================================== */
-  --font-sans: 'Geologica', sans-serif;
+  --font-sans: 'Manrope', sans-serif;
   --fw-light: 300;      /* body copy */
   --fw-regular: 400;    /* everything else — only these two are loaded */
 

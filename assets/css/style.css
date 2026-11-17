@@ -467,14 +467,17 @@ a.work-row:focus-visible .work-row__title span{
 
 .skip-link{
   position: absolute;
-  left: 16px; top: -48px;
+  left: 16px; top: 0;
   background: var(--color-bg-inverse);
   color: var(--color-label-inverse);
   padding: 8px 16px;
   z-index: 200;
-  transition: top .15s var(--ease-out);
+  /* Ховаємо на всю власну висоту, а не на фіксовані 48px: після зміни
+     висоти рядка Title посилання стало ~50px і низ визирав смужкою. */
+  transform: translateY(-100%);
+  transition: transform .15s var(--ease-out);
 }
-.skip-link:focus{ top: 16px; }
+.skip-link:focus{ transform: translateY(16px); }
 
 /* ==========================================================================
    Layout helpers

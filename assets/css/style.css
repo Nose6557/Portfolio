@@ -1386,7 +1386,7 @@ a.work-row:hover .work-row__thumb{ border-color: var(--color-label); }
   border-radius: var(--radius-media);
 }
 .redesign .about__text{ display: flex; flex-direction: column; gap: var(--gap-64); }
-.redesign .about__lead{ color: var(--color-label); margin: 0; letter-spacing: -1px; }
+.redesign .about__lead{ color: var(--color-label); margin: 0; letter-spacing: -0.0125em; }   /* −1px при кеглі 80 */
 .redesign .about__more{ margin: 0; }
 
 /* ---- Контакти ------------------------------------------------------------ */

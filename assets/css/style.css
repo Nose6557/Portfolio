@@ -679,6 +679,15 @@ a.work-row:focus-visible .work-row__title span{
   font-weight: var(--fw-regular);
   letter-spacing: var(--accent-ls);
 }
+/* Підкреслення останнього слова. Товщина й відступ — в em, щоб трималися
+   пропорції на всій плинній шкалі 56→160: у Figma це 4% і 13.5% від кегля.
+   skip-ink лишає розриви там, де лінію перетинають виносні. */
+.hero__underline{
+  text-decoration: underline;
+  text-decoration-thickness: 0.04em;
+  text-underline-offset: 0.135em;
+  text-decoration-skip-ink: auto;
+}
 .hero__meta{
   margin-top: clamp(32px,6vw,56px);
   display: grid;

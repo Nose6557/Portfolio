@@ -588,8 +588,9 @@ a.work-row:focus-visible .work-row__title span{
   color: var(--color-label-secondary);
 }
 .lang-switch__part[data-active="true"]{ color: var(--color-label); }
-.mobile-menu .lang-switch__part{ color: var(--color-label-inverse-secondary); }
+.mobile-menu .lang-switch__part{ color: var(--color-label-inverse-secondary); text-decoration: none; }
 .mobile-menu .lang-switch__part[data-active="true"]{ color: var(--color-label-inverse); }
+.mobile-menu .lang-switch__sep{ color: var(--color-label-inverse-secondary); }
 
 /* Scoped to the header so the footer and mobile-menu switches keep the
    ordinary palette — only the blended group needs pre-inversion values. */
@@ -1493,12 +1494,11 @@ html[data-page-end="true"] body.redesign{ background: var(--color-bg-inverse); }
 .redesign .site-nav .lang-switch{
   border: 1px solid var(--color-label); border-radius: 50%;
   width: var(--lang-size); height: var(--lang-size);
-  padding: 0; gap: 0; font-size: 0;
+  padding: 0; gap: 0;
   justify-content: center;
+  text-decoration: none;
+  color: var(--color-label);
 }
-.redesign .site-nav .lang-switch__part,
-.redesign .site-nav .lang-switch__part[data-active="true"]{ color: var(--color-label); }
-.redesign .site-nav .lang-switch__part[data-active="false"]{ display: none; }
 
 /* ---- States (погоджено) ------------------------------------------------- */
 /* On every card, linked or not — the links come later. */

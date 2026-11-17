@@ -61,36 +61,6 @@
   });
 
   /* ---------------------------------------------------------------------
-     Language switch
-     NOTE: only Ukrainian copy exists today. The toggle is wired up
-     structurally (state + persistence) but there is no English content
-     to swap in yet — flipping it currently just updates the visual
-     active state. Wire real translations here once copy exists.
-  --------------------------------------------------------------------- */
-  const LANG_KEY = "portfolio-lang";
-  const storedLang = localStorage.getItem(LANG_KEY) || "ua";
-
-  document.querySelectorAll("[data-lang-switch]").forEach((el) => {
-    const parts = el.querySelectorAll("[data-lang]");
-    const applyState = (lang) => {
-      parts.forEach((p) => {
-        p.dataset.active = String(p.dataset.lang === lang);
-      });
-    };
-    applyState(storedLang);
-    el.addEventListener("click", (e) => {
-      const target = e.target.closest("[data-lang]");
-      if (!target) return;
-      /* A "toggle" switch shows only the active language, so a click on
-         it means "the other one". */
-      const other = [...parts].find((p) => p !== target);
-      const lang = el.dataset.langSwitch === "toggle" && other ? other.dataset.lang : target.dataset.lang;
-      localStorage.setItem(LANG_KEY, lang);
-      applyState(lang);
-    });
-  });
-
-  /* ---------------------------------------------------------------------
      Reading progress bar (case pages)
   --------------------------------------------------------------------- */
   const progressFill = document.querySelector("[data-progress-fill]");

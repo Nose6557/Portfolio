@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>About — Oleksandr Nosach</title>
+<meta name="description" content="A product designer who came to design from logistics. Experience, tools, contacts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400&display=swap" rel="stylesheet">
+<link rel="alternate" hreflang="uk" href="../about.html">
+<link rel="alternate" hreflang="en" href="about.html">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="redesign">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-nav" data-site-nav>
+  <div class="wrap site-nav__row">
+    <a class="site-nav__name" href="index.html">Oleksandr Nosach</a>
+    <nav class="site-nav__links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="work.html">Work</a>
+      <a href="about.html" aria-current="page">About</a>
+      <a href="contact.html">Contact</a>
+      <a class="lang-switch" href="../about.html" hreflang="uk" aria-label="Перейти на українську"><span aria-hidden="true">EN</span></a>
+    </nav>
+    <button type="button" class="nav-toggle" data-menu-open aria-haspopup="true">Menu</button>
+  </div>
+</header>
+
+<div class="mobile-menu" data-mobile-menu data-open="false" role="dialog" aria-modal="true" aria-label="Mobile menu">
+  <div class="mobile-menu__top">
+    <span>Oleksandr Nosach</span>
+    <button type="button" class="mobile-menu__close" data-menu-close aria-label="Close menu">✕</button>
+  </div>
+  <nav class="mobile-menu__links" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
+    <a href="work.html">Work</a>
+    <a href="about.html" aria-current="page">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <div class="mobile-menu__bottom">
+    <a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a>
+    <div class="lang-switch" role="group" aria-label="Site language"><a class="lang-switch__part" data-active="false" href="../about.html" hreflang="uk" lang="uk">UA</a><span class="lang-switch__sep" aria-hidden="true">/</span><span class="lang-switch__part" data-active="true">EN</span></div>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- Усе над футером: непрозора «кришка», з-під якої він відкривається -->
+  <div class="page-cover">
+
+  <section class="page-hero about-hero wrap">
+    <div class="about-hero__head">
+      <p class="mono-label page-hero__kicker" data-hero-fade>about · in design since 2021</p>
+      <h1 class="page-hero__title">
+        <span class="hero-line" data-hero-line data-reveal><span class="hero-line__inner">I came</span></span><br>
+        <span class="hero-line" data-hero-line data-reveal><span class="hero-line__inner">to design</span></span><br>
+        <span class="hero-line" data-hero-line data-reveal><span class="hero-line__inner">from logistics</span></span>
+      </h1>
+    </div>
+    <img class="about-hero__photo" src="../assets/images/portrait.png" alt="Portrait of Oleksandr Nosach" width="336" height="420" data-hero-fade="late">
+  </section>
+
+  <section class="about-story wrap" data-reveal>
+    <p class="about-story__lede">For three years I was the manager waiting for the table to load. So when I say &laquo;an&nbsp;11-step path to&nbsp;a&nbsp;deal&raquo;, that is not&nbsp;from research — it is from&nbsp;memory.</p>
+    <div class="about-story__text">
+      <p>What I like most is the moment complex logic finally fits on one screen and there is nothing left to explain. What I like least is a handsome mockup breaking against real production data.</p>
+      <p>Outside work I collect old technical manuals: there the typesetting solves the problem instead of asking for attention.</p>
+    </div>
+  </section>
+
+  <section class="about-experience" data-reveal>
+    <p class="mono-label about-experience__kicker">experience</p>
+    <div class="exp-row">
+      <span class="exp-row__years">2024—2026</span>
+      <span class="exp-row__org">B2B SAAS · logistics</span>
+      <span class="exp-row__role">lead product designer</span>
+    </div>
+    <div class="exp-row">
+      <span class="exp-row__years">2022—2024</span>
+      <span class="exp-row__org">FINTECH · internal tools</span>
+      <span class="exp-row__role">product designer</span>
+    </div>
+    <div class="exp-row">
+      <span class="exp-row__years">2021—2022</span>
+      <span class="exp-row__org">studio · outsourcing</span>
+      <span class="exp-row__role">UI designer</span>
+    </div>
+    <div class="exp-row">
+      <span class="exp-row__years">2018—2021</span>
+      <span class="exp-row__org">carrier · operations</span>
+      <span class="exp-row__role">dispatch manager</span>
+    </div>
+  </section>
+
+  <section class="about-footer" data-reveal>
+    <div class="about-tools">
+      <p class="mono-label about-tools__kicker">tools</p>
+      <p>Figma · Maze · Amplitude · Metabase · Notion · enough HTML/CSS to stay on good terms with engineering</p>
+    </div>
+  </section>
+
+  </div>
+
+  <!-- КОНТАКТИ -->
+  <section class="contacts" id="contact" aria-label="Contacts" data-footer-reveal>
+    <div class="contacts__inner wrap">
+      <div class="contacts__text">
+        <p class="contacts__label">Get in touch</p>
+        <h2 class="contacts__email"><a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a></h2>
+        <div class="contacts__links">
+          <a class="contacts__link" href="#" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="contacts__link" href="resume.html">Résumé PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Path to a deal: from 11 steps to 4 — Oleksandr Nosach</title>
+<meta name="description" content="B2B SaaS for logistics, team of 60. We cut a manager's path to a deal from 11 steps to 4 and processing time fell by 38%.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400&display=swap" rel="stylesheet">
+<link rel="alternate" hreflang="uk" href="../../case/deal-flow.html">
+<link rel="alternate" hreflang="en" href="deal-flow.html">
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="redesign">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="progress-bar" aria-hidden="true"><div class="progress-bar__fill" data-progress-fill></div></div>
+
+<header class="site-nav" data-site-nav>
+  <div class="wrap site-nav__row">
+    <a class="site-nav__name" href="../index.html">Oleksandr Nosach</a>
+    <nav class="site-nav__links" aria-label="Main navigation">
+      <a href="../index.html">Home</a>
+      <a href="../work.html" aria-current="location">Work</a>
+      <a href="../about.html">About</a>
+      <a href="../contact.html">Contact</a>
+      <a class="lang-switch" href="../../case/deal-flow.html" hreflang="uk" aria-label="Перейти на українську"><span aria-hidden="true">EN</span></a>
+    </nav>
+    <button type="button" class="nav-toggle" data-menu-open aria-haspopup="true">Menu</button>
+  </div>
+</header>
+
+<div class="mobile-menu" data-mobile-menu data-open="false" role="dialog" aria-modal="true" aria-label="Mobile menu">
+  <div class="mobile-menu__top">
+    <span>Oleksandr Nosach</span>
+    <button type="button" class="mobile-menu__close" data-menu-close aria-label="Close menu">✕</button>
+  </div>
+  <nav class="mobile-menu__links" aria-label="Mobile navigation">
+    <a href="../index.html">Home</a>
+    <a href="../work.html" aria-current="location">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </nav>
+  <div class="mobile-menu__bottom">
+    <a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a>
+    <div class="lang-switch" role="group" aria-label="Site language"><a class="lang-switch__part" data-active="false" href="../../case/deal-flow.html" hreflang="uk" lang="uk">UA</a><span class="lang-switch__sep" aria-hidden="true">/</span><span class="lang-switch__part" data-active="true">EN</span></div>
+  </div>
+</div>
+
+<div class="case-header">
+  <a href="../work.html">← all work</a>
+  <span>case 01 / 03</span>
+</div>
+
+<main id="main">
+
+  <!-- Усе над футером: непрозора «кришка», з-під якої він відкривається -->
+  <div class="page-cover">
+
+  <section class="case-hero">
+    <p class="mono-label case-hero__kicker" data-hero-fade>B2B SAAS · logistics · team of 60 · 2024</p>
+    <h1 class="case-hero__title"><span class="hero-line" data-hero-line data-reveal><span class="hero-line__inner">Path to a deal: from 11 steps to 4</span></span></h1>
+  </section>
+
+  <dl class="case-facts">
+    <div class="case-facts__item case-facts__item--strong"><dt>role</dt><dd>lead designer</dd></div>
+    <div class="case-facts__item case-facts__item--strong"><dt>team</dt><dd>2 designers · 6 engineers · PM</dd></div>
+    <div class="case-facts__item case-facts__item--strong"><dt>period</dt><dd>05—11 2024</dd></div>
+    <div class="case-facts__item"><dt>platform</dt><dd>web, 1280—1920</dd></div>
+    <div class="case-facts__item"><dt>status</dt><dd>in production</dd></div>
+    <div class="case-facts__item"><dt>NDA</dt><dd>client name withheld</dd></div>
+  </dl>
+
+  <section class="case-section" data-reveal>
+    <div class="case-section__inner">
+      <p class="mono-label case-section__kicker">01 context</p>
+      <h2 class="case-section__title">Whoever books the trip faster wins</h2>
+      <p>A platform for booking freight: a manager takes the request, picks a carrier, agrees the rate and closes the deal. That path used to stretch across eleven screens, half of which asked for the same data twice.</p>
+      <p>The problem was not that the interface was complex — it was that it did not remember context. The manager typed in what the system already knew.</p>
+    </div>
+  </section>
+
+  <figure class="case-figure" data-reveal>
+    <div class="case-figure__frame">
+      <div class="frame-media"><span class="frame-label">2:1 frame · map of the old path, 11 steps</span></div>
+    </div>
+  </figure>
+
+  <section class="case-constraints" data-reveal>
+    <p class="case-constraints__kicker">02 constraints</p>
+    <div class="case-constraints__list">
+      <div class="case-constraints__item">
+        <p class="case-constraints__item-title">The backend stays as it is</p>
+        <p class="case-constraints__item-body">Field order in the API is fixed — the sequence of steps can only change within the endpoints that already exist.</p>
+      </div>
+      <div class="case-constraints__item">
+        <p class="case-constraints__item-title">No user training</p>
+        <p class="case-constraints__item-body">60 managers work a shift without a break. The release could not demand training.</p>
+      </div>
+      <div class="case-constraints__item">
+        <p class="case-constraints__item-title">13-inch laptops</p>
+        <p class="case-constraints__item-body">70% of sessions come from small screens. Every permanent element costs rows of the table.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section" data-reveal>
+    <div class="case-section__inner">
+      <p class="mono-label case-section__kicker">03 process</p>
+      <h2 class="case-section__title">Watching a shift, not interviewing</h2>
+      <p>Six shifts, three hours each, sitting beside the managers. We recorded actions rather than opinions: how often someone goes back, where they keep data in a notebook, when they switch to a messenger.</p>
+      <p>It turned out 4 of the 11 steps existed only to confirm what the manager had already seen on the previous screen.</p>
+    </div>
+  </section>
+
+  <div class="case-figure-grid" data-reveal>
+    <div class="case-figure__frame">
+      <div class="frame-media"><span class="frame-label">field photo · the workstation</span></div>
+    </div>
+    <div class="case-figure__frame">
+      <div class="frame-media"><span class="frame-label">diagram · the new IA</span></div>
+    </div>
+  </div>
+
+  <section class="case-decisions" data-reveal>
+    <p class="mono-label case-decisions__kicker">04 key decisions</p>
+    <h2 class="case-decisions__title">Three forks</h2>
+
+    <div class="decision">
+      <div><p class="decision__label">fork</p><p class="decision__fork">Filters would not fit in the table header</p></div>
+      <div><p class="decision__label">options</p>
+        <div class="decision__options"><span>A. Side panel</span><span>B. Modal window</span><span>C. A separate step in the wizard</span></div>
+      </div>
+      <div><p class="decision__label">what I chose</p>
+        <p class="decision__choice"><strong>B</strong> — 70% of sessions come from a 13-inch laptop, and a side panel ate a third of the table. A modal opens from the keyboard and does not change the width of the data.</p>
+      </div>
+    </div>
+
+    <div class="decision">
+      <div><p class="decision__label">fork</p><p class="decision__fork">Where to put the four confirmation steps</p></div>
+      <div><p class="decision__label">options</p>
+        <div class="decision__options"><span>A. Remove them entirely</span><span>B. One combined confirmation</span><span>C. Inline editing</span></div>
+      </div>
+      <div><p class="decision__label">what I chose</p>
+        <p class="decision__choice"><strong>B</strong> — a deal runs to €40k and managers asked for a point to stop at before sending. Removing everything would have shifted the risk onto a person with no safety net.</p>
+      </div>
+    </div>
+
+    <div class="decision">
+      <div><p class="decision__label">fork</p><p class="decision__fork">The rate depends on six parameters</p></div>
+      <div><p class="decision__label">options</p>
+        <div class="decision__options"><span>A. A single number</span><span>B. A breakdown by rows</span><span>C. A number plus details on demand</span></div>
+      </div>
+      <div><p class="decision__label">what I chose</p>
+        <p class="decision__choice"><strong>C</strong> — the manager needs a number for the phone call, but in 1 case out of 5 the client asks why it costs that. The details have to sit one click away, not on screen at all times.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="case-results" data-reveal>
+    <p class="mono-label case-results__kicker">05 outcome</p>
+    <div class="case-results__stats">
+      <div class="stat-card"><p class="stat-card__value">4</p><p class="stat-card__label">steps instead of 11</p></div>
+      <div class="stat-card"><p class="stat-card__value">−38%</p><p class="stat-card__label">of processing time</p></div>
+      <div class="stat-card"><p class="stat-card__value">0</p><p class="stat-card__label">hours of training before release</p></div>
+    </div>
+    <div class="case-results__summary">
+      <p>A month after release, support stopped getting the question of where to see the rate — before that it was a third of all tickets.</p>
+    </div>
+  </section>
+
+  <section class="case-section" data-reveal>
+    <div class="case-section__inner">
+      <p class="mono-label case-section__kicker">06 reflection</p>
+      <p>One thing I would do differently: start with the logs, not the observations. Three weeks in the field confirmed what analytics would have shown in a day — and only after that would watching people have made sense as a way to understand why.</p>
+    </div>
+  </section>
+
+  <a class="next-case" href="#" aria-disabled="true">
+    <p class="next-case__kicker">next case →</p>
+    <p class="next-case__title">Payment reconciliation</p>
+    <p class="next-case__meta">FINTECH · internal tool · team of 12 · 2023</p>
+  </a>
+
+  </div>
+
+  <!-- КОНТАКТИ -->
+  <section class="contacts" id="contact" aria-label="Contacts" data-footer-reveal>
+    <div class="contacts__inner wrap">
+      <div class="contacts__text">
+        <p class="contacts__label">Get in touch</p>
+        <h2 class="contacts__email"><a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a></h2>
+        <div class="contacts__links">
+          <a class="contacts__link" href="#" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="contacts__link" href="../resume.html">Résumé PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="../../assets/js/main.js" defer></script>
+</body>
+</html>

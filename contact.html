@@ -13,6 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400&display=swap" rel="stylesheet">
+<link rel="alternate" hreflang="uk" href="contact.html">
+<link rel="alternate" hreflang="en" href="en/contact.html">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="redesign">
@@ -26,9 +28,7 @@
       <a href="work.html">Роботи</a>
       <a href="about.html">Про мене</a>
       <a href="contact.html" aria-current="page">Контакт</a>
-      <div class="lang-switch" data-lang-switch="toggle" role="group" aria-label="Мова сайту">
-        <button type="button" class="lang-switch__part" data-lang="ua">UA</button> / <button type="button" class="lang-switch__part" data-lang="en">EN</button>
-      </div>
+      <a class="lang-switch" href="en/contact.html" hreflang="en" aria-label="Switch to English"><span aria-hidden="true">UA</span></a>
     </nav>
     <button type="button" class="nav-toggle" data-menu-open aria-haspopup="true">Меню</button>
   </div>
@@ -47,9 +47,7 @@
   </nav>
   <div class="mobile-menu__bottom">
     <a href="mailto:Nose6557@gmail.com">Nose6557@gmail.com</a>
-    <div class="lang-switch" data-lang-switch role="group" aria-label="Мова сайту">
-      <button type="button" class="lang-switch__part" data-lang="ua">UA</button> / <button type="button" class="lang-switch__part" data-lang="en">EN</button>
-    </div>
+    <div class="lang-switch" role="group" aria-label="Мова сайту"><span class="lang-switch__part" data-active="true">UA</span><span class="lang-switch__sep" aria-hidden="true">/</span><a class="lang-switch__part" data-active="false" href="en/contact.html" hreflang="en" lang="en">EN</a></div>
   </div>
 </div>
 
